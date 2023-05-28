@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 def ask_gpt():
-    load_dotenv() # loads the dotenv file
+    load_dotenv() # loads the dotenv file, maybe move this to main.py?
     openai.api_key = os.getenv("OPENAI_API_KEY") # sets the api key, currently just a test value
     return
 
