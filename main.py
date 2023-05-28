@@ -1,4 +1,4 @@
-from query_gpt import query_gpt
+from openai_gpt import query_gpt
 
 def main():
     # Run stuff here
