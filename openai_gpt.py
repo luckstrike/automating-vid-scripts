@@ -44,9 +44,25 @@ def ask_gpt(prompt):
         print(f"Uh oh, an error occured: {e}")
         return None
 
-def check_sentiment():
+def check_sentiment(text):
     # OpenAI has an API that allows you to use sentiment analysis (use this to see if a query is an answer or not)
-    return
+    # You can use this to gauge the confidence of GPT's answer
+
+    debug_load_dotenv()
+    openai.api_key = os.getenv("OPENAI_API_KEY") # sets the api key
+
+    # Running sentiment analysis
+    response = openai.Completion.create(
+        model = "text-davinci-002",
+        prompt = f"Sentiment analysis of the following text as a single word (either Positive, Neutral or Negative): \n{text}\n",
+        temperature = 0,
+        max_tokens = 60,
+        top_p = 1,
+        frequency_penalty = 0,
+        presence_penalty = 0,
+    )
+
+    return response['choices'][0]['text']
 
 def create_search_query():
     # Creates a search query if GPT is unable to answer a question
@@ -56,6 +72,12 @@ def query_sense():
     # Note: Should this be used? A funtion to check if the web results make sense?
     return
 
-result = ask_gpt("What is the meaning of life?")
+# Testing the ask_gpt function
+result = ask_gpt("What is Vacations (the band) current discography as of 2023?")
 
 print(result)
+
+# Testing the check_sentiment function
+sentiment_result = check_sentiment(result)
+
+print(sentiment_result)
