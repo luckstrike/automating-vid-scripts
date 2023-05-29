@@ -19,3 +19,7 @@ def get_results(search_query):
     res = service.cse().list(q = search_query, cx = os.getenv("GOOGLE_CSE_ID")).execute()
 
     return res
+
+def results_to_urls(json_results, num_results):
+    # Takes in a JSON file and returns the urls
+    pass
