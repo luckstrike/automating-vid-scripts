@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 from googleapiclient.discovery import build
 
-# Used to search the internet and scrape answers from the web
+# Used to search the internet and get search results
 # Using the Google Custom Search JSON API
 
 def debug_load_dotenv():
