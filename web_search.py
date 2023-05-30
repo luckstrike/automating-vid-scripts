@@ -20,6 +20,11 @@ def get_results(search_query):
 
     return res
 
-def results_to_urls(json_results, num_results):
+def results_to_urls(json_results, num_results = 5):
     # Takes in a JSON file and returns the urls
-    pass
+
+    # num_results bound check
+    if num_results > len(json_results['items']):
+        num_results = len(json_results['items'])
+
+    return [json_results['items'][i]['link'] for i in range(num_results)]

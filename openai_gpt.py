@@ -72,6 +72,10 @@ def query_sense():
     # Note: Should this be used? A funtion to check if the web results make sense?
     return
 
+def summarize_info():
+    # Summarizes the information from a web result
+    return
+
 # Testing the ask_gpt function
 result = ask_gpt("What is Vacations (the band) current discography as of 2023?")
 
