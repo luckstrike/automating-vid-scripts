@@ -21,7 +21,7 @@ def ask_gpt(prompt):
 
     # Takes a while to generate the response, so add a loading screen in the UI?
 
-    debug_load_dotenv()
+    # debug_load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY") # sets the api key
 
     # Runs the GPT-3.5-turbo model
@@ -48,7 +48,7 @@ def check_sentiment(text):
     # OpenAI has an API that allows you to use sentiment analysis (use this to see if a query is an answer or not)
     # You can use this to gauge the confidence of GPT's answer
 
-    debug_load_dotenv()
+    # debug_load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY") # sets the api key
 
     # Running sentiment analysis
@@ -67,23 +67,34 @@ def check_sentiment(text):
 def create_search_query():
     # Creates a search query if GPT is unable to answer a question
     # Possible queries to ask:
-    
     return
 
 def query_sense():
     # Note: Should this be used? A funtion to check if the web results make sense?
     return
 
-def summarize_info():
+def summarize_info(content):
     # Summarizes the information from a web result
+    openai.api_key = os.getenv("OPENAI_API_KEY") # sets the api key
+
+    # Runs the GPT-3.5-turbo model
+    try:
+        response = openai.ChatCompletion.create(
+            model = "gpt-3.5-turbo",
+            messages = [
+                {"role": "system", "content": "You are a helpful assitant who summarizes any user provided text."},
+                {"role": "user", "content": content}
+            ],
+            temperature = 0.5 # creativity factor, from 0 to 1 where one is more creative
+        )
+        return response['choices'][0]['message']['content']
+    
+    except OpenAIError as e:
+        print(f"Uh oh, an API error occured. {e}")
+        return None
+    
+    except Exception as e:
+        print(f"Uh oh, an error occured: {e}")
+        return None
+
     return
-
-# Testing the ask_gpt function
-result = ask_gpt("What is Vacations (the band) current discography as of 2023?")
-
-print(result)
-
-# Testing the check_sentiment function
-sentiment_result = check_sentiment(result)
-
-print(sentiment_result)

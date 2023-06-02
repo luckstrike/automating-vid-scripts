@@ -1,0 +1,630 @@
+{
+    "kind": "customsearch#search",
+    "url": {
+        "type": "application/json",
+        "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}&cx={cx?}&sort={sort?}&filter={filter?}&gl={gl?}&cr={cr?}&googlehost={googleHost?}&c2coff={disableCnTwTranslation?}&hq={hq?}&hl={hl?}&siteSearch={siteSearch?}&siteSearchFilter={siteSearchFilter?}&exactTerms={exactTerms?}&excludeTerms={excludeTerms?}&linkSite={linkSite?}&orTerms={orTerms?}&relatedSite={relatedSite?}&dateRestrict={dateRestrict?}&lowRange={lowRange?}&highRange={highRange?}&searchType={searchType}&fileType={fileType?}&rights={rights?}&imgSize={imgSize?}&imgType={imgType?}&imgColorType={imgColorType?}&imgDominantColor={imgDominantColor?}&alt=json"
+    },
+    "queries": {
+        "request": [
+            {
+                "title": "Google Custom Search - NBA Playoffs 2023",
+                "totalResults": "126000000",
+                "searchTerms": "NBA Playoffs 2023",
+                "count": 10,
+                "startIndex": 1,
+                "inputEncoding": "utf8",
+                "outputEncoding": "utf8",
+                "safe": "off",
+                "cx": "03a60f1f4cceb4f36"
+            }
+        ],
+        "nextPage": [
+            {
+                "title": "Google Custom Search - NBA Playoffs 2023",
+                "totalResults": "126000000",
+                "searchTerms": "NBA Playoffs 2023",
+                "count": 10,
+                "startIndex": 11,
+                "inputEncoding": "utf8",
+                "outputEncoding": "utf8",
+                "safe": "off",
+                "cx": "03a60f1f4cceb4f36"
+            }
+        ]
+    },
+    "context": {
+        "title": "VideoScript"
+    },
+    "searchInformation": {
+        "searchTime": 0.379127,
+        "formattedSearchTime": "0.38",
+        "totalResults": "126000000",
+        "formattedTotalResults": "126,000,000"
+    },
+    "items": [
+        {
+            "kind": "customsearch#result",
+            "title": "2023 NBA Playoffs | Home | NBA.com",
+            "htmlTitle": "<b>2023 NBA Playoffs</b> | Home | NBA.com",
+            "link": "https://www.nba.com/playoffs/2023",
+            "displayLink": "www.nba.com",
+            "snippet": "Inside the NBA wraps its head around Boston being on the verge of accomplishing what has never been done in NBA postseason history. 20 hours ago \u00b7 NBA players\u00a0...",
+            "htmlSnippet": "Inside the NBA wraps its head around Boston being on the verge of accomplishing what has never been done in <b>NBA postseason</b> history. 20 hours ago &middot; NBA players&nbsp;...",
+            "cacheId": "rq9WFts1RqUJ",
+            "formattedUrl": "https://www.nba.com/playoffs/2023",
+            "htmlFormattedUrl": "https://www.<b>nba</b>.com/<b>playoffs</b>/<b>2023</b>",
+            "pagemap": {
+                "cse_thumbnail": [
+                    {
+                        "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcR_i_H_tu0IHvXaZtXbLDmLtvBNwyZryhgZr4v9WaMxrAKcZ4a5R4GODZ-8",
+                        "width": "278",
+                        "height": "181"
+                    }
+                ],
+                "metatags": [
+                    {
+                        "msapplication-tilecolor": "#da532c",
+                        "next-head-count": "24",
+                        "og:type": "website",
+                        "twitter:card": "summary_large_image",
+                        "og:site_name": "NBA.com",
+                        "twitter:site": "@NBA",
+                        "viewport": "width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no",
+                        "post-id": "1056326",
+                        "og:locale": "en_US"
+                    }
+                ],
+                "cse_image": [
+                    {
+                        "src": "https://cdn.nba.com/manage/2023/05/GettyImages-1258041136-1.jpg"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "NBA playoffs 2023: Schedule, news, highlights, scores, more - ESPN",
+            "htmlTitle": "<b>NBA playoffs 2023</b>: Schedule, news, highlights, scores, more - ESPN",
+            "link": "https://www.espn.com/nba/story/_/id/36069090/nba-playoff-schedule-highlights-2023",
+            "displayLink": "www.espn.com",
+            "snippet": "23 hours ago ... The NBA Finals are slated to start June 1, with Game 7 -- should the series go that long -- scheduled for June 18. All NBA Finals games will be\u00a0...",
+            "htmlSnippet": "23 hours ago <b>...</b> The <b>NBA Finals</b> are slated to start June 1, with Game 7 -- should the series go that long -- scheduled for June 18. All <b>NBA Finals</b> games will be&nbsp;...",
+            "cacheId": "LZqDPKYsx3IJ",
+            "formattedUrl": "https://www.espn.com/nba/story/_/.../nba-playoff-schedule-highlights-2023",
+            "htmlFormattedUrl": "https://www.espn.com/<b>nba</b>/story/_/.../<b>nba</b>-<b>playoff</b>-schedule-highlights-<b>2023</b>",
+            "pagemap": {
+                "cse_thumbnail": [
+                    {
+                        "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ-0ZsbJ1i98k349TrQbXM82D1iIRBPPPbz-2U_XvjgEHq912GuPIZF0rc",
+                        "width": "300",
+                        "height": "168"
+                    }
+                ],
+                "thumbnail": [
+                    {
+                        "src": "https://a.espncdn.com/combiner/i?img=%2Fphoto%2F2023%2F0404%2Fr1154356_1296x729_16%2D9.jpg",
+                        "width": "1296",
+                        "height": "729"
+                    }
+                ],
+                "document": [
+                    {
+                        "title": "NBA playoffs 2023: Schedule, news, highlights, scores, more"
+                    }
+                ],
+                "metatags": [
+                    {
+                        "og:image": "https://a.espncdn.com/combiner/i?img=%2Fphoto%2F2023%2F0404%2Fr1154356_1296x729_16%2D9.jpg",
+                        "twitter:app:url:iphone": "sportscenter://x-callback-url/showStory?uid=36069090",
+                        "twitter:app:id:googleplay": "com.espn.score_center",
+                        "apple-itunes-app": "app-id=317469184, app-argument=sportscenter://x-callback-url/showStory?uid=36069090",
+                        "og:image:width": "1296",
+                        "twitter:card": "summary_large_image",
+                        "og:site_name": "ESPN.com",
+                        "twitter:url": "https://www.espn.com/nba/story/_/id/36069090/nba-playoff-schedule-highlights-2023",
+                        "twitter:app:name:googleplay": "ESPN",
+                        "medium": "article",
+                        "twitter:app:id:iphone": "317469184",
+                        "title": "NBA playoffs 2023: Schedule, news, highlights, scores, more - ESPN",
+                        "og:description": "Everything you need to know about the NBA's Eastern and Western Conference finals is right here.",
+                        "twitter:site": "espn",
+                        "article:content_tier": "free",
+                        "og:type": "article",
+                        "twitter:title": "NBA playoffs 2023: Schedule, news, highlights, scores, more",
+                        "og:title": "NBA playoffs 2023: Schedule, news, highlights, scores, more",
+                        "og:image:height": "729",
+                        "fb:pages": "104266592953439",
+                        "dc.date.issued": "2023-05-28T06:38:00Z",
+                        "referrer": "origin-when-cross-origin",
+                        "fb:app_id": "116656161708917",
+                        "twitter:app:url:googleplay": "sportscenter://x-callback-url/showStory?uid=36069090",
+                        "viewport": "initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+                        "twitter:description": "Everything you need to know about the NBA's Eastern and Western Conference finals is right here.",
+                        "og:url": "https://www.espn.com/nba/story/_/id/36069090/nba-playoff-schedule-highlights-2023",
+                        "twitter:app:name:iphone": "ESPN",
+                        "article:opinion": "false"
+                    }
+                ],
+                "cse_image": [
+                    {
+                        "src": "https://a.espncdn.com/combiner/i?img=%2Fphoto%2F2023%2F0404%2Fr1154356_1296x729_16%2D9.jpg"
+                    }
+                ],
+                "sitenavigationelement": [
+                    {
+                        "name": "NFL",
+                        "url": "NFL"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "2023 NBA Playoffs Schedule | NBA.com",
+            "htmlTitle": "<b>2023 NBA Playoffs</b> Schedule | NBA.com",
+            "link": "https://www.nba.com/news/2023-nba-playoffs-schedule",
+            "displayLink": "www.nba.com",
+            "snippet": "2 days ago ... 2023 NBA Playoffs Schedule ; April 11-14: AT&T Play-In Tournament ; April 15: NBA playoffs begin ; May 1-2: NBA Conference Semifinals begin (\u00a0...",
+            "htmlSnippet": "2 days ago <b>...</b> <b>2023 NBA Playoffs</b> Schedule ; April 11-14: AT&amp;T Play-In Tournament ; April 15: <b>NBA playoffs</b> begin ; May 1-2: NBA Conference Semifinals begin (&nbsp;...",
+            "cacheId": "VVdHDnVf8mUJ",
+            "formattedUrl": "https://www.nba.com/news/2023-nba-playoffs-schedule",
+            "htmlFormattedUrl": "https://www.<b>nba</b>.com/news/<b>2023</b>-<b>nba</b>-<b>playoffs</b>-schedule",
+            "pagemap": {
+                "cse_thumbnail": [
+                    {
+                        "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSBWANufJGoayTpFomlatymtrAfx4-tzUIzY2kmn6sxc_1EA3aRkSm3Dkbk",
+                        "width": "300",
+                        "height": "168"
+                    }
+                ],
+                "metatags": [
+                    {
+                        "msapplication-tilecolor": "#da532c",
+                        "og:image": "https://cdn.nba.com/manage/2023/02/2023-Playoffs-Logo-Bluebg-v5.jpg",
+                        "og:type": "website",
+                        "twitter:card": "summary_large_image",
+                        "twitter:title": "2023 NBA Playoffs Schedule",
+                        "og:site_name": "NBA.com",
+                        "post-id": "1046041",
+                        "og:title": "2023 NBA Playoffs Schedule",
+                        "og:description": "The NBA Play-In Tournament takes place April 11-14. The first round of the playoffs starts April 15. Game 1 of the NBA Finals will be June 1.",
+                        "twitter:image": "https://cdn.nba.com/manage/2023/02/2023-Playoffs-Logo-Bluebg-v5.jpg",
+                        "next-head-count": "32",
+                        "twitter:site": "@NBA",
+                        "viewport": "width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no",
+                        "twitter:description": "Get the latest series matchups, schedules and broadcast information for the 2023 NBA playoffs.",
+                        "og:locale": "en_US",
+                        "og:url": "https://www.nba.com/news/2023-nba-playoffs-schedule"
+                    }
+                ],
+                "cse_image": [
+                    {
+                        "src": "https://cdn.nba.com/manage/2023/02/2023-Playoffs-Logo-Bluebg-v5.jpg"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "2023 NBA playoffs - Wikipedia",
+            "htmlTitle": "<b>2023 NBA playoffs</b> - Wikipedia",
+            "link": "https://en.wikipedia.org/wiki/2023_NBA_playoffs",
+            "displayLink": "en.wikipedia.org",
+            "snippet": "The 2023 NBA playoffs is the ongoing postseason tournament of the National Basketball Association's 2022\u201323 season. The playoffs began on April 15 and will\u00a0...",
+            "htmlSnippet": "The <b>2023 NBA playoffs</b> is the ongoing postseason tournament of the National Basketball Association&#39;s 2022\u201323 season. The playoffs began on April 15 and will&nbsp;...",
+            "cacheId": "MRxyjjLtGKgJ",
+            "formattedUrl": "https://en.wikipedia.org/wiki/2023_NBA_playoffs",
+            "htmlFormattedUrl": "https://en.wikipedia.org/wiki/<b>2023</b>_<b>NBA</b>_<b>playoffs</b>",
+            "pagemap": {
+                "hcard": [
+                    {
+                        "fn": "2023 NBA playoffs"
+                    }
+                ],
+                "metatags": [
+                    {
+                        "referrer": "origin",
+                        "theme-color": "#eaecf0",
+                        "og:type": "website",
+                        "viewport": "width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0",
+                        "og:title": "2023 NBA playoffs - Wikipedia",
+                        "format-detection": "telephone=no"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "2023 Playoffs | Bracket for Hub Summary | NBA.com",
+            "htmlTitle": "<b>2023 Playoffs</b> | Bracket for Hub Summary | <b>NBA</b>.com",
+            "link": "https://www.nba.com/playoffs/2023/bracket",
+            "displayLink": "www.nba.com",
+            "snippet": "2023 NBA Media Ventures, LLC. All rights reserved. Privacy Policy \u00b7 Terms of Use \u00b7 Accessibility and Closed Captions \u00b7 Customer Support",
+            "htmlSnippet": "<b>2023 NBA</b> Media Ventures, LLC. All rights reserved. Privacy Policy &middot; Terms of Use &middot; Accessibility and Closed Captions &middot; Customer Support",
+            "cacheId": "Rf884xiBSo4J",
+            "formattedUrl": "https://www.nba.com/playoffs/2023/bracket",
+            "htmlFormattedUrl": "https://www.<b>nba</b>.com/<b>playoffs</b>/<b>2023</b>/bracket",
+            "pagemap": {
+                "metatags": [
+                    {
+                        "msapplication-tilecolor": "#da532c",
+                        "next-head-count": "24",
+                        "og:type": "website",
+                        "twitter:card": "summary_large_image",
+                        "og:site_name": "NBA.com",
+                        "twitter:site": "@NBA",
+                        "viewport": "width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no",
+                        "post-id": "1087644",
+                        "og:locale": "en_US"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "2023 NBA Playoffs Summary | Basketball-Reference.com",
+            "htmlTitle": "<b>2023 NBA Playoffs</b> Summary | Basketball-Reference.com",
+            "link": "https://www.basketball-reference.com/playoffs/NBA_2023.html",
+            "displayLink": "www.basketball-reference.com",
+            "snippet": "Checkout the Results, Statistics, Playoff Leaders, Per Game Stats, Advanced Stats and more for the 2023 NBA playoffs on Basketball-Reference.com.",
+            "htmlSnippet": "Checkout the Results, Statistics, Playoff Leaders, Per Game Stats, Advanced Stats and more for the <b>2023 NBA playoffs</b> on Basketball-Reference.com.",
+            "cacheId": "yp7BRXqlSGcJ",
+            "formattedUrl": "https://www.basketball-reference.com/playoffs/NBA_2023.html",
+            "htmlFormattedUrl": "https://www.basketball-reference.com/<b>playoffs</b>/<b>NBA</b>_<b>2023</b>.html",
+            "pagemap": {
+                "metatags": [
+                    {
+                        "msapplication-tilecolor": "#905500",
+                        "generated-by": "/home/bbr/build/playoffs/build_playoff_year_pages.pl",
+                        "og:image": "https://cdn.ssref.net/req/202305251/favicons/bbr/apple-touch-icon-228x228-precomposed.png",
+                        "theme-color": "#4d4438",
+                        "og:type": "article",
+                        "twitter:card": "summary",
+                        "og:site_name": "Basketball-Reference.com",
+                        "handheldfriendly": "True",
+                        "twitter:domain": "Basketball-Reference.com",
+                        "og:title": "2023 NBA Playoffs Summary | Basketball-Reference.com",
+                        "msapplication-tileimage": "https://cdn.ssref.net/req/202305251/favicons/bbr/ms-tile-144.png",
+                        "msapplication-navbutton-color": "#4d4438",
+                        "og:description": "Checkout the Results, Statistics, Playoff Leaders, Per Game Stats, Advanced Stats and more for the 2023 NBA playoffs on Basketball-Reference.com",
+                        "twitter:creator": "@bball_ref",
+                        "twitter:image": "https://cdn.ssref.net/req/202305251/favicons/bbr/apple-touch-icon-228x228-precomposed.png",
+                        "referrer": "unsafe-url",
+                        "apple-mobile-web-app-status-bar-style": "#4d4438",
+                        "twitter:site": "@bball_ref",
+                        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=2.0",
+                        "apple-mobile-web-app-capable": "no",
+                        "mobile-web-app-capable": "yes",
+                        "revised": "03:46:59 28-May-2023",
+                        "og:url": "https://www.basketball-reference.com/playoffs/NBA_2023.html",
+                        "format-detection": "telephone=no"
+                    }
+                ],
+                "cse_image": [
+                    {
+                        "src": "https://cdn.ssref.net/req/202305251/favicons/bbr/apple-touch-icon-228x228-precomposed.png"
+                    }
+                ],
+                "listitem": [
+                    {
+                        "item": "BBR Home Page",
+                        "name": "BBR Home Page",
+                        "position": "1"
+                    },
+                    {
+                        "item": "Playoffs",
+                        "name": "Playoffs",
+                        "position": "2"
+                    },
+                    {
+                        "item": "2023 NBA",
+                        "name": "2023 NBA",
+                        "position": "3"
+                    },
+                    {
+                        "item": "BBR Home Page",
+                        "name": "BBR Home Page",
+                        "position": "1"
+                    },
+                    {
+                        "item": "Playoffs",
+                        "name": "Playoffs",
+                        "position": "2"
+                    },
+                    {
+                        "item": "2023 NBA",
+                        "name": "2023 NBA",
+                        "position": "3"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "2023 NBA playoffs bracket, schedule: Celtics force Game 6 vs. Heat ...",
+            "htmlTitle": "<b>2023 NBA playoffs</b> bracket, schedule: Celtics force Game 6 vs. Heat ...",
+            "link": "https://www.cbssports.com/nba/news/2023-nba-playoffs-bracket-schedule-celtics-force-game-6-vs-heat-nuggets-await-winner-in-finals/",
+            "displayLink": "www.cbssports.com",
+            "snippet": "3 days ago ... 2023 NBA playoffs bracket, schedule: Celtics force Game 6 vs. Heat; Nuggets await winner in Finals \u00b7 Saturday, May 27. Game 6: Celtics at Heat, 8\u00a0...",
+            "htmlSnippet": "3 days ago <b>...</b> <b>2023 NBA playoffs</b> bracket, schedule: Celtics force Game 6 vs. Heat; Nuggets await winner in Finals &middot; Saturday, May 27. Game 6: Celtics at Heat, 8&nbsp;...",
+            "cacheId": "sy9ArrT3FfUJ",
+            "formattedUrl": "https://www.cbssports.com/nba/.../2023-nba-playoffs-bracket-schedule-celtics -force-game-6-vs-heat-nuggets-await-winner-in-finals/",
+            "htmlFormattedUrl": "https://www.cbssports.com/<b>nba</b>/.../<b>2023</b>-<b>nba</b>-<b>playoffs</b>-bracket-schedule-celtics -force-game-6-vs-heat-nuggets-await-winner-in-<b>finals</b>/",
+            "pagemap": {
+                "cse_thumbnail": [
+                    {
+                        "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf3Z3MlDotIt3mwqBbi_9_DOgxYKxEXRPu3a3_A7aOUlfcB2rGnLllpvXs",
+                        "width": "311",
+                        "height": "162"
+                    }
+                ],
+                "imageobject": [
+                    {
+                        "width": "1200",
+                        "url": "https://sportshub.cbsistatic.com/i/r/2023/05/23/6232df84-fdb5-4df4-840e-6bfdc21d225d/thumbnail/1200x675/44a433e834749072925f10d90211c71c/nba-playoff-bracket-2023-nuggets.png",
+                        "height": "675"
+                    },
+                    {
+                        "width": "289",
+                        "url": "https://sportsfly.cbsistatic.com/fly-0479/bundles/sportsmediacss/images/core/cbssports-logo-60x289.png",
+                        "height": "60"
+                    }
+                ],
+                "person": [
+                    {
+                        "name": "Brad Botkin"
+                    }
+                ],
+                "speakablespecification": [
+                    {
+                        "cssselector": ".article-headline"
+                    }
+                ],
+                "organization": [
+                    {
+                        "name": "CBS Sports"
+                    }
+                ],
+                "metatags": [
+                    {
+                        "og:image": "https://sportsfly.cbsistatic.com/fly-0479/bundles/sportsmediacss/images/fantasy/default-article-image-large.png",
+                        "twitter:card": "summary_large_image",
+                        "og:site_name": "CBSSports.com",
+                        "msapplication-tooltip": "CBSSports.com features live scoring and news for NFL football, MLB baseball, NBA basketball, NHL hockey, college basketball and football. CBSSports.com is also your source for fantasy sports news.",
+                        "og:description": "Denver has secured its spot in the Finals; who will join the Nuggets?",
+                        "twitter:creator": "@cbssports",
+                        "article:publisher": "https://www.facebook.com/cbssports",
+                        "twitter:image": "https://sportsfly.cbsistatic.com/fly-0479/bundles/sportsmediacss/images/fantasy/default-article-image-large.png",
+                        "twitter:site": "@cbssports",
+                        "fb:admins": "100002967552623",
+                        "article:content_tier": "free",
+                        "twitter:account_id": "14885860",
+                        "msapplication-starturl": "https://www.cbssports.com/",
+                        "og:type": "article",
+                        "twitter:title": "2023 NBA playoffs bracket, schedule: Celtics force Game 6 vs. Heat; Nuggets await winner in Finals - CBSSports.com",
+                        "msapplication-window": "width=1024;height=768",
+                        "handheldfriendly": "True",
+                        "og:title": "2023 NBA playoffs bracket, schedule: Celtics force Game 6 vs. Heat; Nuggets await winner in Finals",
+                        "google": "notranslate",
+                        "fb:pages": "25902406772",
+                        "msapplication-navbutton-color": "#1483b2",
+                        "fb:app_id": "297742330311988",
+                        "apple-mobile-web-app-status-bar-style": "black",
+                        "viewport": "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+                        "twitter:description": "Denver has secured its spot in the Finals; who will join the Nuggets?",
+                        "apple-mobile-web-app-capable": "yes",
+                        "mobileoptimized": "320",
+                        "og:url": "https://www.cbssports.com/nba/news/2023-nba-playoffs-bracket-schedule-celtics-force-game-6-vs-heat-nuggets-await-winner-in-finals/",
+                        "google-play-app": "com.handmark.sportcaster",
+                        "article:opinion": "false",
+                        "format-detection": "telephone=no"
+                    }
+                ],
+                "cse_image": [
+                    {
+                        "src": "https://sportsfly.cbsistatic.com/fly-0479/bundles/sportsmediacss/images/fantasy/default-article-image-large.png"
+                    }
+                ],
+                "article": [
+                    {
+                        "articlebody": "The Boston Celtics are not going down without a fight. The Celtics have won back-to-back games in the Eastern Conference finals against the Heat trim Miami's series lead to 3-2. Game 6 is set...",
+                        "keywords": "NBA",
+                        "datemodified": "2023-05-26 16:57:21",
+                        "description": "Denver has secured its spot in the Finals; who will join the Nuggets?",
+                        "headline": "2023 NBA playoffs bracket, schedule: Celtics force Game 6 vs. Heat; Nuggets await winner in Finals",
+                        "url": "https://www.cbssports.com/nba/news/2023-nba-playoffs-bracket-schedule-celtics-force-game-6-vs-heat-nuggets-await-winner-in-finals/",
+                        "datepublished": "2023-05-26 16:56:00",
+                        "mainentityofpage": "https://www.cbssports.com//nba/news/2023-nba-playoffs-bracket-schedule-celtics-force-game-6-vs-heat-nuggets-await-winner-in-finals/",
+                        "thumbnailurl": "https://sportshub.cbsistatic.com/i/r/2023/05/23/6232df84-fdb5-4df4-840e-6bfdc21d225d/thumbnail/1200x675/44a433e834749072925f10d90211c71c/nba-playoff-bracket-2023-nuggets.png"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "2023 NBA Finals - Wikipedia",
+            "htmlTitle": "<b>2023 NBA Finals</b> - Wikipedia",
+            "link": "https://en.wikipedia.org/wiki/2023_NBA_Finals",
+            "displayLink": "en.wikipedia.org",
+            "snippet": "The 2023 NBA Finals will be the championship series of the National Basketball Association (NBA)'s 2022\u201323 season and conclusion to the season's playoffs.",
+            "htmlSnippet": "The <b>2023 NBA Finals</b> will be the championship series of the National Basketball Association (NBA)&#39;s 2022\u201323 season and conclusion to the season&#39;s playoffs.",
+            "cacheId": "RtbdBOKHOfgJ",
+            "formattedUrl": "https://en.wikipedia.org/wiki/2023_NBA_Finals",
+            "htmlFormattedUrl": "https://en.wikipedia.org/wiki/<b>2023</b>_<b>NBA</b>_<b>Finals</b>",
+            "pagemap": {
+                "hcard": [
+                    {
+                        "fn": "Denver Nuggets"
+                    },
+                    {
+                        "fn": "TBD"
+                    }
+                ],
+                "metatags": [
+                    {
+                        "referrer": "origin",
+                        "og:image": "https://upload.wikimedia.org/wikipedia/en/thumb/8/81/2023_NBA_Finals_logo.svg/1200px-2023_NBA_Finals_logo.svg.png",
+                        "theme-color": "#eaecf0",
+                        "og:image:width": "1200",
+                        "og:type": "website",
+                        "viewport": "width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.25, maximum-scale=5.0",
+                        "og:title": "2023 NBA Finals - Wikipedia",
+                        "og:image:height": "797",
+                        "format-detection": "telephone=no"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "2023 NBA playoffs scores, results: Celtics stay alive with Game 5 ...",
+            "htmlTitle": "<b>2023 NBA playoffs</b> scores, results: Celtics stay alive with Game 5 ...",
+            "link": "https://www.cbssports.com/nba/news/2023-nba-playoffs-scores-results-celtics-stay-alive-with-game-5-win-nuggets-finish-off-sweep-of-lakers/",
+            "displayLink": "www.cbssports.com",
+            "snippet": "3 days ago ... The Denver Nuggets survived a dominant LeBron James performance to finish off a sweep of the Los Angeles Lakers on Monday and reach the NBA\u00a0...",
+            "htmlSnippet": "3 days ago <b>...</b> The Denver Nuggets survived a dominant LeBron James performance to finish off a sweep of the Los Angeles Lakers on Monday and reach the <b>NBA</b>&nbsp;...",
+            "cacheId": "4XMd0Hb2LykJ",
+            "formattedUrl": "https://www.cbssports.com/nba/.../2023-nba-playoffs-scores-results-celtics- stay-alive-with-game-5-win-nuggets-finish-off-sweep-of-lakers/",
+            "htmlFormattedUrl": "https://www.cbssports.com/<b>nba</b>/.../<b>2023</b>-<b>nba</b>-<b>playoffs</b>-scores-results-celtics- stay-alive-with-game-5-win-nuggets-finish-off-sweep-of-lakers/",
+            "pagemap": {
+                "cse_thumbnail": [
+                    {
+                        "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf3Z3MlDotIt3mwqBbi_9_DOgxYKxEXRPu3a3_A7aOUlfcB2rGnLllpvXs",
+                        "width": "311",
+                        "height": "162"
+                    }
+                ],
+                "imageobject": [
+                    {
+                        "width": "1200",
+                        "url": "https://sportshub.cbsistatic.com/i/r/2023/05/26/12dc2935-ad7a-40e0-8e73-ea6ee76aba09/thumbnail/1200x675/61d5c921b099a4bb3cdd3f6367cf3abb/tatum-getty-12.png",
+                        "height": "675"
+                    },
+                    {
+                        "width": "289",
+                        "url": "https://sportsfly.cbsistatic.com/fly-0479/bundles/sportsmediacss/images/core/cbssports-logo-60x289.png",
+                        "height": "60"
+                    }
+                ],
+                "person": [
+                    {
+                        "name": "Brad Botkin"
+                    }
+                ],
+                "speakablespecification": [
+                    {
+                        "cssselector": ".article-headline"
+                    }
+                ],
+                "organization": [
+                    {
+                        "name": "CBS Sports"
+                    }
+                ],
+                "metatags": [
+                    {
+                        "og:image": "https://sportsfly.cbsistatic.com/fly-0479/bundles/sportsmediacss/images/fantasy/default-article-image-large.png",
+                        "twitter:card": "summary_large_image",
+                        "og:site_name": "CBSSports.com",
+                        "msapplication-tooltip": "CBSSports.com features live scoring and news for NFL football, MLB baseball, NBA basketball, NHL hockey, college basketball and football. CBSSports.com is also your source for fantasy sports news.",
+                        "og:description": "The NBA Finals begin on June 1",
+                        "twitter:creator": "@cbssports",
+                        "article:publisher": "https://www.facebook.com/cbssports",
+                        "twitter:image": "https://sportsfly.cbsistatic.com/fly-0479/bundles/sportsmediacss/images/fantasy/default-article-image-large.png",
+                        "twitter:site": "@cbssports",
+                        "fb:admins": "100002967552623",
+                        "article:content_tier": "free",
+                        "twitter:account_id": "14885860",
+                        "msapplication-starturl": "https://www.cbssports.com/",
+                        "og:type": "article",
+                        "twitter:title": "2023 NBA playoffs scores, results: Celtics stay alive with Game 5 win; Nuggets finish off sweep of Lakers - CBSSports.com",
+                        "msapplication-window": "width=1024;height=768",
+                        "handheldfriendly": "True",
+                        "og:title": "2023 NBA playoffs scores, results: Celtics stay alive with Game 5 win; Nuggets finish off sweep of Lakers",
+                        "google": "notranslate",
+                        "fb:pages": "25902406772",
+                        "msapplication-navbutton-color": "#1483b2",
+                        "fb:app_id": "297742330311988",
+                        "apple-mobile-web-app-status-bar-style": "black",
+                        "viewport": "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+                        "twitter:description": "The NBA Finals begin on June 1",
+                        "apple-mobile-web-app-capable": "yes",
+                        "mobileoptimized": "320",
+                        "og:url": "https://www.cbssports.com/nba/news/2023-nba-playoffs-scores-results-celtics-stay-alive-with-game-5-win-nuggets-finish-off-sweep-of-lakers/",
+                        "google-play-app": "com.handmark.sportcaster",
+                        "article:opinion": "false",
+                        "format-detection": "telephone=no"
+                    }
+                ],
+                "cse_image": [
+                    {
+                        "src": "https://sportsfly.cbsistatic.com/fly-0479/bundles/sportsmediacss/images/fantasy/default-article-image-large.png"
+                    }
+                ],
+                "article": [
+                    {
+                        "articlebody": "The Denver Nuggets survived a dominant LeBron James performance to finish off a sweep of the Los Angeles Lakers on Monday and reach the NBA Finals for the first time in franchise history. Who...",
+                        "keywords": "NBA",
+                        "datemodified": "2023-05-26 17:02:29",
+                        "description": "The NBA Finals begin on June 1",
+                        "headline": "2023 NBA playoffs scores, results: Celtics stay alive with Game 5 win; Nuggets finish off sweep of Lakers",
+                        "url": "https://www.cbssports.com/nba/news/2023-nba-playoffs-scores-results-celtics-stay-alive-with-game-5-win-nuggets-finish-off-sweep-of-lakers/",
+                        "datepublished": "2023-05-26 17:00:00",
+                        "mainentityofpage": "https://www.cbssports.com//nba/news/2023-nba-playoffs-scores-results-celtics-stay-alive-with-game-5-win-nuggets-finish-off-sweep-of-lakers/",
+                        "thumbnailurl": "https://sportshub.cbsistatic.com/i/r/2023/05/26/12dc2935-ad7a-40e0-8e73-ea6ee76aba09/thumbnail/1200x675/61d5c921b099a4bb3cdd3f6367cf3abb/tatum-getty-12.png"
+                    }
+                ]
+            }
+        },
+        {
+            "kind": "customsearch#result",
+            "title": "2023 NBA playoff bracket, standings: Updated schedule, scores ...",
+            "htmlTitle": "<b>2023 NBA playoff</b> bracket, standings: Updated schedule, scores ...",
+            "link": "https://www.foxsports.com/stories/nba/nba-playoff-picture-how-first-round-matchups-are-shaping-up",
+            "displayLink": "www.foxsports.com",
+            "snippet": "3 days ago ... 2023 NBA playoff bracket, standings: Updated schedule, scores, dates ; Eastern Conference Semifinals. New York Knicks (5) vs. Miami Heat (8) -\u00a0...",
+            "htmlSnippet": "3 days ago <b>...</b> <b>2023 NBA playoff</b> bracket, standings: Updated schedule, scores, dates ; Eastern Conference Semifinals. New York Knicks (5) vs. Miami Heat (8) -&nbsp;...",
+            "formattedUrl": "https://www.foxsports.com/.../nba/nba-playoff-picture-how-first-round- matchups-are-shaping-up",
+            "htmlFormattedUrl": "https://www.foxsports.com/.../<b>nba</b>/<b>nba</b>-<b>playoff</b>-picture-how-first-round- matchups-are-shaping-up",
+            "pagemap": {
+                "cse_thumbnail": [
+                    {
+                        "src": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSWGub8oSoppMi_oR3ov34pW8svsYBLmhjV7wRC6q5gIWLrDSOtgyYxXVI",
+                        "width": "295",
+                        "height": "171"
+                    }
+                ],
+                "metatags": [
+                    {
+                        "msapplication-tilecolor": "#ffffff",
+                        "og:image": "https://a57.foxsports.com/statics.foxsports.com/www.foxsports.com/content/uploads/2023/03/1408/814/03.08.23_NBAPlayoffPicture_Horizontal.jpg?ve=1&tl=1",
+                        "theme-color": "#ffffff",
+                        "og:type": "website",
+                        "twitter:card": "summary_large_image",
+                        "twitter:title": "2023 NBA playoff bracket, standings: Updated schedule, scores, dates",
+                        "og:site_name": "FOX Sports",
+                        "og:title": "2023 NBA playoff bracket, standings: Updated schedule, scores, dates",
+                        "fb:pages": "112638779551",
+                        "og:description": "The 2023 NBA playoff field is set! Check out our updated bracket and standings.",
+                        "twitter:creator": "@foxsports",
+                        "twitter:image": "https://a57.foxsports.com/statics.foxsports.com/www.foxsports.com/content/uploads/2023/03/1408/814/03.08.23_NBAPlayoffPicture_Horizontal.jpg?ve=1&tl=1",
+                        "fb:app_id": "380390622023704",
+                        "apple-mobile-web-app-status-bar-style": "black",
+                        "twitter:site": "@foxsports",
+                        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0, user-scalable=yes",
+                        "apple-mobile-web-app-capable": "yes",
+                        "twitter:description": "The 2023 NBA playoff field is set! Check out our updated bracket and standings.",
+                        "og:locale": "en_US",
+                        "og:url": "https://www.foxsports.com/stories/nba/nba-playoff-picture-how-first-round-matchups-are-shaping-up",
+                        "format-detection": "telephone=no"
+                    }
+                ],
+                "cse_image": [
+                    {
+                        "src": "https://a57.foxsports.com/statics.foxsports.com/www.foxsports.com/content/uploads/2023/03/1408/814/03.08.23_NBAPlayoffPicture_Horizontal.jpg?ve=1&tl=1"
+                    }
+                ]
+            }
+        }
+    ]
+}
