@@ -43,6 +43,10 @@ def scrape_urls(url):
     
     return Exception("Error: Unable to get webpage content")
 
+def check_wikipedia(url):
+    # Checks if any updated info is on Wikipedia
+    pass
+
 def parse_urls():
     # Parses the provided URLs from a textbox and returns them as a list
     pass

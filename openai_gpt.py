@@ -74,27 +74,33 @@ def query_sense():
     return
 
 def summarize_info(content):
-    # Summarizes the information from a web result
-    openai.api_key = os.getenv("OPENAI_API_KEY") # sets the api key
+    # Currently doesn't contain any sentence bound checking!
+    # Will make the summary weird in some cases (if a word is cut off)
 
-    # Runs the GPT-3.5-turbo model
-    try:
-        response = openai.ChatCompletion.create(
-            model = "gpt-3.5-turbo",
-            messages = [
-                {"role": "system", "content": "You are a helpful assitant who summarizes any user provided text."},
-                {"role": "user", "content": content}
-            ],
-            temperature = 0.5 # creativity factor, from 0 to 1 where one is more creative
-        )
-        return response['choices'][0]['message']['content']
-    
-    except OpenAIError as e:
-        print(f"Uh oh, an API error occured. {e}")
-        return None
-    
-    except Exception as e:
-        print(f"Uh oh, an error occured: {e}")
-        return None
+    openai.api_key = os.getenv("OPENAI_API_KEY")  # sets the api key
 
-    return
+    # Divide the text into chunks of 2048 tokens each
+    content_chunks = [content[i:i+2048] for i in range(0, len(content), 2048)]
+
+    summary = ""
+    for chunk in content_chunks:
+        print("DEBUG: Chunk has been sent to GPT")
+        # Runs the GPT-3.5-turbo model
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant who summarizes any user provided text."},
+                    {"role": "user", "content": chunk}
+                ],
+                temperature=0.5  # creativity factor, from 0 to 1 where one is more creative
+            )
+            summary += response['choices'][0]['message']['content']
+        except OpenAIError as e:
+            print(f"Uh oh, an API error occurred. {e}")
+            return None
+        except Exception as e:
+            print(f"Uh oh, an error occurred: {e}")
+            return None
+
+    return summary
