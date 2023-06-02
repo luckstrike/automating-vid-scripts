@@ -9,7 +9,7 @@ def main():
 
     print("Parsing...")
     # Scraping the URL
-    url = "https://www.motortrend.com/features/ford-mustang-history-generations-models-specifications/"
+    url = ""
     site_result = scrape_urls(url)
 
     print("Parsed!")
