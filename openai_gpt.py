@@ -66,6 +66,8 @@ def check_sentiment(text):
 
 def create_search_query():
     # Creates a search query if GPT is unable to answer a question
+    # Possible queries to ask:
+    
     return
 
 def query_sense():
