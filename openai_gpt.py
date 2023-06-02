@@ -6,6 +6,8 @@ from openai.error import OpenAIError
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from nltk.tokenize import sent_tokenize
 
+MAX_TOKEN_CHUNKS = 2048 # Default of 2048, lower values lead to a more detailed summary but more chunks are used
+
 def debug_load_dotenv():
     load_dotenv()
     return
@@ -108,11 +110,11 @@ def ask_gpt_chunk(chunk):
         return None
 
 def summarize_info(content):
-    load_dotenv()
+    # load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY")  # sets the api key
 
-    # Splits up website content into chunks of 2048 tokens
-    content_chunks = chunk_sentences(content)
+    # Splits up website content into chunks of the specified max token value (in this case words)
+    content_chunks = chunk_sentences(content, MAX_TOKEN_CHUNKS)
 
     print("DEBUG: A total of " + str(len(content_chunks)) + " chunks have been created")
 
