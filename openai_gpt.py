@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 from openai.error import OpenAIError
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from nltk.tokenize import sent_tokenize
 
 def debug_load_dotenv():
     load_dotenv()
@@ -74,6 +75,19 @@ def query_sense():
     # Note: Should this be used? A funtion to check if the web results make sense?
     return
 
+def chunk_sentences(content, max_tokens=2048):
+    sentences = sent_tokenize(content)
+    chunks = []
+    current_chunk = ''
+    for sentence in sentences:
+        if len((current_chunk + sentence).split()) > max_tokens:
+            chunks.append(current_chunk)
+            current_chunk = sentence
+        else:
+            current_chunk += ' ' + sentence
+    chunks.append(current_chunk)
+    return chunks
+
 def ask_gpt_chunk(chunk):
     print("DEBUG: Chunk has been fed into GPT")
     try:
@@ -94,12 +108,17 @@ def ask_gpt_chunk(chunk):
         return None
 
 def summarize_info(content):
+    load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY")  # sets the api key
 
-    # Divide the text into chunks of 2048 tokens each (no sentence splitting)
-    content_chunks = [content[i:i+2048] for i in range(0, len(content), 2048)]
+    # Splits up website content into chunks of 2048 tokens
+    content_chunks = chunk_sentences(content)
 
-    # Parallelize the chunk processing
+    print("DEBUG: A total of " + str(len(content_chunks)) + " chunks have been created")
+
+    # Parallelizes the chunks and puts together results back into original order
     with ThreadPoolExecutor(max_workers = 10) as executor:  # Adjust max_workers as needed
-        future_to_chunk = {executor.submit(ask_gpt_chunk, chunk): chunk for chunk in content_chunks}
-        return "".join(future.result() for future in as_completed(future_to_chunk))
+        futures = [executor.submit(ask_gpt_chunk, chunk) for chunk in content_chunks]
+        results = [future.result() for future in futures]
+
+    return "".join(results)
