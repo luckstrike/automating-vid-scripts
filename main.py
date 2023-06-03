@@ -15,7 +15,7 @@ def main():
     print("Parsed!")
     
     # Turning the site results into a summary using GPT
-    summary = summarize_info(site_result)
+    summary = summarize_info(site_result, "bullet_points")
     print(summary)
 
 if __name__ == "__main__":

@@ -90,13 +90,21 @@ def chunk_sentences(content, max_tokens=2048):
     chunks.append(current_chunk)
     return chunks
 
-def ask_gpt_chunk(chunk):
+def ask_gpt_chunk(chunk, summary_mode):
     print("DEBUG: Chunk has been fed into GPT")
+
+    assistant_role = ""
+
+    if summary_mode == 'summarize':
+        assistant_role = "You are a helpful assistant who summarizes any user provided text."
+    elif summary_mode == 'bullet_points':
+        assistant_role = "You are a helpful assistant who creates bullet points from any user provided text."
+
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant who summarizes any user provided text."},
+                {"role": "system", "content": assistant_role},
                 {"role": "user", "content": chunk}
             ],
             temperature=0.5  # creativity factor, from 0 to 1 where one is more creative
@@ -109,9 +117,11 @@ def ask_gpt_chunk(chunk):
         print(f"Uh oh, an error occurred: {e}")
         return None
 
-def summarize_info(content):
+def summarize_info(content, summary_mode = 'summarize'):
     # load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY")  # sets the api key
+
+    print("DEBUG: Assistant role has been set to the following: " + summary_mode)
 
     # Splits up website content into chunks of the specified max token value (in this case words)
     content_chunks = chunk_sentences(content, MAX_TOKEN_CHUNKS)
@@ -120,7 +130,7 @@ def summarize_info(content):
 
     # Parallelizes the chunks and puts together results back into original order
     with ThreadPoolExecutor(max_workers = 10) as executor:  # Adjust max_workers as needed
-        futures = [executor.submit(ask_gpt_chunk, chunk) for chunk in content_chunks]
+        futures = [executor.submit(ask_gpt_chunk, chunk, summary_mode) for chunk in content_chunks]
         results = [future.result() for future in futures]
 
     return "".join(results)
