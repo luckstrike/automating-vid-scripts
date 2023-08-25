@@ -161,3 +161,38 @@ cython_debug/
 
 # Ignore da
 search_data.json
+
+# front-end stuff #
+
+# Svelte Stuff
+front-end/.idea
+front-end/.DS_Store
+front-end/.vscode/*
+front-end/!.vscode/launch.json
+front-end/node_modules
+front-end/.eslintcache
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+front-end/node_modules
+front-end/dist
+front-end/dist-ssr
+front-end/*.local
+
+# Editor directories and files
+front-end/.vscode/*
+front-end/!.vscode/extensions.json
+front-end/.idea
+front-end/.DS_Store
+front-end/*.suo
+front-end/*.ntvs*
+front-end/*.njsproj
+front-end/*.sln
+front-end/*.sw?
