@@ -2,11 +2,12 @@
     let brainstorm_text = "";
 
     function handleGenerate() {
-        // TODO: Call on the GPT back-end to generate a random idea
+        // TODO: Call on the GPT back-end to generate the provided idea
         console.log("Generating user provided idea...")
     }
 
     function handleGenerateRandomIdea() {
+        // TODO: Call on the GPT back-end to generate a random idea
         console.log("Generating random idea...");
     }
 </script>
@@ -23,5 +24,15 @@
     <br/>
     
     <button on:click={() => handleGenerate()}>Generate</button>
-    <button on:click={() => handleGenerateRandomIdea()}>Generate Random Idea</button>
+    <button 
+        on:click={() => handleGenerateRandomIdea()}
+        disabled={brainstorm_text !== ""}>
+        Generate Random Idea
+    </button>
 </div>
+
+<style>
+    button[disabled] {
+        background-color: grey;
+    }
+</style>
