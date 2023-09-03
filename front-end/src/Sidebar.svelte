@@ -27,15 +27,14 @@
         {link.name}
     </a>
 {/each}
-
 </div>
 
 <style>
     /* The navigation menu links */
     .sidenav {
-        height: 100%; /* Full-height: remove this if you want "auto" height */
+        height: 100vh; /* Full-height: remove this if you want "auto" height */
         width: 300px; /* Set the width of the sidebar */
-        position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+        position: relative; /* Fixed Sidebar (stay in place on scroll) */
         z-index: 1; /* Stay on top */
         top: 0; /* Stay at the top */
         left: 0;
@@ -61,9 +60,14 @@
     }
 
     /* When you mouse over the navigation links, change their color */
-    .sidenav a:hover, .sidenav a.active {
+    .sidenav a:hover {
         color: #f1f1f1;
         font-weight: bold;
+        background-color: #2f2f2f;
+    }
+    
+    .sidenav a.active {
+        color: #f1f1f1;
         background-color: #2f2f2f;
     }
 
