@@ -1,4 +1,9 @@
-<script>
+<script lang="ts">
+    // Importing the Svelte components
+    import Brainstorm from './modes/Brainstorm.svelte';
+    import Script from './modes/Script.svelte';
+    import Summarize from './modes/Summarize.svelte';
+
     // Creating the elements for the sidebar
     let links = [
         {name: 'Brainstorm', color: '#990000', anchor: 'brainstorm', isActive: false},
@@ -14,26 +19,53 @@
     }
 </script>
 
-<div class="sidenav">
-    <!-- Creating the sidebar elements with Svelte -->
-    <!-- Use link.anchors here -->
-    {#each links as link, index}
-    <a 
-        href="#" 
-        data-index={index} 
-        style="--after-color: {link.color};"
-        class:active={link.isActive}
-        on:click|preventDefault={() => activateLink(index)}>
-        {link.name}
-    </a>
-{/each}
+<div class="flex-container">
+    <div class="sidenav">
+        <!-- Creating the sidebar elements with Svelte -->
+        <!-- Use link.anchors here -->
+        {#each links as link, index}
+        <a 
+            href="#" 
+            data-index={index} 
+            style="--after-color: {link.color};"
+            class:active={link.isActive}
+            on:click|preventDefault={() => activateLink(index)}>
+            {link.name}
+        </a>
+    {/each}
+    </div>
+
+    <div class="content">
+        {#if links[0].isActive}
+            <Brainstorm />
+        {:else if links[1].isActive}
+            <Script />
+        {:else if links[2].isActive}
+            <Summarize />
+        {/if}
+    </div>
 </div>
 
+
+
+
 <style>
+    .flex-container {
+        display: flex;
+        height: 100vh;
+    }
+
+    .content {
+        flex: 1;
+        overflow-y: auto;
+        margin: 0;
+        padding: 10px;
+    }
+
     /* The navigation menu links */
     .sidenav {
         height: 100vh; /* Full-height: remove this if you want "auto" height */
-        width: 300px; /* Set the width of the sidebar */
+        width: 15%; /* Set the width of the sidebar */
         position: relative; /* Fixed Sidebar (stay in place on scroll) */
         z-index: 1; /* Stay on top */
         top: 0; /* Stay at the top */
