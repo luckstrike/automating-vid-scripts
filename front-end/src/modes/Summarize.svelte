@@ -1,6 +1,18 @@
 <script lang="ts">
-    let summarize_url = "";
-    let selectedOption: string;
+    let summarize_url:string | null = null;
+    let selectedOption:string | null = null;
+
+    function handleSummarize(selectedOption: string | null, summarize_url: string | null) {
+        // Change this to actual logic later
+        if (selectedOption == "detailed-summary") {
+            console.log("Summarizing with detailed summary...")
+        } else if ("bullet-points") {
+            console.log("Summarizing with bullet points...")
+        } else {
+            console.log("Something went wrong...")
+        }
+    }
+
 </script>
 
 <div class="summarize-section">
@@ -21,11 +33,35 @@
             <input type="radio" id="bullet-points" name="options" value="bullet-points" bind:group={selectedOption}>
             <label for="bullet-points">Bullet Points</label>
         </div>
+
+        <button 
+            id="start-summary" 
+            disabled={!(selectedOption && summarize_url)}
+            on:click={() => handleSummarize(selectedOption, summarize_url)}
+            >
+            Summarize
+        </button>
     </div>
 
 </div>
 
 <style>
+    #start-summary[disabled] {
+        background-color: grey;
+        color: #d9d9d9;
+        cursor: not-allowed;
+    }
+
+    #start-summary {
+        height: 40px;
+        font-size: 18px;
+        border-radius: 10px;
+        border: none;
+        background-color: #005fa3;
+        color: #ffffff;
+        cursor: pointer;
+    }
+
     .summarize-section {
         display: flex;
         flex-direction: column;
