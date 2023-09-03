@@ -11,7 +11,7 @@
         {name: 'Summarize', color: '#003d75', anchor: 'summarize', isActive: false},
     ];
 
-    function activateLink(index) {
+    function activateLink(index: number) {
         links = links.map((link, i) => ({
             ...link,
             isActive: i === index
@@ -45,9 +45,6 @@
         {/if}
     </div>
 </div>
-
-
-
 
 <style>
     .flex-container {

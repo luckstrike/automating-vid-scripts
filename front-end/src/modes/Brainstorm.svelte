@@ -37,6 +37,8 @@
 <style>
     button[disabled] {
         background-color: grey;
+        color: #d9d9d9;
+        cursor: not-allowed;
     }
 
     button:not([disabled]):hover {
