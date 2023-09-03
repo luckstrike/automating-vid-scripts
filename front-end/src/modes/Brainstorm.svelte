@@ -25,11 +25,18 @@
     <br/>
     
     <div class="button-container">
-        <button class="idea-buttons" on:click={() => handleGenerate()}>Generate Idea</button>
+        <button 
+            class="idea-buttons" 
+            on:click={() => handleGenerate()}
+            disabled={brainstorm_text == ""}
+        >
+        Generate Idea
+    </button>
         <button 
             class="idea-buttons"
             on:click={() => handleGenerateRandomIdea()}
-            disabled={brainstorm_text !== ""}>
+            disabled={brainstorm_text !== ""}
+        >
             Generate Random Idea
         </button>
     </div>
