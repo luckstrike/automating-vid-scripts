@@ -1,16 +1,33 @@
 <script>
+    // Creating the elements for the sidebar
     let links = [
-        {name: 'Brainstorm', color: '#990000'},
-        {name: 'Script', color: '#107500'},
-        {name: 'Summarize', color: '#003d75'}
+        {name: 'Brainstorm', color: '#990000', anchor: 'brainstorm', isActive: false},
+        {name: 'Script', color: '#107500', anchor: 'script', isActive: false},
+        {name: 'Summarize', color: '#003d75', anchor: 'summarize', isActive: false},
     ];
+
+    function activateLink(index) {
+        links = links.map((link, i) => ({
+            ...link,
+            isActive: i === index
+        }));
+    }
 </script>
 
 <div class="sidenav">
+    <!-- Creating the sidebar elements with Svelte -->
+    <!-- Use link.anchors here -->
     {#each links as link, index}
-        <!-- Set inline style for the ::after pseudo-element -->
-        <a href="#" data-index={index} style="--after-color: {link.color};">{link.name}</a>
-    {/each}
+    <a 
+        href="#" 
+        data-index={index} 
+        style="--after-color: {link.color};"
+        class:active={link.isActive}
+        on:click|preventDefault={() => activateLink(index)}>
+        {link.name}
+    </a>
+{/each}
+
 </div>
 
 <style>
@@ -30,7 +47,7 @@
 
     /* The navigation menu links */
     .sidenav a {
-        padding: 20px 8px 20px 16px;
+        padding: 20px 8px;
         text-decoration: none;
         font-size: 20px;
         color: #fdfdfd;
@@ -39,15 +56,18 @@
         transition: font-size 0.3s ease-in-out;
         position: relative;
         line-height: 1;
+        z-index: 1;
+        position: relative;
     }
 
     /* When you mouse over the navigation links, change their color */
-    .sidenav a:hover {
+    .sidenav a:hover, .sidenav a.active {
         color: #f1f1f1;
         font-weight: bold;
         background-color: #2f2f2f;
     }
 
+    /* Note: For some reason, the red rectangle is larger by a bit*/
     .sidenav a::after {
         content: '';
         position: absolute;
@@ -57,7 +77,18 @@
         height: 100%;
         background-color: var(--after-color); /* Use the CSS variable for the color */
         transform: translateY(-50%);
+        opacity: 0;
+        z-index: 2;
     }
+
+    .sidenav a:hover::after {
+        opacity: 1;
+    }
+
+    .sidenav a.active::after {
+        opacity: 1;
+    }
+
 
     /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
     @media screen and (max-height: 450px) {
