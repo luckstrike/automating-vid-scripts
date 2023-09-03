@@ -14,6 +14,7 @@
 
 <div class="idea-generation-section">
     <!--Creating a textbox with placeholder text for brainstorming ideas-->
+    <p>Do you have a topic that you want to make a video about? Provide it here:</p>
     <input id="idea-generation-input"
         type="text"
         placeholder="or try generating a random idea..."
@@ -51,6 +52,9 @@
         align-items: center;
         justify-content: center;
         height: 100vh;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
     }
 
     #idea-generation-input {
