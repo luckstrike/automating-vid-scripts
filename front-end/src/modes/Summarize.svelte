@@ -14,7 +14,7 @@
     <div class="radio-buttons">
         <div class="radio-option">
             <input type="radio" id="detailed-summary" name="options" value="detailed-summary" checked bind:group={selectedOption}>
-            <label for="summary">Detailed Summary</label>
+            <label for="detailed-summary">Detailed Summary</label>
         </div>
 
         <div class="radio-option">
