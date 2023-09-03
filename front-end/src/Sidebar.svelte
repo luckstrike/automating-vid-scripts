@@ -6,7 +6,7 @@
 
     // Creating the elements for the sidebar
     let links = [
-        {name: 'Brainstorm', color: '#990000', anchor: 'brainstorm', isActive: false},
+        {name: 'Brainstorm', color: '#990000', anchor: 'brainstorm', isActive: true},
         {name: 'Script', color: '#107500', anchor: 'script', isActive: false},
         {name: 'Summarize', color: '#003d75', anchor: 'summarize', isActive: false},
     ];
@@ -25,7 +25,7 @@
         <!-- Use link.anchors here -->
         {#each links as link, index}
         <a 
-            href="#" 
+            href=""
             data-index={index} 
             style="--after-color: {link.color};"
             class:active={link.isActive}
