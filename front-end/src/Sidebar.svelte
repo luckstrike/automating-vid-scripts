@@ -1,7 +1,7 @@
 <script lang="ts">
     // Importing the Svelte components
     import Brainstorm from './modes/Brainstorm.svelte';
-    import Script from './modes/Script.svelte';
+    import Script from './modes/script/Script.svelte';
     import Summarize from './modes/Summarize.svelte';
 
     // Creating the elements for the sidebar
