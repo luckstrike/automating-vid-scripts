@@ -2,6 +2,7 @@
     import { onMount, onDestroy } from 'svelte';
     import { Editor } from '@tiptap/core';
     import StarterKit from '@tiptap/starter-kit';
+    import Underline from '@tiptap/extension-underline';
 
     let element: any; // figure out this type later
     let editor: any; // figure out this type later
@@ -16,6 +17,7 @@
         element: element,
         extensions: [
             StarterKit,
+            Underline
         ],
         content: '<p>Start typing here...</p>',
         onTransaction: () => {
@@ -23,6 +25,8 @@
             editor = editor
         },
         })
+        console.log("editor: ", editor)
+        console.log("element: ", element)
     })
 
     onDestroy(() => {
@@ -54,6 +58,14 @@
         italic
     </button>
 
+    <!-- Underline Button -->
+    <button
+        on:click={() => editor.chain().focus().toggleUnderline().run()}
+        class={editor.isActive('underline') ? 'is-active' : ''}
+    >
+        underline
+    </button>
+
     <!-- Paragraph Button -->
     <button on:click={() => editor.chain().focus().setParagraph().run()} class:active={editor.isActive('paragraph')}>
         P
@@ -76,7 +88,7 @@
     </button>
 {/if}
 
-<div bind:this={element} />
+<div bind:this={element}/>
 
 <style>
   button.active {
@@ -84,10 +96,11 @@
     color: white;
   }
 
-  .tiptap {
-    border: 1px solid #ccc;
+  /* This feels so wrong but it works */
+  :global(.tiptap) {
+    border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 10px;
+    padding: 0.5em;
   }
 
 </style>
