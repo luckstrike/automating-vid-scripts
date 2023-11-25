@@ -1,40 +1,57 @@
-<script lang = "ts">
-    import Quill from "quill";
+<script lang="ts">
+    import { onMount, onDestroy } from 'svelte';
+    import { Editor } from '@tiptap/core';
+    import StarterKit from '@tiptap/starter-kit';
 
-    // This currently shows a split second of some loading triangle thingy
-    // TODO: Fix this
-    function quill(node) {
-        new Quill(node, {
-				modules: {
-					toolbar: [
-						[{ header: [1, 2, 3, false] }],
-						["bold", "italic", "underline", "strike"],
-						["link", "code-block"]
-					]
-				},
-				placeholder: "Type something...",
-				theme: "snow" // or 'bubble'
-			});
-    }
+    let element: any; // figure out this type later
+    let editor: any; // figure out this type later
 
-    /// asdjkasdj
+    // NOTE: Extensions for TipTap can be added here
+    onMount(() => {
+        editor = new Editor({
+        element: element,
+        extensions: [
+            StarterKit,
+        ],
+        content: '<p>Start typing here...</p>',
+        onTransaction: () => {
+            // force re-render so `editor.isActive` works as expected
+            editor = editor
+        },
+        })
+    })
+
+    onDestroy(() => {
+        if (editor) {
+        editor.destroy()
+        }
+    })
 </script>
 
-<svelte:head>
-    <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-</svelte:head>
+{#if editor}
+  <button
+    on:click={() => editor.chain().focus().toggleHeading({ level: 1}).run()}
+    class:active={editor.isActive('heading', { level: 1 })}
+  >
+    H1
+  </button>
+  <button
+    on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+    class:active={editor.isActive('heading', { level: 2 })}
+  >
+    H2
+  </button>
+  <button on:click={() => editor.chain().focus().setParagraph().run()} class:active={editor.isActive('paragraph')}>
+    P
+  </button>
+{/if}
 
-<div class="text-editor">
-    <div class="editor" use:quill />
-</div>
+<div bind:this={element} />
 
 <style>
-    .text-editor {
-        margin-top: 5vh;
-    }
+  button.active {
+    background: black;
+    color: white;
+  }
 
-    .editor {
-        height: 85vh;
-        overflow-y: hidden;
-    }
 </style>

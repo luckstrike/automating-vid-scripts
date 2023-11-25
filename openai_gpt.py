@@ -71,11 +71,11 @@ def check_sentiment(text):
 def create_search_query():
     # Creates a search query if GPT is unable to answer a question
     # Possible queries to ask:
-    return
+    pass
 
 def query_sense():
     # Note: Should this be used? A funtion to check if the web results make sense?
-    return
+    pass
 
 def chunk_sentences(content, max_tokens=2048):
     sentences = sent_tokenize(content)
@@ -134,3 +134,7 @@ def summarize_info(content, summary_mode = 'summarize'):
         results = [future.result() for future in futures]
 
     return "".join(results)
+
+def brainstorm():
+    # A function that will brainstorm ideas for a given topic or provide random ideas
+    pass
