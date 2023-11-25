@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte';
-    import { Editor } from '@tiptap/core';
+    import { Editor } from '@tiptap/core';  
     import StarterKit from '@tiptap/starter-kit';
     import Underline from '@tiptap/extension-underline';
 
@@ -42,7 +42,7 @@
 {#if editor}
     <!-- Bold Button -->
     <button
-        on:click={() => console.log && editor.chain().focus().toggleBold().run()}
+        on:click={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
         class={editor.isActive("bold") ? "is-active" : ""}
     >
