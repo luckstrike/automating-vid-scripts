@@ -66,11 +66,6 @@
         underline
     </button>
 
-    <!-- Paragraph Button -->
-    <button on:click={() => editor.chain().focus().setParagraph().run()} class:active={editor.isActive('paragraph')}>
-        P
-    </button>
-
     <!-- Undo Button -->
     <button
         on:click={() => editor.chain().focus().undo().run()}
@@ -97,6 +92,9 @@
   }
 
   /* This feels so wrong but it works */
+  /* background-color here changes the text box's background color */
+  /* While color changes the text color */
+
   :global(.tiptap) {
     border: 1px solid #ddd;
     border-radius: 5px;
