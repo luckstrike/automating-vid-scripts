@@ -20,9 +20,12 @@
     "vite": "^4.5.0"
   },
   "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@tiptap/core": "^2.1.12",
     "@tiptap/extension-underline": "^2.1.12",
     "@tiptap/pm": "^2.1.12",
-    "@tiptap/starter-kit": "^2.1.12"
+    "@tiptap/starter-kit": "^2.1.12",
+    "svelte-fa": "^3.0.4"
   }
 }
