@@ -8,7 +8,7 @@
 
     // Icon Imports
     import Fa from 'svelte-fa'
-    import { faBold, faItalic, faUnderline, faUndo, faRedo } from '@fortawesome/free-solid-svg-icons'
+    import { faBold, faItalic, faUnderline, faUndo, faRedo, faList, faListOl } from '@fortawesome/free-solid-svg-icons'
 
     let element: any; // figure out this type later
     let editor: any; // figure out this type later
@@ -46,8 +46,8 @@
     })
 </script>
 
-<!-- Let's get the following working: Bold, Italic, Underlined, Font Size -->
-<!-- Next Up: Bullet List -->
+<!-- Potential Future Buttons -->
+<!-- Code Block, Quote Block, Horizontal Rule (just like a horizontal line) -->
 
 {#if editor}
     <div class="toolbar">
@@ -92,6 +92,24 @@
         >
             <Fa icon={faRedo} />
         </button>
+
+        <!-- Bullet List Button -->
+        <button
+            on:click={() => editor.chain().focus().toggleBulletList().run()}
+            class={editor.isActive("bulletList") ? "is-active" : ""}
+        >
+            <Fa icon={faList} />
+        </button>
+        
+        <!-- Ordered List Button -->
+        <button
+            on:click={() => editor.chain().focus().toggleOrderedList().run()}
+            class={editor.isActive("orderedList") ? "is-active" : ""}
+        >
+            <Fa icon={faListOl} />
+        </button>   
+
+
     </div>
 
 {/if}
