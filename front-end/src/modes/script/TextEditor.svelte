@@ -46,6 +46,8 @@
     })
 </script>
 
+<!-- TODO: Add in a way to change font size (so you have titles) -->
+
 <!-- Potential Future Buttons -->
 <!-- Code Block, Quote Block, Horizontal Rule (just like a horizontal line) -->
 
@@ -126,6 +128,7 @@
   .toolbar {
     display: flex;
     justify-content: center;
+    margin-bottom: 0.5em;
   }
 
   /* This feels so wrong but it works */
@@ -136,6 +139,10 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 0.5em;
+    padding-top: 0em;
+    min-height: 85vh;
+    overflow: hidden;
+    scroll-behavior: smooth; /* This is so that the text box can scroll */
   }
 
   /* Changes color when a button is active */
