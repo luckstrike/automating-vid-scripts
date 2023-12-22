@@ -99,15 +99,10 @@
 <div bind:this={element}/>
 
 <style>
-  button.active {
-    background: black;
-    color: white;
-  }
-
   button {
     border: none;
-    margin: 0.3em;
     background: none;
+    margin: 0.3em;
   }
 
   .toolbar {
@@ -123,6 +118,12 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 0.5em;
+  }
+
+  /* Changes color when a button is active */
+  .is-active {
+    background-color: lightblue;
+    font-weight: bolder;
   }
 
 </style>
