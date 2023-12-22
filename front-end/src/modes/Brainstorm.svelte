@@ -1,9 +1,46 @@
 <script lang="ts">
-    let brainstorm_text = "";
+    let brainstorm_text: string = "";
+    let isLoading: boolean = false;
 
-    function handleGenerate() {
+    const API_URL: string = ""; // should be the API URL for the GPT back-end
+
+    async function handleGenerate(userPrompt: string): Promise<void> {
         // TODO: Call on the GPT back-end to generate the provided idea
-        console.log("Generating user provided idea...")
+
+        let response: string = "";
+        let error: string | null = null;
+
+        isLoading = true;
+
+        // Handles the fetch request
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt: userPrompt })
+            });
+
+            // Everything went well
+            if (res.ok) {
+                const data = await res.json();
+                response = data.response;
+
+                // TODO: Create a new script with the video idea
+
+            } else {
+                // TODO: Show an error message to the user
+                // Handle HTTP errors
+                error = `Server responded with status: ${res.status}`;
+            }
+        } catch (err) {
+            // TODO: Show an error message to the user
+            // Handle network errors
+            error = `Fetch failed: ${(err as Error).message}`;
+        } finally {
+            isLoading = false;
+        }
     }
 
     function handleGenerateRandomIdea() {
@@ -27,10 +64,14 @@
     <div class="button-container">
         <button 
             class="idea-buttons" 
-            on:click={() => handleGenerate()}
-            disabled={brainstorm_text == ""}
+            on:click={() => handleGenerate(brainstorm_text)}
+            disabled={brainstorm_text == "" || isLoading}
         >
-        Generate Idea
+        {#if isLoading}
+            Generating Idea...
+        {:else}
+            Generate Idea
+        {/if}
     </button>
         <button 
             class="idea-buttons"
