@@ -2,7 +2,8 @@
     let brainstorm_text: string = "";
     let isLoading: boolean = false;
 
-    const API_URL: string = ""; // should be the API URL for the GPT back-end
+    const tempAddr: string = "localhost:5000"
+    const API_URL: string = "http://" + tempAddr + "/api"; // should be the API URL for the GPT back-end
 
     async function handleGenerate(userPrompt: string): Promise<void> {
         // TODO: Call on the GPT back-end to generate the provided idea
@@ -14,7 +15,7 @@
 
         // Handles the fetch request
         try {
-            const res = await fetch(API_URL, {
+            const res = await fetch(API_URL + "/askgpt", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -28,6 +29,7 @@
                 response = data.response;
 
                 // TODO: Create a new script with the video idea
+                console.log(response);
 
             } else {
                 // TODO: Show an error message to the user
