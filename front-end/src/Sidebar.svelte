@@ -6,6 +6,7 @@
 
     // Creating the elements for the sidebar
     let links = [
+        {name: 'Home', color: '#FFD700', anchor: 'none', isActive: true},
         {name: 'Brainstorm', color: '#990000', anchor: 'brainstorm', isActive: true},
         {name: 'Script', color: '#107500', anchor: 'script', isActive: false},
         {name: 'Summarize', color: '#003d75', anchor: 'summarize', isActive: false},
@@ -36,11 +37,11 @@
     </div>
 
     <div class="content">
-        {#if links[0].isActive}
+        {#if links[1].isActive}
             <Brainstorm />
-        {:else if links[1].isActive}
-            <Script />
         {:else if links[2].isActive}
+            <Script />
+        {:else if links[3].isActive}
             <Summarize />
         {/if}
     </div>

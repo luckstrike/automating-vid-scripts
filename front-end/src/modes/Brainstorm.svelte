@@ -6,6 +6,10 @@
     const tempAddr: string = "localhost:5000"
     const API_URL: string = "http://" + tempAddr + "/api"; // should be the API URL for the GPT back-end
 
+    // TODO: Make these now create a brand new script page
+    //       Change over to the v2 UI draft in Figma
+    //       This lets me have user accounts and stuff!
+
     async function handleGenerate(userPrompt: string): Promise<void> {
         let response: string = "";
         let error: string | null = null;
