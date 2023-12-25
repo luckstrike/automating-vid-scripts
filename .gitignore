@@ -198,3 +198,6 @@ front-end/*.sln
 front-end/*.sw?
 
 .DS_Store
+
+# Ignoring the Firebase Private Key
+back-end/automating-video-1685338158314-firebase-adminsdk-hbq0s-a62668ef38.json

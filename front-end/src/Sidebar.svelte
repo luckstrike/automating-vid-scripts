@@ -1,5 +1,6 @@
 <script lang="ts">
     // Importing the Svelte components
+    import Home from './modes/Home.svelte';
     import Brainstorm from './modes/Brainstorm.svelte';
     import Script from './modes/script/Script.svelte';
     import Summarize from './modes/Summarize.svelte';
@@ -7,7 +8,7 @@
     // Creating the elements for the sidebar
     let links = [
         {name: 'Home', color: '#FFD700', anchor: 'none', isActive: true},
-        {name: 'Brainstorm', color: '#990000', anchor: 'brainstorm', isActive: true},
+        {name: 'Brainstorm', color: '#990000', anchor: 'brainstorm', isActive: false},
         {name: 'Script', color: '#107500', anchor: 'script', isActive: false},
         {name: 'Summarize', color: '#003d75', anchor: 'summarize', isActive: false},
     ];
@@ -37,7 +38,10 @@
     </div>
 
     <div class="content">
-        {#if links[1].isActive}
+        <!-- Creating the content elements with Svelte -->
+        {#if links[0].isActive}
+            <Home />
+        {:else if links[1].isActive}
             <Brainstorm />
         {:else if links[2].isActive}
             <Script />
