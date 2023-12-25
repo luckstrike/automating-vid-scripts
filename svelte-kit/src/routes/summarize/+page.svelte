@@ -4,14 +4,13 @@
 </script>
 
 <div class="container">
-    <Sidebar />
     <Summarize />
 </div>
 
 <style>
     .container {
         display: flex;
-        flex-direction: row;
         height: 100vh;
+        flex: 0 0 100%;
     }
 </style>

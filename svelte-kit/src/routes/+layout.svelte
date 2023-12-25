@@ -1,16 +1,17 @@
 <script lang="ts">
-	import Sidebar from "$lib/Sidebar.svelte";
-    import Brainstorm from "./Brainstorm.svelte";
+    import Sidebar from "$lib/Sidebar.svelte";
+    import '../global.css';
 </script>
 
 <div class="container">
-    <Brainstorm />
+    <Sidebar />
+    <slot />
 </div>
 
 <style>
     .container {
         display: flex;
+        flex-direction: row;
         height: 100vh;
-        flex: 0 0 100%;
     }
 </style>

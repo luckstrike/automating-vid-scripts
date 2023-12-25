@@ -1,24 +1,20 @@
 <script lang="ts">
-	import Sidebar from "$lib/Sidebar.svelte";
     import Script from "./Script.svelte";
+
+    // TODO: Fix Sidebar not being pinned to the side when the text editor gets too long!
+
 </script>
 
 <div class="container">
-    <Sidebar />
-    <div class="text-editor">
-        <Script />
-    </div>
+    <Script />
 </div>
 
 <style>
     .container {
         display: flex;
-        flex-direction: row;
         height: 100vh;
+        flex: 0 0 100%;
+        margin-left: 2.5%;
+        margin-right: 2.5%;
     }
-
-    .text-editor {
-        flex: 1 1 auto;
-    }
-
 </style>
