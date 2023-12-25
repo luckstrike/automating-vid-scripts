@@ -2,8 +2,23 @@
     // Importing the Svelte components
     import Home from './modes/Home.svelte';
     import Brainstorm from './modes/Brainstorm.svelte';
-    import Script from './modes/script/Script.svelte';
+    import Script from './modes/script/Script.svelte';  
     import Summarize from './modes/Summarize.svelte';
+
+    import { onMount } from 'svelte';
+
+    let isUserLoggedIn = false;
+
+    // Checking if the user is logged in before showing any cool stuff
+    function checkLogin() {
+        // TODO: Actually check if the user is logged in
+        /* Do some *sparkly* stuff with Firebase and the login check here*/
+        
+        // For now, just set the variable to true
+        isUserLoggedIn = true;
+
+        return;
+    }
 
     // Creating the elements for the sidebar
     let links = [
@@ -19,6 +34,11 @@
             isActive: i === index
         }));
     }
+
+    onMount(() => {
+        checkLogin();
+    });
+
 </script>
 
 <div class="flex-container">
@@ -26,14 +46,16 @@
         <!-- Creating the sidebar elements with Svelte -->
         <!-- Use link.anchors here -->
         {#each links as link, index}
-        <a 
-            href=""
-            data-index={index} 
-            style="--after-color: {link.color};"
-            class:active={link.isActive}
-            on:click|preventDefault={() => activateLink(index)}>
-            {link.name}
-        </a>
+        {#if index === 0 || isUserLoggedIn}
+            <a 
+                href=""
+                data-index={index} 
+                style="--after-color: {link.color};"
+                class:active={link.isActive}
+                on:click|preventDefault={() => activateLink(index)}>
+                {link.name}
+            </a>
+        {/if}
     {/each}
     </div>
 
