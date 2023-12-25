@@ -144,7 +144,7 @@
     border-radius: 5px;
     padding: 0.5em;
     padding-top: 0em;
-    min-height: 85vh;
+    min-height: 90vh;
     overflow: hidden;
     scroll-behavior: smooth; /* This is so that the text box can scroll */
   }
