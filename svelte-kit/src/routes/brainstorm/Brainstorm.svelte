@@ -81,7 +81,7 @@
     }
 </script>
 
-<div class="idea-generation-section">
+<div class="container">
     <!--Creating a textbox with placeholder text for brainstorming ideas-->
     <p>Do you have a topic that you want to make a video about? Provide it here:</p>
     <input id="idea-generation-input"
@@ -130,7 +130,7 @@
         background-color: #005fa3;
     }
 
-    .idea-generation-section {
+    .container {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -139,6 +139,7 @@
         color: white;
         font-size: 18px;
         font-weight: bold;
+        flex: 0 0 85%;
     }
 
     #idea-generation-input {

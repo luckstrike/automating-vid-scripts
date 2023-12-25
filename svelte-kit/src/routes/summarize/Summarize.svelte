@@ -15,7 +15,7 @@
 
 </script>
 
-<div class="summarize-section">
+<div class="container">
     <p>Please provide the URL of the website you would like to summarize:</p>
     <input id="summarize-url-input"
         type="text" 
@@ -62,7 +62,7 @@
         cursor: pointer;
     }
 
-    .summarize-section {
+    .container {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -71,6 +71,7 @@
         color: #ffffff;
         font-size: 20px;
         font-weight: bold;
+        flex: 0 0 85%;
     }
 
     .radio-buttons {

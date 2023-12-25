@@ -110,13 +110,11 @@
         >
             <Fa icon={faListOl} />
         </button>   
-
-
     </div>
 
 {/if}
 
-<div bind:this={element}/>
+<div class="text-editor" bind:this={element}/>
 
 <style>
   button {
@@ -125,10 +123,16 @@
     margin: 0.3em;
   }
 
+  .text-editor {
+    flex: 1 1 auto;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
+
   .toolbar {
     display: flex;
     justify-content: center;
-    margin-bottom: 0.5em;
+    margin: 0.5em;
   }
 
   /* This feels so wrong but it works */
