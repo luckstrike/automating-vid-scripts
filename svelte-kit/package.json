@@ -42,6 +42,7 @@
 		"@tiptap/extension-underline": "^2.1.13",
 		"@tiptap/pm": "^2.1.13",
 		"@tiptap/starter-kit": "^2.1.13",
+		"firebase": "^10.7.1",
 		"svelte-fa": "^3.0.4",
 		"tiptap": "^1.32.2"
 	}
