@@ -16,7 +16,7 @@
 
 <div class="container">
     {#if $authStore.currentUser}
-        <h1>Hello, {$authStore.currentUser.email}</h1>
+        <h1>Howdy there, {$authStore.currentUser.email}</h1>
         <LoginReset />
     {:else}
         <h1>Not logged in</h1>
@@ -24,5 +24,11 @@
 </div>
 
 <style>
-
+	.container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+    }
 </style>

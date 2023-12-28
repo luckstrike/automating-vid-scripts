@@ -43,7 +43,6 @@
 <style>
     .container {
         display: flex;
-        flex-direction: row;
         height: 100vh;
     }
 </style>
