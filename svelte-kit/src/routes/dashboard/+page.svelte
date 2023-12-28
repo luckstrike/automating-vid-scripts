@@ -3,11 +3,14 @@
     import { authHandlers, authStore } from "$lib/stores/authStore";
     import LoginReset from "$lib/LoginReset.svelte";
 
+    // TODO: This should show up once you're logged in
+    // and show all of your existing scripts!        
+
     let userEmail: string | null;
 
-    authStore.subscribe((curr) => {
+    authStore.subscribe((curr: any) => {
         console.log("Current User: ", curr?.currentUser);
-        userEmail = curr?.currentUser?.email; // TODO: idk how to fix this ts error?
+        userEmail = curr?.currentUser?.email;
     });
 </script>
 

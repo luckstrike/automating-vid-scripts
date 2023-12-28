@@ -6,7 +6,6 @@
     import { auth } from '$lib/firebase/firebase.client';
     import { authStore } from "$lib/stores/authStore";
     import { browser } from '$app/environment';
-    import { type User } from 'firebase/auth'
 
     onMount(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -25,6 +24,8 @@
             // Takes the user back to the root (login) page if they are not logged in
             if (browser && !$authStore.currentUser && !$authStore.isLoading && window.location.pathname != '/') {
                 window.location.href = '/';
+            } else if (browser && $authStore.currentUser && !$authStore.isLoading && window.location.pathname == '/') {
+                window.location.href = '/dashboard';
             }
         });
 
@@ -33,7 +34,9 @@
 </script>
 
 <div class="container">
-    <Sidebar />
+    {#if $authStore.currentUser}
+        <Sidebar />
+    {/if}
     <slot />
 </div>
 
