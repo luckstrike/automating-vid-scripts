@@ -60,6 +60,14 @@
         return unsubscribe;
     });
 
+    let data = [
+        {name: "Title 1", lastUpdated: "1/1/2023"},
+        {name: "Title 2", lastUpdated: "1/2/2023"},
+        {name: "Title 3", lastUpdated: "1/3/2023"},
+    ];
+
+    let filteredData = data;
+
 </script>
 
 <div class="container">
@@ -90,7 +98,22 @@
     </div>
 
     <div class="script-list">
-
+        <table class="script-table">
+            <thead>
+            <tr>
+                <th class="table-name">Name</th>
+                <th class="table-date">Last Updated</th>
+            </tr>
+            </thead>
+            <tbody>
+            {#each filteredData as item}
+                <tr>
+                <td class="table-name">{item.name}</td>
+                <td class="table-date">{item.lastUpdated}</td>
+                </tr>
+            {/each}
+            </tbody>
+        </table>
     </div>
 
 </div>
@@ -141,6 +164,29 @@
     #new-script {
         font-size: 36px;
         color: #2f2f2f;
+    }
+
+    .script-list {
+        display: flex;
+    }
+
+    .script-table {
+        margin-top: 25px;
+        border-collapse: collapse;
+        width: 100vh;
+        text-align: left;
+        background-color: white;
+        border-radius: 5px;
+    }
+
+    .table-name {
+        width: 70%;
+        padding: 5px;
+    }
+
+    .table-date {
+        width: 30%;
+        padding: 5px;
     }
 
 </style>
