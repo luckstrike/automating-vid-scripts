@@ -100,14 +100,14 @@
     <div class="script-list">
         <table class="script-table">
             <thead>
-            <tr>
+            <tr class="table-row">
                 <th class="table-name">Name</th>
                 <th class="table-date">Last Updated</th>
             </tr>
             </thead>
             <tbody>
             {#each filteredData as item}
-                <tr>
+                <tr class="table-row">
                 <td class="table-name">{item.name}</td>
                 <td class="table-date">{item.lastUpdated}</td>
                 </tr>
@@ -130,8 +130,7 @@
 
     .title {
         color: #fff;
-        margin: 0;
-        margin-top: 15px;
+        margin-top: 10px;
     }
     
     .script-boxes {
@@ -168,25 +167,31 @@
 
     .script-list {
         display: flex;
+        margin-top: 5vh;
     }
 
     .script-table {
-        margin-top: 25px;
         border-collapse: collapse;
         width: 100vh;
         text-align: left;
         background-color: white;
-        border-radius: 5px;
+        border-radius: 10px;
     }
 
+    /* Makes the Name column only take up 70% of the table width*/
     .table-name {
         width: 70%;
-        padding: 5px;
+        padding: 10px;
     }
 
+    /* Makes the Last Updated dates only take up 30% of the table width*/
     .table-date {
         width: 30%;
-        padding: 5px;
+        padding: 10 px;
+    }
+    
+    .table-row {
+        border-bottom: 1px solid #2f2f2f;
     }
 
 </style>
