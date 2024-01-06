@@ -60,10 +60,20 @@
         return unsubscribe;
     });
 
+    // Function to sort by date
+    function sortByDate() {
+        filteredData = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
+
+    // Function to sort alphabetically by name
+    function sortByName() {
+        filteredData = [...data].sort((a, b) => a.name.localeCompare(b.name));
+    }
+
     let data = [
-        {name: "Title 1", lastUpdated: "1/1/2023"},
-        {name: "Title 2", lastUpdated: "1/2/2023"},
-        {name: "Title 3", lastUpdated: "1/3/2023"},
+        {name: "Title 1", lastUpdated: "2023-01-01"},
+        {name: "Title 2", lastUpdated: "2023-01-02"},
+        {name: "Title 3", lastUpdated: "2023-01-03"},
     ];
 
     let filteredData = data;
