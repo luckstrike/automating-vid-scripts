@@ -61,9 +61,9 @@
     });
 
     function setActiveButton(button: string) {
-        if (sortModeActive === "name") {
+        if (button === "name") {
             sortByName();
-        } else if (sortModeActive === "last-updated") {
+        } else if (button === "last-updated") {
             sortByDate();
         }
 
@@ -87,9 +87,9 @@
     }
 
     let data = [
-        {name: "Title 1", lastUpdated: "2023-01-01"},
-        {name: "Title 2", lastUpdated: "2023-01-02"},
-        {name: "Title 3", lastUpdated: "2023-01-03"},
+        {name: "Corn on a Cob", lastUpdated: "2023-01-01"},
+        {name: "Berry Bicycles", lastUpdated: "2023-01-02"},
+        {name: "Artic Aardvarks", lastUpdated: "2023-01-03"},
     ];
 
     let filteredData = data;
