@@ -8,7 +8,7 @@
 
     // Icon Imports
     import Fa from 'svelte-fa'
-    import { faPlus } from '@fortawesome/free-solid-svg-icons'
+    import { faCaretDown, faPlus } from '@fortawesome/free-solid-svg-icons'
 
     let currentUser: User | null;
 
@@ -60,6 +60,22 @@
         return unsubscribe;
     });
 
+    function setActiveButton(button: string) {
+        if (sortModeActive === "name") {
+            sortByName();
+        } else if (sortModeActive === "last-updated") {
+            sortByDate();
+        }
+
+        sortModeActive = button;
+    }
+
+    function handleKeydown(event, action) {
+        if (event.key === "Enter") {
+            action();
+        }
+    }
+
     // Function to sort by date
     function sortByDate() {
         filteredData = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -77,6 +93,8 @@
     ];
 
     let filteredData = data;
+
+    let sortModeActive: string | null = 'last-updated';
 
 </script>
 
@@ -111,8 +129,36 @@
         <table class="script-table">
             <thead>
             <tr class="table-row">
-                <th class="table-name">Name</th>
-                <th class="table-date">Last Updated</th>
+                <th class="table-name">
+                    <div 
+                        class="clickable-icon" 
+                        on:click={() => setActiveButton("name")}
+                        role="button"
+                        tabindex="0"
+                        on:keydown={(event) => handleKeydown(event, () => setActiveButton("name"))}
+                    >
+                        Name
+                        <Fa
+                            icon={faCaretDown} 
+                            style="color: {sortModeActive == 'name' ? '#1f1f1f' : 'lightgray'}"
+                        />
+                    </div>
+                </th>
+                <th class="table-date">
+                    <div 
+                        class="clickable-icon" 
+                        on:click={() => setActiveButton("last-updated")}
+                        role="button"
+                        tabindex="0"
+                        on:keydown={(event) => handleKeydown(event, () => setActiveButton("last-updated"))}
+                    >
+                        Last Updated
+                        <Fa
+                            icon={faCaretDown}
+                            style="color: {sortModeActive == 'last-updated' ? '#1f1f1f' : 'lightgray'}"
+                        />
+                    </div>
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -136,6 +182,10 @@
         align-items: center; /* Center children horizontally */
         height: 100vh; /* Full viewport height */
         flex: 0 0 85%;
+    }
+
+    .clickable-icon {
+        cursor: pointer;
     }
 
     .title {
