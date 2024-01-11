@@ -9,8 +9,18 @@
     // Icon Imports
     import Fa from 'svelte-fa'
     import { faCaretDown, faPlus } from '@fortawesome/free-solid-svg-icons'
+	import Page from '../+page.svelte';
+
+    // Typescript Interface to Define the Script Object
+    interface Script {
+        name: string;
+        lastUpdated: string;
+    }
 
     let currentUser: User | null;
+
+    // Used to hold all of a user's scripts
+    let filteredData: Script[] = [];
 
     // TODO: Get the document titles and display them in the script-boxes div,
     // organize them the most recent updated date
@@ -20,6 +30,8 @@
     // is closer to 1MB, it's going to take a while to load
 
     async function loadUserScripts() {
+        let scriptData: Script[] = [];
+
         if (!currentUser) {
             console.log("No user authenticated");
             // Optionally, handle the case when there's no user (e.g., redirect to login)
@@ -27,38 +39,54 @@
         }
 
         try {
-            // Only get the documents that belong to the current user
             const q = query(collection(db, "documents"), where("uid", "==", currentUser.uid));
             const querySnapshot = await getDocs(q);
 
-            // This actually gets the documents
-            // The querySnapshot is an array of documents
+            filteredData = []; // Clear existing data
 
+            // Getting the Script data from Firestore
             querySnapshot.forEach((doc) => {
-                console.log(`${doc.id} => ${doc.data().doc_name}`);
+                const timestamp = doc.data().updated;
+
+                const formattedDate = timestamp.toDate().toLocaleDateString("en-US");
+                const formattedTime = timestamp.toDate().toLocaleTimeString("en-US");
+
+                const dateTime = `${formattedDate} ${formattedTime}`;
+
+                filteredData = [...filteredData, {
+                    name: doc.data().doc_name,
+                    lastUpdated: dateTime,
+                }];
             });
         } catch (error) {
             console.error("Error loading scripts:", error);
-            // Handle the error appropriately
         }
+
+        return scriptData;
     }
 
-
     onMount(() => {
-        // This needs to be used to pull up the current user's scripts
         const unsubscribe = auth.onAuthStateChanged((user) => {
             currentUser = user;
             if (currentUser) {
-                // This is only called once the user has been resolved
-
-                // This is being called every time the dashboard is rendered though
-                // TODO: Figure out if there's a way to minimize this?
-                loadUserScripts();
+                loadUserScripts(); // No need to assign, as loadUserScripts will update filteredData directly
             }
         });
 
         return unsubscribe;
     });
+
+
+    // TODO: Make these functions not die when no data is loaded or available
+    // Function to sort by date
+    function sortByDate() {
+        filteredData = [...filteredData].sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
+
+    // Function to sort alphabetically by name
+    function sortByName() {
+        filteredData = [...filteredData].sort((a, b) => a.name.localeCompare(b.name));
+    }
 
     function setActiveButton(button: string) {
         if (button === "name") {
@@ -75,24 +103,6 @@
             action();
         }
     }
-
-    // Function to sort by date
-    function sortByDate() {
-        filteredData = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
-    }
-
-    // Function to sort alphabetically by name
-    function sortByName() {
-        filteredData = [...data].sort((a, b) => a.name.localeCompare(b.name));
-    }
-
-    let data = [
-        {name: "Corn on a Cob", lastUpdated: "2023-01-01"},
-        {name: "Berry Bicycles", lastUpdated: "2023-01-02"},
-        {name: "Artic Aardvarks", lastUpdated: "2023-01-03"},
-    ];
-
-    let filteredData = data;
 
     let sortModeActive: string | null = 'last-updated';
 
@@ -140,7 +150,7 @@
                         Name
                         <Fa
                             icon={faCaretDown} 
-                            style="color: {sortModeActive == 'name' ? '#1f1f1f' : 'lightgray'}"
+                            style="color: {sortModeActive == 'name' ? '#2f2f2f' : 'lightgray'}"
                         />
                     </div>
                 </th>
@@ -155,7 +165,7 @@
                         Last Updated
                         <Fa
                             icon={faCaretDown}
-                            style="color: {sortModeActive == 'last-updated' ? '#1f1f1f' : 'lightgray'}"
+                            style="color: {sortModeActive == 'last-updated' ? '#2f2f2f' : 'lightgray'}"
                         />
                     </div>
                 </th>
