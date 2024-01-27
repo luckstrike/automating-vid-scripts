@@ -9,7 +9,6 @@
     // Icon Imports
     import Fa from 'svelte-fa'
     import { faCaretDown, faPlus } from '@fortawesome/free-solid-svg-icons'
-	import Page from '../+page.svelte';
 
     // Typescript Interface to Define the Script Object
     interface Script {
@@ -120,19 +119,15 @@
             <div class="script-title">Create a New Script</div>
         </div>
 
-        <!-- Use a loop here to create scripts, depending on how many scripts exist-->
-        <div class="rectangle-container">
-            <div class="script-rectangle"></div>
-            <div class="script-title">Title 1</div>
-        </div>
-        <div class="rectangle-container">
-            <div class="script-rectangle"></div>
-            <div class="script-title">Title 2</div>
-        </div>
-        <div class="rectangle-container">
-            <div class="script-rectangle"></div>
-            <div class="script-title">Title 3</div>
-        </div>
+        <!-- Shows only the first 3 items in the query-->
+        <!-- Not sure if this sorts them by last updated though -->
+        {#each filteredData.slice(0, 3) as item}
+            <div class="rectangle-container">
+                <div class="script-rectangle"></div>
+                <div class="script-title">{item.name}</div>
+            </div>
+        {/each}
+
     </div>
 
     <div class="script-list">
