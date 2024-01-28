@@ -12,6 +12,8 @@
 
     // TODO: Not a fan of how this just updates the global variables, fix this later
 
+    let isLoading: boolean = true;
+
     // Typescript Interface to Define the Script Object
     interface Script {
         name: string;
@@ -69,6 +71,10 @@
             });
 
             previewData = [...filteredData].sort((a, b) => new Date(b.lastUpdatedDate) - new Date(a.lastUpdatedDate)).slice(0, 3);
+
+            // Loading is now complete, render eveything!
+            isLoading = false;
+
         } catch (error) {
             console.error("Error loading scripts:", error);
         }
@@ -124,74 +130,78 @@
 </script>
 
 <div class="container">
-    <h1 class="title">Howdy {currentUser?.email}! Ready to start script writing?</h1>
-    <p class="title">or create a new script with Brainstorm or Summarize a URL!</p>
+    {#if !isLoading}
+        <h1 class="title">Howdy {currentUser?.email}! Ready to start script writing?</h1>
+        <p class="title">or create a new script with Brainstorm or Summarize a URL!</p>
 
-    <div class="script-boxes">
-        <div class="rectangle-container">
-            <div class="script-rectangle" id="new-script">
-                <Fa icon={faPlus} />
+        <div class="script-boxes">
+            <div class="rectangle-container">
+                <div class="script-rectangle" id="new-script">
+                    <Fa icon={faPlus} />
+                </div>
+                <div class="script-title">Create a New Script</div>
             </div>
-            <div class="script-title">Create a New Script</div>
+
+            <!-- Shows only the first 3 items in the query-->
+            <!-- Not sure if this sorts them by last updated though -->
+            {#each previewData as item}
+                <div class="rectangle-container">
+                    <div class="script-rectangle"></div>
+                    <div class="script-title">{item.name}</div>
+                </div>
+            {/each}
+
         </div>
 
-        <!-- Shows only the first 3 items in the query-->
-        <!-- Not sure if this sorts them by last updated though -->
-        {#each previewData as item}
-            <div class="rectangle-container">
-                <div class="script-rectangle"></div>
-                <div class="script-title">{item.name}</div>
-            </div>
-        {/each}
-
-    </div>
-
-    <div class="script-list">
-        <table class="script-table">
-            <thead>
-            <tr class="table-row">
-                <th class="table-name">
-                    <div 
-                        class="clickable-icon" 
-                        on:click={() => setActiveButton("name")}
-                        role="button"
-                        tabindex="0"
-                        on:keydown={(event) => handleKeydown(event, () => setActiveButton("name"))}
-                    >
-                        Name
-                        <Fa
-                            icon={faCaretDown} 
-                            style="color: {sortModeActive == 'name' ? '#2f2f2f' : 'lightgray'}"
-                        />
-                    </div>
-                </th>
-                <th class="table-date">
-                    <div 
-                        class="clickable-icon" 
-                        on:click={() => setActiveButton("last-updated")}
-                        role="button"
-                        tabindex="0"
-                        on:keydown={(event) => handleKeydown(event, () => setActiveButton("last-updated"))}
-                    >
-                        Last Updated
-                        <Fa
-                            icon={faCaretDown}
-                            style="color: {sortModeActive == 'last-updated' ? '#2f2f2f' : 'lightgray'}"
-                        />
-                    </div>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            {#each filteredData as item}
+        <div class="script-list">
+            <table class="script-table">
+                <thead>
                 <tr class="table-row">
-                <td class="table-name">{item.name}</td>
-                <td class="table-date">{item.lastUpdatedString}</td>
+                    <th class="table-name">
+                        <div 
+                            class="clickable-icon" 
+                            on:click={() => setActiveButton("name")}
+                            role="button"
+                            tabindex="0"
+                            on:keydown={(event) => handleKeydown(event, () => setActiveButton("name"))}
+                        >
+                            Name
+                            <Fa
+                                icon={faCaretDown} 
+                                style="color: {sortModeActive == 'name' ? '#2f2f2f' : 'lightgray'}"
+                            />
+                        </div>
+                    </th>
+                    <th class="table-date">
+                        <div 
+                            class="clickable-icon" 
+                            on:click={() => setActiveButton("last-updated")}
+                            role="button"
+                            tabindex="0"
+                            on:keydown={(event) => handleKeydown(event, () => setActiveButton("last-updated"))}
+                        >
+                            Last Updated
+                            <Fa
+                                icon={faCaretDown}
+                                style="color: {sortModeActive == 'last-updated' ? '#2f2f2f' : 'lightgray'}"
+                            />
+                        </div>
+                    </th>
                 </tr>
-            {/each}
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                {#each filteredData as item}
+                    <tr class="table-row">
+                    <td class="table-name">{item.name}</td>
+                    <td class="table-date">{item.lastUpdatedString}</td>
+                    </tr>
+                {/each}
+                </tbody>
+            </table>
+        </div>
+    {:else}
+        <!-- TODO: Make this either a loading screen or just keep it empty-->
+    {/if}
 
 </div>
 
