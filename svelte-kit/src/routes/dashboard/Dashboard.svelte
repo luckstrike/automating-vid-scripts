@@ -10,16 +10,12 @@
     import Fa from 'svelte-fa'
     import { faCaretDown, faPlus } from '@fortawesome/free-solid-svg-icons'
 
+    // Script Type Import
+    import type { Script } from '$lib/index.ts'
+
     // TODO: Not a fan of how this just updates the global variables, fix this later
 
     let isLoading: boolean = true;
-
-    // Typescript Interface to Define the Script Object
-    interface Script {
-        name: string;
-        lastUpdatedString: string;
-        lastUpdatedDate: Date | null;
-    }
 
     let currentUser: User | null;
 
@@ -66,11 +62,15 @@
                 filteredData = [...filteredData, {
                     name: doc.data().doc_name,
                     lastUpdatedString: dateTime,
-                    lastUpdatedDate: timestamp
+                    lastUpdatedDate: timestamp,
+                    content: doc.data().content
                 }].sort((a, b) => new Date(b.lastUpdatedString) - new Date(a.lastUpdatedString));
             });
 
-            previewData = [...filteredData].sort((a, b) => new Date(b.lastUpdatedDate) - new Date(a.lastUpdatedDate)).slice(0, 3);
+            // Determines how many preview script rectangles are shown
+            let maxPreview: number = 3;
+
+            previewData = [...filteredData].sort((a, b) => new Date(b.lastUpdatedDate) - new Date(a.lastUpdatedDate)).slice(0, maxPreview);
 
             // Loading is now complete, render eveything!
             isLoading = false;

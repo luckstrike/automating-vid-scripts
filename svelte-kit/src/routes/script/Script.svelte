@@ -3,6 +3,7 @@
 </script>
 
 <div class="script">
+    
     <TextEditor />
 </div>
 

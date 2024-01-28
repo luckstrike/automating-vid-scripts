@@ -1,6 +1,11 @@
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte';
 
+    // Firebase Firestore Stuff
+    import type { User } from 'firebase/auth';
+    import { auth, db } from '$lib/firebase/firebase.client';
+    import { collection, getDoc, getDocs, query, where } from 'firebase/firestore';
+
     // Text Editor Imports
     import { Editor } from '@tiptap/core';  
     import StarterKit from '@tiptap/starter-kit';
@@ -10,8 +15,13 @@
     import Fa from 'svelte-fa'
     import { faBold, faItalic, faUnderline, faUndo, faRedo, faList, faListOl } from '@fortawesome/free-solid-svg-icons'
 
+    // Script Type Import
+    import type { Script } from '$lib/index.ts'
+
     let element: any; // figure out this type later
     let editor: any; // figure out this type later
+
+    let currentUser: User | null;
 
     // TODO: You might be able to take advantage of floating menus for GPT features!
     // Use the floating menu to possibly suggest GPT features to the user on any new lines
@@ -21,6 +31,56 @@
     //       and bullet points and then stylize the buttons with the proper icons
 
     // TODO: Make the default text disappear as soon as the user starts typing
+
+    async function getTestDocument() {
+        let filteredData: Script[] = [];
+
+        if (!currentUser) {
+            console.log("No user authenticated");
+            // Optionally, handle the case when there's no user (e.g., redirect to login)
+            return;
+        }
+
+        try {
+            const q = query(collection(db, "documents"), where("uid", "==", currentUser.uid));
+            const querySnapshot = await getDocs(q);
+
+            for (const doc of querySnapshot.docs) {
+                // Getting the timestamps and converting them to a string
+                const timestamp = doc.data().updated;
+                const formattedDate = timestamp.toDate().toLocaleDateString("en-US");
+                const formattedTime = timestamp.toDate().toLocaleTimeString("en-US");
+                const dateTime = `${formattedDate} ${formattedTime}`;
+
+                let contentData: string | unknown;
+                const contentRef = doc.data().content;
+
+                if (contentRef) {
+                    try {
+                        const contentDoc = await getDoc(contentRef);
+                        if (contentDoc.exists()) {
+                            contentData = contentDoc.data();
+                        }
+                    } catch (fetchError) {
+                        console.error("Error fetching referenced document:", fetchError);
+                    }
+                }
+
+                filteredData.push({
+                    name: doc.data().doc_name,
+                    lastUpdatedString: dateTime,
+                    lastUpdatedDate: timestamp,
+                    content: contentData // Assign the fetched data here
+                });
+            }
+
+            // For Debugging: Now actually get the content in the content reference
+            console.log(filteredData[0].content)
+
+        } catch (error) {
+            console.log("Error loading the user, ", error)
+        }
+    }
 
     onMount(() => {
         editor = new Editor({
@@ -37,6 +97,15 @@
         })
         console.log("editor: ", editor)
         console.log("element: ", element)
+
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            currentUser = user;
+            if (currentUser) {
+                getTestDocument(); // No need to assign, as loadUserScripts will update filteredData directly
+            }
+        });
+
+        return unsubscribe;
     })
 
     onDestroy(() => {
@@ -52,6 +121,9 @@
 <!-- Code Block, Quote Block, Horizontal Rule (just like a horizontal line) -->
 
 {#if editor}
+    <div class="title">
+        <input type="text" placeholder="Test Document Title" class="document-title">
+    </div>
     <div class="toolbar">
         <!-- Bold Button -->
         <button
@@ -109,7 +181,9 @@
             class={editor.isActive("orderedList") ? "is-active" : ""}
         >
             <Fa icon={faListOl} />
-        </button>   
+        </button>
+
+        <!-- TODO: Add a save button? -->
     </div>
 
 {/if}
@@ -129,10 +203,26 @@
     margin-right: 0.5em;
   }
 
+  .title {
+    margin-left: 0.5em;
+    margin-top: 1.0em;
+  }
+
+  .document-title {
+    min-height: 3vh;
+    min-width: 40vh;
+    background-color: transparent;
+    border-radius: 10px;
+    border: 3px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
   .toolbar {
     display: flex;
     justify-content: center;
     margin: 0.5em;
+    margin-top: 0em;
   }
 
   /* This feels so wrong but it works */
@@ -144,7 +234,7 @@
     border-radius: 5px;
     padding: 0.5em;
     padding-top: 0em;
-    min-height: 90vh;
+    min-height: 85vh;
     overflow: hidden;
     scroll-behavior: smooth; /* This is so that the text box can scroll */
   }
