@@ -10,16 +10,25 @@
     import Fa from 'svelte-fa'
     import { faCaretDown, faPlus } from '@fortawesome/free-solid-svg-icons'
 
+    // TODO: Not a fan of how this just updates the global variables, fix this later
+
     // Typescript Interface to Define the Script Object
     interface Script {
         name: string;
-        lastUpdated: string;
+        lastUpdatedString: string;
+        lastUpdatedDate: Date | null;
     }
 
     let currentUser: User | null;
 
     // Used to hold all of a user's scripts
     let filteredData: Script[] = [];
+    let previewData: Script[] = []; // the data shown next to the add a new script
+
+    // Used to hold whether data is sorted by ascending or descending manner
+    // (ex. A-Z or Z-A, most recent to least recent, etc...)
+    let isNameAscending = true;
+    let isDateAscending = true;
 
     // TODO: Get the document titles and display them in the script-boxes div,
     // organize them the most recent updated date
@@ -54,9 +63,12 @@
 
                 filteredData = [...filteredData, {
                     name: doc.data().doc_name,
-                    lastUpdated: dateTime,
-                }];
+                    lastUpdatedString: dateTime,
+                    lastUpdatedDate: timestamp
+                }].sort((a, b) => new Date(b.lastUpdatedString) - new Date(a.lastUpdatedString));
             });
+
+            previewData = [...filteredData].sort((a, b) => new Date(b.lastUpdatedDate) - new Date(a.lastUpdatedDate)).slice(0, 3);
         } catch (error) {
             console.error("Error loading scripts:", error);
         }
@@ -77,21 +89,25 @@
 
 
     // TODO: Make these functions not die when no data is loaded or available
-    // Function to sort by date
-    function sortByDate() {
-        filteredData = [...filteredData].sort((a, b) => new Date(a.date) - new Date(b.date));
+    // Function to toggle and sort by name
+    function toggleSortByName() {
+        filteredData.sort((a, b) => isNameAscending ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
+        filteredData = [...filteredData];
+        isNameAscending = !isNameAscending;
     }
 
-    // Function to sort alphabetically by name
-    function sortByName() {
-        filteredData = [...filteredData].sort((a, b) => a.name.localeCompare(b.name));
+    // Function to toggle and sort by date
+    function toggleSortByDate() {
+        filteredData.sort((a, b) => isDateAscending ? new Date(a.lastUpdatedString) - new Date(b.lastUpdatedString) : new Date(b.lastUpdatedString) - new Date(a.lastUpdatedString));
+        filteredData = [...filteredData];
+        isDateAscending = !isDateAscending;
     }
 
     function setActiveButton(button: string) {
         if (button === "name") {
-            sortByName();
+            toggleSortByName();
         } else if (button === "last-updated") {
-            sortByDate();
+            toggleSortByDate();
         }
 
         sortModeActive = button;
@@ -121,7 +137,7 @@
 
         <!-- Shows only the first 3 items in the query-->
         <!-- Not sure if this sorts them by last updated though -->
-        {#each filteredData.slice(0, 3) as item}
+        {#each previewData as item}
             <div class="rectangle-container">
                 <div class="script-rectangle"></div>
                 <div class="script-title">{item.name}</div>
@@ -170,7 +186,7 @@
             {#each filteredData as item}
                 <tr class="table-row">
                 <td class="table-name">{item.name}</td>
-                <td class="table-date">{item.lastUpdated}</td>
+                <td class="table-date">{item.lastUpdatedString}</td>
                 </tr>
             {/each}
             </tbody>
