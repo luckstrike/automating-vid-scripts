@@ -3,7 +3,7 @@
     
     import { authHandlers, authStore } from "$lib/stores/authStore";
 	import type { User } from 'firebase/auth';
-    import { collection, getDocs, query, where } from 'firebase/firestore';
+    import { DocumentReference, DocumentSnapshot, collection, getDoc, getDocs, query, where } from 'firebase/firestore';
     import { onMount } from 'svelte';
 
     // Icon Imports
@@ -93,6 +93,29 @@
         return unsubscribe;
     });
 
+    // Used to get the script from the database and then show it to the user
+    async function getScript(item: Script) {
+        // This should ideally get the script's document ID
+    // Type assertion: Explicitly tell TypeScript that `item.content` is a DocumentReference
+        const documentReference = item.content as DocumentReference;
+
+        // Proceed with the assumption that `item.content` is now a DocumentReference
+        const docSnap = await getDoc(documentReference);
+
+        let scriptContent: string;
+        
+        // Checking if docSnap actually exists
+        if (docSnap.exists()) {
+            const textDocument = docSnap.data(); // Getting the document data
+
+            scriptContent = textDocument.content;
+            console.log(scriptContent); // Holds the document data
+        } else {
+            console.log("No such document!");
+        }
+
+    }
+
 
     // TODO: Make these functions not die when no data is loaded or available
     // Function to toggle and sort by name
@@ -146,7 +169,9 @@
             <!-- Not sure if this sorts them by last updated though -->
             {#each previewData as item}
                 <div class="rectangle-container">
-                    <div class="script-rectangle"></div>
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <!-- svelte-ignore a11y-no-static-element-interactions -->
+                    <div class="script-rectangle" on:click={() => getScript(item)}></div>
                     <div class="script-title">{item.name}</div>
                 </div>
             {/each}
@@ -191,7 +216,7 @@
                 </thead>
                 <tbody>
                 {#each filteredData as item}
-                    <tr class="table-row">
+                    <tr class="table-row" on:click={() => getScript(item)}>
                     <td class="table-name">{item.name}</td>
                     <td class="table-date">{item.lastUpdatedString}</td>
                     </tr>
