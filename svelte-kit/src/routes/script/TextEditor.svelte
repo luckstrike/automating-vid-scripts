@@ -74,9 +74,6 @@
                 });
             }
 
-            // For Debugging: Now actually get the content in the content reference
-            console.log(filteredData[0].content)
-
         } catch (error) {
             console.log("Error loading the user, ", error)
         }
@@ -95,8 +92,6 @@
             editor = editor
         },
         })
-        console.log("editor: ", editor)
-        console.log("element: ", element)
 
         const unsubscribe = auth.onAuthStateChanged((user) => {
             currentUser = user;

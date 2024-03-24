@@ -1,8 +1,7 @@
 <script lang="ts">
     import Script from "./Script.svelte";
 
-    // TODO: Fix Sidebar not being pinned to the side when the text editor gets too long!
-
+    export let data;
 </script>
 
 <div class="container">

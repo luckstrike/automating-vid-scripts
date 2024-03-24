@@ -13,6 +13,9 @@
     // Script Type Import
     import type { Script } from '$lib/index.ts'
 
+    // Redirecting to another route
+    import { goto } from '$app/navigation'
+
     // TODO: Not a fan of how this just updates the global variables, fix this later
 
     let isLoading: boolean = true;
@@ -106,14 +109,11 @@
         
         // Checking if docSnap actually exists
         if (docSnap.exists()) {
-            const textDocument = docSnap.data(); // Getting the document data
-
-            scriptContent = textDocument.content;
-            console.log(scriptContent); // Holds the document data
+            // Go to the sccript with the id provided by docSnap.id
+            goto(`/script/${docSnap.id}`)
         } else {
             console.log("No such document!");
         }
-
     }
 
 
