@@ -18,6 +18,9 @@
     // Script Type Import
     import type { Script } from '$lib/index.ts'
 
+    // Will contain a script's data (if any)
+    export let content: string;
+
     let element: any; // figure out this type later
     let editor: any; // figure out this type later
 

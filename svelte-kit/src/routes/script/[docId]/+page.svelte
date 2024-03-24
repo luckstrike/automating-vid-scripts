@@ -8,10 +8,11 @@
     // Holds the document id for the script
     export let data;
 
-    console.log("data!:", data)
+    // Will hold the Script's text content
+    export let textContent: string;
 
     // Holds the collection name in which text document data is stored in
-    let collectionName: any = 'textcontent';
+    let collectionName: string = 'textcontent';
 
     onMount(() => {
         const docRef = doc(db, collectionName, data.docId)
@@ -22,24 +23,31 @@
         });
     });
 
-
+    // TODO: Potentially make this use a store instead in the future
+    // Maybe that way it can always load the previously used script
+    // after it was launched once
+    // although I would probably need to update it many times every
+    // time the use updates stuff (which seems excessive tbh)
     async function getDocumentData(docRef: DocumentReference) {
         try {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-            console.log(docSnap.data().content)
+            textContent = docSnap.data().content;
+            // documentData.set(docSnap.data()) // or something like that?
         } else {
             console.log("No such document!");
+            // documentData.set(null) // or something like that?
         }
         } catch (error) {
             console.error("Error fetching document: ", error);
+            // documentData.set(null) // or something like that?
         }
     }
 
 </script>
 
 <div class="container">
-    <Script docId={data}/>
+    <Script content={textContent}/>
 </div>
 
 <style>

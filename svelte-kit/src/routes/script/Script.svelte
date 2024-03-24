@@ -1,10 +1,11 @@
 <script lang="ts">
   import TextEditor from "./TextEditor.svelte";
+
+  export let content: string;
 </script>
 
 <div class="script">
-    
-    <TextEditor />
+    <TextEditor content={content}/>
 </div>
 
 <style>
