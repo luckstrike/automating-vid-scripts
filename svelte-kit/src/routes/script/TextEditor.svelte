@@ -38,7 +38,7 @@
         const docRef: DocumentReference = await doc(db, collectionName, docId);
 
         try {
-            const docSnap: DocumentData | null = await getDoc(docRef);
+            const docSnap: DocumentSnapshot | null = await getDoc(docRef);
             if (docSnap.exists()) {
                 return docSnap.data();
             } else {
@@ -67,6 +67,8 @@
         })
 
         // Updating the content to the correct script
+        // TODO: Add saving your doc (and a warning before leaving the script tab to save a document)
+        //       Auto-saving would be cool but not sure how to do that
         if ($scriptIdStore) {
             getScriptContent(db, 'textcontent', $scriptIdStore).then(result => {
                 if (result) {
