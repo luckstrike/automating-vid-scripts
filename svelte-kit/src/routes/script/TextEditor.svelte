@@ -4,7 +4,9 @@
     // Firebase Firestore Stuff
     import type { User } from 'firebase/auth';
     import { auth, db } from '$lib/firebase/firebase.client';
-    import { collection, getDoc, getDocs, query, where } from 'firebase/firestore';
+    import { DocumentReference, DocumentSnapshot, Firestore, collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+
+    import { scriptIdStore } from '$lib/stores/scriptStore';
 
     // Text Editor Imports
     import { Editor } from '@tiptap/core';  
@@ -17,9 +19,6 @@
 
     // Script Type Import
     import type { Script } from '$lib/index.ts'
-
-    // Will contain a script's data (if any)
-    export let content: string;
 
     let element: any; // figure out this type later
     let editor: any; // figure out this type later
@@ -35,52 +34,23 @@
 
     // TODO: Make the default text disappear as soon as the user starts typing
 
-    async function getTestDocument() {
-        let filteredData: Script[] = [];
-
-        if (!currentUser) {
-            console.log("No user authenticated");
-            // Optionally, handle the case when there's no user (e.g., redirect to login)
-            return;
-        }
+    async function getScriptContent(db: Firestore, collectionName: string, docId: string) {
+        const docRef: DocumentReference = await doc(db, collectionName, docId);
 
         try {
-            const q = query(collection(db, "documents"), where("uid", "==", currentUser.uid));
-            const querySnapshot = await getDocs(q);
-
-            for (const doc of querySnapshot.docs) {
-                // Getting the timestamps and converting them to a string
-                const timestamp = doc.data().updated;
-                const formattedDate = timestamp.toDate().toLocaleDateString("en-US");
-                const formattedTime = timestamp.toDate().toLocaleTimeString("en-US");
-                const dateTime = `${formattedDate} ${formattedTime}`;
-
-                let contentData: string | unknown;
-                const contentRef = doc.data().content;
-
-                if (contentRef) {
-                    try {
-                        const contentDoc = await getDoc(contentRef);
-                        if (contentDoc.exists()) {
-                            contentData = contentDoc.data();
-                        }
-                    } catch (fetchError) {
-                        console.error("Error fetching referenced document:", fetchError);
-                    }
-                }
-
-                filteredData.push({
-                    name: doc.data().doc_name,
-                    lastUpdatedString: dateTime,
-                    lastUpdatedDate: timestamp,
-                    content: contentData // Assign the fetched data here
-                });
+            const docSnap: DocumentData | null = await getDoc(docRef);
+            if (docSnap.exists()) {
+                return docSnap.data();
+            } else {
+                console.log("No such document!");
+                return null;
             }
-
         } catch (error) {
-            console.log("Error loading the user, ", error)
+            console.error("Error fetching document: ", error);
+            return null;
         }
     }
+
 
     onMount(() => {
         editor = new Editor({
@@ -89,18 +59,23 @@
             StarterKit,
             Underline
         ],
-        content: '<p>Start typing here...</p>',
+        content: "",
         onTransaction: () => {
             // force re-render so `editor.isActive` works as expected
             editor = editor
         },
         })
 
+        // Updating the content to the correct script
+        if ($scriptIdStore) {
+            getScriptContent(db, 'textcontent', $scriptIdStore).then(result => {
+                if (result) {
+                    editor.commands.setContent(result.content);
+                }
+            })
+        }
+
         const unsubscribe = auth.onAuthStateChanged((user) => {
-            currentUser = user;
-            if (currentUser) {
-                getTestDocument(); // No need to assign, as loadUserScripts will update filteredData directly
-            }
         });
 
         return unsubscribe;
@@ -183,7 +158,6 @@
 
         <!-- TODO: Add a save button? -->
     </div>
-
 {/if}
 
 <div class="text-editor" bind:this={element}/>

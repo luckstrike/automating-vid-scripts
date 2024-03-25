@@ -1,7 +1,9 @@
 <script lang='ts'>
     import { auth, db } from '$lib/firebase/firebase.client';
     
-    import { authHandlers, authStore } from "$lib/stores/authStore";
+    import { authHandlers, authStore  } from "$lib/stores/authStore";
+    import { scriptIdStore } from "$lib/stores/scriptStore"
+
 	import type { User } from 'firebase/auth';
     import { DocumentReference, DocumentSnapshot, collection, getDoc, getDocs, query, where } from 'firebase/firestore';
     import { onMount } from 'svelte';
@@ -99,7 +101,7 @@
     // Used to get the script from the database and then show it to the user
     async function getScript(item: Script) {
         // This should ideally get the script's document ID
-    // Type assertion: Explicitly tell TypeScript that `item.content` is a DocumentReference
+        // Type assertion: Explicitly tell TypeScript that `item.content` is a DocumentReference
         const documentReference = item.content as DocumentReference;
 
         // Proceed with the assumption that `item.content` is now a DocumentReference
@@ -109,8 +111,8 @@
         
         // Checking if docSnap actually exists
         if (docSnap.exists()) {
-            // Go to the sccript with the id provided by docSnap.id
-            goto(`/script/${docSnap.id}`)
+            scriptIdStore.set(docSnap.id); // Update the store with the script id that was clicked on
+            goto(`/script/${docSnap.id}`); // Go to the sccript with the id provided by docSnap.id
         } else {
             console.log("No such document!");
         }
