@@ -265,9 +265,16 @@
         border-radius: 5px; /* Might remove the rounded corners */
         margin-left: 25px;
         margin-right: 25px;
+        margin-bottom: 25px;
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .script-rectangle:hover {
+        background-color: lightgray;
+        transform: scale(110%)
     }
 
     .script-title {
@@ -310,6 +317,7 @@
     
     .table-row {
         border-bottom: 1px solid #2f2f2f;
+        transition: background-color 0.3s ease;
     }
 
     tr.table-row:hover {
