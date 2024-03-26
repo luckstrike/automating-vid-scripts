@@ -4,9 +4,9 @@
     // Firebase Firestore Stuff
     import type { User } from 'firebase/auth';
     import { auth, db } from '$lib/firebase/firebase.client';
-    import { DocumentReference, DocumentSnapshot, Firestore, collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+    import { DocumentReference, DocumentSnapshot, Firestore, collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 
-    import { scriptIdStore } from '$lib/stores/scriptStore';
+    import { scriptIdStore, scriptSaveStatus } from '$lib/stores/scriptStore';
 
     // Text Editor Imports
     import { Editor } from '@tiptap/core';  
@@ -15,13 +15,13 @@
 
     // Icon Imports
     import Fa from 'svelte-fa'
-    import { faBold, faItalic, faUnderline, faUndo, faRedo, faList, faListOl } from '@fortawesome/free-solid-svg-icons'
+    import { faBold, faItalic, faUnderline, faUndo, faRedo, faList, faListOl, faSave } from '@fortawesome/free-solid-svg-icons'
 
     // Script Type Import
     import type { Script } from '$lib/index.ts'
 
     let element: any; // figure out this type later
-    let editor: any; // figure out this type later
+    let editor: Editor;
 
     let currentUser: User | null;
 
@@ -51,31 +51,95 @@
         }
     }
 
+    // Get's the HTML content that is currently in the script text editor
+    async function extractScriptContent(editor: Editor) {
+        let scriptContent:string = editor.getHTML();
+
+        return scriptContent;
+    }
+
+    // Returns either true or false
+    async function saveHTMLtoDatabase(scriptContent: string, collectionName:string, documentId: string) {
+        if (documentId == null) {
+            console.error("saveHTMLtoDatabase Error: There is no valid script ID to save this too")
+            return false;
+        }
+
+        // Getting a reference to the document in the firestore database
+        const docRef = doc(db, collectionName, documentId)
+
+        // Holds the wheter or not a database update was successful or not
+        let saveResult: boolean = false;
+
+        // Updating the document with the new script content
+        await updateDoc(docRef, {
+            content: scriptContent
+        }).then(()=> {
+            console.log("saveHTMLtoDatabase() Success: Document sucessfully updated");
+            saveResult = true;
+        }).catch((error) => {
+            // TODO: Show some kind of pop up here if an error occurs
+            console.error("saveHTMLtoDatabase() Error: Error updating document: ", error);
+            saveResult = false;
+        })
+
+        return saveResult;
+    }
+
+    async function saveScript(editor: Editor, collectionName: string, documentId: string | null) {
+        // Get's the script content 
+        if (documentId == null) {
+            // TODO: Make this show a pop up error message in the UI
+            console.error("saveScript() Error: There is no valid script ID to save this too")
+            return false;
+        }
+
+        const scriptContent: string = await extractScriptContent(editor)
+
+        let result: boolean = await saveHTMLtoDatabase(scriptContent, "textcontent", documentId);
+
+        if (result) {
+            // Everything went well!
+            console.log("saveScript() Success: Everything went well!")
+        } else {
+            // Something broke
+            console.error("saveScript() Error: Something went wrong... :(")
+            console.log(result)
+        }
+
+        // Resets the save status and saves a script to the database
+        $scriptSaveStatus = false;
+    }
 
     onMount(() => {
         editor = new Editor({
-        element: element,
-        extensions: [
-            StarterKit,
-            Underline
-        ],
-        content: "",
-        onTransaction: () => {
-            // force re-render so `editor.isActive` works as expected
-            editor = editor
-        },
-        })
-
-        // Updating the content to the correct script
-        // TODO: Add saving your doc (and a warning before leaving the script tab to save a document)
-        //       Auto-saving would be cool but not sure how to do that
-        if ($scriptIdStore) {
-            getScriptContent(db, 'textcontent', $scriptIdStore).then(result => {
-                if (result) {
-                    editor.commands.setContent(result.content);
+            element: element,
+            extensions: [
+                StarterKit,
+                Underline
+            ],
+            content: "",
+            onTransaction: () => {
+                // force re-render so `editor.isActive` works as expected
+                editor = editor
+            },
+            onCreate({ editor }) {
+                // Updating the content to the correct script
+                // TODO: Add saving your doc (and a warning before leaving the script tab to save a document)
+                //       Auto-saving would be cool but not sure how to do that
+                if ($scriptIdStore) {
+                    getScriptContent(db, 'textcontent', $scriptIdStore).then(result => {
+                        if (result) {
+                            editor.commands.setContent(result.content);
+                        }
+                    })
                 }
-            })
-        }
+            },
+            onUpdate( { editor } ) {
+                // Everytime something new is typed/updated, the save button becomes active
+                $scriptSaveStatus = true;
+            }
+        })
 
         const unsubscribe = auth.onAuthStateChanged((user) => {
         });
@@ -100,6 +164,13 @@
         <input type="text" placeholder="Test Document Title" class="document-title">
     </div>
     <div class="toolbar">
+        <!-- Save Button -->
+        <button
+            on:click={() => saveScript(editor, "textcontent", $scriptIdStore)}
+            class={$scriptSaveStatus ? "updates" : "no-updates"}
+        >
+            <Fa icon={faSave} />
+        </button>
         <!-- Bold Button -->
         <button
             on:click={() => editor.chain().focus().toggleBold().run()}
@@ -157,8 +228,6 @@
         >
             <Fa icon={faListOl} />
         </button>
-
-        <!-- TODO: Add a save button? -->
     </div>
 {/if}
 
@@ -217,6 +286,14 @@
   .is-active {
     background-color: lightblue;
     font-weight: bolder;
+  }
+
+  .no-updates {
+    color: darkgrey;
+  }
+
+  .updates {
+    color: black;
   }
 
 </style>
