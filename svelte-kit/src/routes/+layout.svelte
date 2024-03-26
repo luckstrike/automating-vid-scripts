@@ -5,7 +5,20 @@
     import { onMount } from 'svelte';
     import { auth } from '$lib/firebase/firebase.client';
     import { authStore } from "$lib/stores/authStore";
+    import { scriptSaveStatus } from "$lib/stores/scriptStore"
     import { browser } from '$app/environment';
+    import { page } from '$app/stores'
+
+    // This sets the scriptSaveStatus store to false whenever it
+    // isn't the route being accessed (basically resetting it)
+    // TODO: If I ever want to keep the text editors states
+    //       while changing states I will need to remove this
+    $: {
+            if (!$page.url.pathname.startsWith('/script')) {
+                scriptSaveStatus.set(false);
+                console.log("routes/+layout.svelte: Resetting the scriptSaveStatus to false!")
+            }
+        }
 
     onMount(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
