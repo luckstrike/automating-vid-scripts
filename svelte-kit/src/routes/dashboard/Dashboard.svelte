@@ -183,7 +183,6 @@
         <div class="script-list">
             <table class="script-table">
                 <thead>
-                <tr class="table-row">
                     <th class="table-name">
                         <div 
                             class="clickable-icon" 
@@ -214,7 +213,6 @@
                             />
                         </div>
                     </th>
-                </tr>
                 </thead>
                 <tbody>
                 {#each filteredData as item}
@@ -300,16 +298,22 @@
     .table-name {
         width: 70%;
         padding: 10px;
+        border-bottom: 1px solid #2f2f2f;
     }
 
     /* Makes the Last Updated dates only take up 30% of the table width*/
     .table-date {
         width: 30%;
         padding: 10 px;
+        border-bottom: 1px solid #2f2f2f;
     }
     
     .table-row {
         border-bottom: 1px solid #2f2f2f;
+    }
+
+    tr.table-row:hover {
+        background-color: lightgray;
     }
 
 </style>

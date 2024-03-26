@@ -280,6 +280,8 @@
     min-height: 85vh;
     overflow: hidden;
     scroll-behavior: smooth; /* This is so that the text box can scroll */
+    color: white;
+    font-size: 18px;
   }
 
   /* Changes color when a button is active */
