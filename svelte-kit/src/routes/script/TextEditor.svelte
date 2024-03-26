@@ -20,6 +20,9 @@
     // Script Type Import
     import type { Script } from '$lib/index.ts'
 
+    // To change the size of the toolbar icons
+    let faIconSize = "1.5x";
+
     let element: any; // figure out this type later
     let editor: Editor;
 
@@ -169,7 +172,7 @@
             on:click={() => saveScript(editor, "textcontent", $scriptIdStore)}
             class={$scriptSaveStatus ? "updates" : "no-updates"}
         >
-            <Fa icon={faSave} />
+            <Fa class="toolbar-icons" icon={faSave}/>
         </button>
         <!-- Bold Button -->
         <button
@@ -177,7 +180,7 @@
             disabled={!editor.can().chain().focus().toggleBold().run()}
             class={editor.isActive("bold") ? "is-active" : ""}
         >
-            <Fa icon={faBold} />
+            <Fa class="toolbar-icons" icon={faBold}/>
         </button>
 
         <!-- Italic Button -->
@@ -186,7 +189,7 @@
             disabled={!editor.can().chain().focus().toggleItalic().run()}
             class={editor.isActive("italic") ? "is-active" : ""}
         >
-            <Fa icon={faItalic} />
+            <Fa class="toolbar-icons" icon={faItalic}/>
         </button>
 
         <!-- Underline Button -->
@@ -194,7 +197,7 @@
             on:click={() => editor.chain().focus().toggleUnderline().run()}
             class={editor.isActive('underline') ? 'is-active' : ''}
         >
-            <Fa icon={faUnderline} />
+            <Fa class="toolbar-icons" icon={faUnderline}/>
         </button>
 
         <!-- Undo Button -->
@@ -202,7 +205,7 @@
             on:click={() => editor.chain().focus().undo().run()}
             disabled={!editor.can().chain().focus().undo().run()}
         >
-            <Fa icon={faUndo} />
+            <Fa class="toolbar-icons" icon={faUndo}/>
         </button>
 
         <!-- Redo Button -->
@@ -210,7 +213,7 @@
             on:click={() => editor.chain().focus().redo().run()}
             disabled={!editor.can().chain().focus().redo().run()}
         >
-            <Fa icon={faRedo} />
+            <Fa class="toolbar-icons" icon={faRedo}/>
         </button>
 
         <!-- Bullet List Button -->
@@ -218,7 +221,7 @@
             on:click={() => editor.chain().focus().toggleBulletList().run()}
             class={editor.isActive("bulletList") ? "is-active" : ""}
         >
-            <Fa icon={faList} />
+            <Fa class="toolbar-icons" icon={faList}/>
         </button>
         
         <!-- Ordered List Button -->
@@ -226,7 +229,7 @@
             on:click={() => editor.chain().focus().toggleOrderedList().run()}
             class={editor.isActive("orderedList") ? "is-active" : ""}
         >
-            <Fa icon={faListOl} />
+            <Fa class="toolbar-icons" icon={faListOl}/>
         </button>
     </div>
 {/if}
@@ -266,6 +269,11 @@
     justify-content: center;
     margin: 0.5em;
     margin-top: 0em;
+    margin-bottom: 1em;
+  }
+
+  :global(.toolbar-icons) {
+    font-size: 20px;
   }
 
   /* This feels so wrong but it works */
