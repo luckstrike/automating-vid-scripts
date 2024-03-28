@@ -10,7 +10,7 @@
 
         const status = get(scriptSaveStatus);
 
-        if (!status || confirm('You have unsaved script changes. Are you sure you want to exit this tab?')) {
+        if (!status || confirm('You have unsaved script changes that will be lost upon leaving this page. Are you sure you want to exit this tab?')) {
             links = links.map((link, i) => ({
                 ...link,
                 isActive: i === index
