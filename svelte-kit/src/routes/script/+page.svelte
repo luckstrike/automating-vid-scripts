@@ -1,11 +1,9 @@
 <script lang="ts">
     import Script from "./Script.svelte";
-
-    export let data;
 </script>
 
 <div class="container">
-    <Script />
+    <Script/>
 </div>
 
 <style>

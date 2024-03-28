@@ -3,12 +3,27 @@
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
 	import { authHandlers } from './stores/authStore';
+	import { scriptSaveStatus } from './stores/scriptStore';
+	import { get } from 'svelte/store';
 
-    function activateLink(index: number) {
-        links = links.map((link, i) => ({
-            ...link,
-            isActive: i === index
-        }));
+    function activateLink(index: number, event: MouseEvent) {
+
+        const status = get(scriptSaveStatus);
+
+        if (!status || confirm('You have unsaved script changes. Are you sure you want to exit this tab?')) {
+            links = links.map((link, i) => ({
+                ...link,
+                isActive: i === index
+            }));
+
+            const path = links[index].anchor;
+
+            goto(path);
+        } else {
+            event.preventDefault();
+
+            event.stopPropagation();
+        }
     }
 
     // Creating the elements for the sidebar
@@ -51,7 +66,7 @@
                 data-index={index} 
                 style="--after-color: {link.color};"
                 class:active={link.isActive}
-                on:click={() => activateLink(index)}>
+                on:click|preventDefault={event => activateLink(index, event)}>
                 {link.name}
             </a>
         {/if}
