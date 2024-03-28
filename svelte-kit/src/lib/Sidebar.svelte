@@ -11,19 +11,21 @@
         const status = get(scriptSaveStatus);
 
         if (!status || confirm('You have unsaved script changes that will be lost upon leaving this page. Are you sure you want to exit this tab?')) {
-            links = links.map((link, i) => ({
-                ...link,
-                isActive: i === index
-            }));
-
             const path = links[index].anchor;
 
             goto(path);
         } else {
+            // Prevent's the default event of going to a link from happening
             event.preventDefault();
 
+            // Stops the event from propagating further
             event.stopPropagation();
         }
+
+        links = links.map((link, i) => ({
+            ...link,
+            isActive: i === index
+        }));
     }
 
     // Creating the elements for the sidebar
