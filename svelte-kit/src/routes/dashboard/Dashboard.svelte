@@ -2,7 +2,7 @@
     import { auth, db } from '$lib/firebase/firebase.client';
     
     import { authHandlers, authStore  } from "$lib/stores/authStore";
-    import { scriptIdStore } from "$lib/stores/scriptStore"
+    import { scriptIdStore, scriptMetaIdStore } from "$lib/stores/scriptStore"
 
 	import type { User } from 'firebase/auth';
     import { DocumentReference, DocumentSnapshot, collection, getDoc, getDocs, query, where } from 'firebase/firestore';
@@ -68,7 +68,8 @@
                     name: doc.data().doc_name,
                     lastUpdatedString: dateTime,
                     lastUpdatedDate: timestamp,
-                    content: doc.data().content
+                    content: doc.data().content,
+                    metaDocId: doc.id
                 }].sort((a, b) => new Date(b.lastUpdatedString) - new Date(a.lastUpdatedString));
             });
 
@@ -106,12 +107,11 @@
 
         // Proceed with the assumption that `item.content` is now a DocumentReference
         const docSnap = await getDoc(documentReference);
-
-        let scriptContent: string;
         
         // Checking if docSnap actually exists
         if (docSnap.exists()) {
             scriptIdStore.set(docSnap.id); // Update the store with the script id that was clicked on
+            scriptMetaIdStore.set(item.metaDocId); // Update the store with the id of the script's meta data
             goto(`/script/${docSnap.id}`); // Go to the sccript with the id provided by docSnap.id
         } else {
             console.log("No such document!");

@@ -6,4 +6,5 @@ export interface Script {
     lastUpdatedString: string;
     lastUpdatedDate: Date | null;
     content: string | null | unknown; // a reference to the actual content (so less data is used each call)
+    metaDocId: string | null | unknown; // id of this entry (contains a script's metadata)
 }
