@@ -28,6 +28,9 @@
 
     let scriptTitle: string = ""; // the script's title
 
+    let scriptLoaded = false; // updates whenever the script is done loading
+    let timeoutId: number | undefined; // used for debouncing the title updates (saves on API calls)
+
     let currentUser: User | null;
 
     // TODO: You might be able to take advantage of floating menus for GPT features!
@@ -116,6 +119,50 @@
         $scriptSaveStatus = false;
     }
 
+    // Used to change the title of the script everytime the value of it is changed
+    async function updateScriptTitle(collectionName:string, value: string) {        
+        // Holds the wheter or not a database update was successful or not
+        let saveResult: boolean = false;
+
+        // Getting a reference to the document in the firestore database
+        let docRef: DocumentReference;
+        if ($scriptMetaIdStore) {
+            docRef = doc(db, collectionName, $scriptMetaIdStore)
+        } else {
+            // scriptMetaIdStore is null
+            saveResult = false;
+            return saveResult;
+        }
+
+        await updateDoc(docRef, {
+            doc_name: value
+        }).then(()=> {
+            console.log("updateTitle() Success: Document sucessfully updated");
+            saveResult = true;
+        }).catch((error) => {
+            // TODO: Show some kind of pop up here if an error occurs
+            console.error("updateTitle() Error: Error updating document: ", error);
+            saveResult = false;
+        })
+
+        return saveResult;
+    }
+    
+    async function handleScriptTitleInput(event: Event & { currentTarget: HTMLInputElement }) {
+        const target = event.target as HTMLInputElement; // safely casting the event target
+
+        // Clear the previous timeout, if there's one
+        if (timeoutId !== undefined) {
+            clearTimeout(timeoutId);
+        }
+
+        // Setting a new timeout to update the script title in the database
+        timeoutId = setTimeout(() => {
+            let collectionName: string = 'documents'
+            updateScriptTitle(collectionName, target.value);
+        }, 500) as unknown as number; // delay in milliseconds (plus assertions for TypeScript to stop yelling at me)
+    }
+
     onMount(() => {
         editor = new Editor({
             element: element,
@@ -174,7 +221,8 @@
 
 {#if editor}
     <div class="title">
-        <input type="text" value={scriptTitle} class="document-title">
+        <input type="text" bind:value={scriptTitle} 
+            on:input={handleScriptTitleInput} class="document-title">
     </div>
     <div class="toolbar">
         <!-- Save Button -->
