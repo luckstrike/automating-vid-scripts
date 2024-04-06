@@ -6,7 +6,7 @@
     import { auth, db } from '$lib/firebase/firebase.client';
     import { DocumentReference, DocumentSnapshot, Firestore, collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 
-    import { scriptIdStore, scriptSaveStatus } from '$lib/stores/scriptStore';
+    import { scriptIdStore, scriptMetaIdStore, scriptSaveStatus } from '$lib/stores/scriptStore';
 
     // Text Editor Imports
     import { Editor } from '@tiptap/core';  
@@ -25,6 +25,8 @@
 
     let element: any; // figure out this type later
     let editor: Editor;
+
+    let scriptTitle: string = ""; // the script's title
 
     let currentUser: User | null;
 
@@ -137,6 +139,14 @@
                         }
                     })
                 }
+
+                if ($scriptMetaIdStore) {
+                    getScriptContent(db, 'documents', $scriptMetaIdStore).then(result => {
+                        if (result) {
+                            scriptTitle = result.doc_name;
+                        }
+                    })
+                }
             },
             onUpdate( { editor } ) {
                 // Everytime something new is typed/updated, the save button becomes active
@@ -164,7 +174,7 @@
 
 {#if editor}
     <div class="title">
-        <input type="text" placeholder="Test Document Title" class="document-title">
+        <input type="text" value={scriptTitle} class="document-title">
     </div>
     <div class="toolbar">
         <!-- Save Button -->
