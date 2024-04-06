@@ -196,6 +196,10 @@
 
             console.log("Document written with ID: ", metaDataDocRef.id);
 
+            // Updating the store's to reference the newly created script
+            scriptIdStore.set(contentDocRef.id)
+            scriptMetaIdStore.set(metaDataDocRef.id)
+
             goto(`/script/${contentDocRef.id}`);
         } catch (e) {
             console.error("Error creating documents:", e)
