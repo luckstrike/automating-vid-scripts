@@ -4,7 +4,7 @@
     // Firebase Firestore Stuff
     import type { User } from 'firebase/auth';
     import { auth, db } from '$lib/firebase/firebase.client';
-    import { DocumentReference, DocumentSnapshot, Firestore, collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+    import { DocumentReference, DocumentSnapshot, Firestore, Timestamp, collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 
     import { scriptIdStore, scriptMetaIdStore, scriptSaveStatus } from '$lib/stores/scriptStore';
 
@@ -135,7 +135,8 @@
         }
 
         await updateDoc(docRef, {
-            doc_name: value
+            doc_name: value,
+            updated: Timestamp.now()
         }).then(()=> {
             console.log("updateTitle() Success: Document sucessfully updated");
             saveResult = true;
