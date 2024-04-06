@@ -5,7 +5,7 @@
     import { scriptIdStore, scriptMetaIdStore } from "$lib/stores/scriptStore"
 
 	import type { User } from 'firebase/auth';
-    import { DocumentReference, DocumentSnapshot, collection, getDoc, getDocs, query, where } from 'firebase/firestore';
+    import { DocumentReference, DocumentSnapshot, Timestamp, addDoc, collection, getDoc, getDocs, query, where } from 'firebase/firestore';
     import { onMount } from 'svelte';
 
     // Icon Imports
@@ -112,7 +112,7 @@
         if (docSnap.exists()) {
             scriptIdStore.set(docSnap.id); // Update the store with the script id that was clicked on
             scriptMetaIdStore.set(item.metaDocId); // Update the store with the id of the script's meta data
-            goto(`/script/${docSnap.id}`); // Go to the sccript with the id provided by docSnap.id
+            goto(`/script/${docSnap.id}`); // Go to the script with the id provided by docSnap.id
         } else {
             console.log("No such document!");
         }
@@ -150,6 +150,56 @@
         }
     }
 
+    interface TextContent {
+        content: string,
+        uid: string
+    }
+
+    interface ScriptMetaData {
+        content: DocumentReference<TextContent>,
+        created: Timestamp,
+        doc_name: string,
+        uid: string,
+        updated: Timestamp
+    }
+
+    const contentCollection: string = "textcontent";
+    const scriptMetaInfoCollection: string = "documents";
+
+    async function createScript() {
+        let currentUserUid = $authStore.currentUser?.uid; // get's the uid
+
+        if (!currentUserUid) {
+            console.error("No user UID found");
+            return;
+        }
+
+        try {
+            // Creating the textContent document to hold the script's text content
+            const contentDocRef: DocumentReference<TextContent> = await addDoc(collection(db, contentCollection), {
+                content: "",
+                uid: currentUserUid
+            });
+
+            console.log("Document written with ID: ", contentDocRef.id);
+
+            // Creating the documents document that holds the script's meta data info and a 
+            // reference to the script's content data
+
+            const metaDataDocRef: DocumentReference<ScriptMetaData> = await addDoc(collection(db, scriptMetaInfoCollection), {
+                content: contentDocRef, // reference to the previously made textContent document
+                created: Timestamp.now(),
+                doc_name: "Untitled Document",
+                uid: currentUserUid,
+                updated: Timestamp.now()
+            });
+
+            console.log("Document written with ID: ", metaDataDocRef.id);
+        } catch (e) {
+            console.error("Error creating documents:", e)
+        }
+    }
+
     let sortModeActive: string | null = 'last-updated';
 
 </script>
@@ -161,7 +211,9 @@
 
         <div class="script-boxes">
             <div class="rectangle-container">
-                <div class="script-rectangle" id="new-script">
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <div class="script-rectangle" id="new-script" on:click={() => createScript()}>
                     <Fa icon={faPlus} />
                 </div>
                 <div class="script-title">Create a New Script</div>

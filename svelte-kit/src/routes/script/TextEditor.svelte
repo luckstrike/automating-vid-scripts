@@ -147,7 +147,7 @@
 
         return saveResult;
     }
-    
+
     async function handleScriptTitleInput(event: Event & { currentTarget: HTMLInputElement }) {
         const target = event.target as HTMLInputElement; // safely casting the event target
 
@@ -318,8 +318,9 @@
     background-color: transparent;
     border-radius: 10px;
     border: 3px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
+    color: white;
   }
 
   .toolbar {
