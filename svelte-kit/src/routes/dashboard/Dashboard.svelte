@@ -195,6 +195,8 @@
             });
 
             console.log("Document written with ID: ", metaDataDocRef.id);
+
+            goto(`/script/${contentDocRef.id}`);
         } catch (e) {
             console.error("Error creating documents:", e)
         }
