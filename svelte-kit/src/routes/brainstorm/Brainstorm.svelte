@@ -1,85 +1,41 @@
 <script lang="ts">
     let brainstorm_text: string = "";
-    let isGenPrompt: boolean = false;
-    let isGenRandom: boolean = false;
+    let isGenerating: boolean = false;
+    let errorMessage: string | null = null;
 
-    const tempAddr: string = "localhost:5000"
-    const API_URL: string = "http://" + tempAddr + "/api"; // should be the API URL for the GPT back-end
+    const tempAddr: string = "localhost:5173"
+    const API_URL: string = `http://${tempAddr}/api`;
 
-    // TODO: Make these now create a brand new script page
-    //       Change over to the v2 UI draft in Figma
-    //       This lets me have user accounts and stuff!
+    async function handleGenerate(userPrompt?: string): Promise<void> {
+        isGenerating = true;
+        errorMessage = null;
 
-    async function handleGenerate(userPrompt: string): Promise<void> {
-        let response: string = "";
-        let error: string | null = null;
+        const endpoint = "/gpt";  // Simplified endpoint, always using POST
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: userPrompt || "RANDOM_PROMPT" })
+        };
 
-        isGenPrompt = true;
-
-        // Handles the fetch request
+        // Fetching the result + error handling
         try {
-            const res = await fetch(API_URL + "/generateidea", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ prompt: userPrompt })
-            });
-
-            // Everything went well
+            const res = await fetch(API_URL + endpoint, options);
             if (res.ok) {
                 const data = await res.json();
-                response = data.response;
-
-                // TODO: Create a new script with the video idea
-                console.log(response);
-
+                console.log(data);
             } else {
-                // TODO: Show an error message to the user
-                // Handle HTTP errors
-                error = `Server responded with status: ${res.status}`;
+                errorMessage = `Server error: ${res.status}`;
             }
         } catch (err) {
-            // TODO: Show an error message to the user
-            // Handle network errors
-            error = `Fetch failed: ${(err as Error).message}`;
+            errorMessage = `Network error: ${(err as Error).message}`;
         } finally {
-            isGenPrompt = false;
+            isGenerating = false;
         }
     }
 
-    async function handleGenerateRandomIdea(): Promise<void> {
-        let response: string = "";
-        let error: string | null = null;
 
-        isGenRandom = true;
-
-        // Handles the fetch request
-        try {
-            const res = await fetch(API_URL + "/randomidea");
-
-            // Everything went well
-            if (res.ok) {
-                const data = await res.json();
-                response = data.response;
-
-                // TODO: Create a new script with the video idea
-                console.log(response);
-
-            } else {
-                // TODO: Show an error message to the user
-                // Handle HTTP errors
-                error = `Server responded with status: ${res.status}`;
-            }
-        } catch (err) {
-            // TODO: Show an error message to the user
-            // Handle network errors
-            error = `Fetch failed: ${(err as Error).message}`;
-        } finally {
-            isGenRandom = false;
-        }
-    }
 </script>
+
 
 <div class="container">
     <!--Creating a textbox with placeholder text for brainstorming ideas-->
@@ -97,9 +53,9 @@
         <button 
             class="idea-buttons" 
             on:click={() => handleGenerate(brainstorm_text)}
-            disabled={brainstorm_text == "" || isGenPrompt}
+            disabled={brainstorm_text == "" || isGenerating}
         >
-            {#if isGenPrompt}
+            {#if isGenerating}
                 Generating Idea...
             {:else}
                 Generate Idea
@@ -107,10 +63,10 @@
     </button>
         <button 
             class="idea-buttons"
-            on:click={() => handleGenerateRandomIdea()}
+            on:click={() =>  handleGenerate()}
             disabled={brainstorm_text !== ""}
         >
-            {#if isGenRandom}
+            {#if isGenerating}
                 Generating Random Idea...
             {:else}
                 Generate Random Idea
