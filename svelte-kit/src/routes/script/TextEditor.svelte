@@ -102,11 +102,42 @@
             return false;
         }
 
+        // Pull out the typed script data into a string
         const scriptContent: string = await extractScriptContent(editor)
 
+        // Store the script string data to the database
         let result: boolean = await saveHTMLtoDatabase(scriptContent, "textcontent", documentId);
 
-        if (result) {
+        // Getting a reference to the document in the firestore database
+        let metaDocRef: DocumentReference;
+        let titleResult: boolean = false;
+
+        // Handling updating the document's last updated time
+        collectionName = "documents"
+
+        if ($scriptMetaIdStore) {
+            metaDocRef = doc(db, collectionName, $scriptMetaIdStore)
+        } else {
+            // scriptMetaIdStore is null
+            titleResult = false;
+            return titleResult;
+        }
+
+        console.log("metaDocRef: ", metaDocRef)
+
+        await updateDoc(metaDocRef, {
+            updated: Timestamp.now()
+        }).then(()=> {
+            console.log("saveScript() Success: Document last updated time sucessfully updated");
+            titleResult = true;
+        }).catch((error) => {
+            // TODO: Show some kind of pop up here if an error occurs
+            console.error("saveScript() Error: Error updating last updated time: ", error);
+            titleResult = false;
+        })
+
+        // Error-checking
+        if (result && titleResult) {
             // Everything went well!
             console.log("saveScript() Success: Everything went well!")
         } else {
