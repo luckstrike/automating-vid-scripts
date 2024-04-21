@@ -38,7 +38,7 @@ export async function createScript(currentUserUid?: string, userContent: string 
         scriptIdStore.set(contentDocRef.id);
         scriptMetaIdStore.set(metaDataDocRef.id);
 
-        goto(`/script/${contentDocRef.id}`);
+        goto(`/script`);
     } catch (e) {
         console.error("Error creating documents:", e);
     }
