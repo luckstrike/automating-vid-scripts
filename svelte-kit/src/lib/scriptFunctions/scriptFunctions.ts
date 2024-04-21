@@ -5,7 +5,7 @@ import { goto } from '$app/navigation';
 import { auth, db } from '$lib/firebase/firebase.client';
 
 // TODO: Move all common script related database functions here
-export async function createScript(currentUserUid?: string, userContent: string = ""): Promise<void> {
+export async function createScript(currentUserUid?: string, userContent: string = "", userTitle: string = "Untitled Document"): Promise<void> {
     if (!currentUserUid) {
         console.error("No user UID found");
         return;
@@ -27,7 +27,7 @@ export async function createScript(currentUserUid?: string, userContent: string 
         const metaDataDocRef: DocumentReference<ScriptMetaData> = await addDoc(collection(db, scriptMetaInfoCollection).withConverter(scriptMetaDataConverter), {
             content: contentDocRef, // Reference to the previously made textContent document
             created: Timestamp.now(),
-            doc_name: "Untitled Document",
+            doc_name: userTitle,
             uid: currentUserUid,
             updated: Timestamp.now()
         });

@@ -14,6 +14,7 @@
         errorMessage = null;
 
         let userContent: string | null = null;
+        let userTitle: string | null = null;
 
         const endpoint = "/gpt";  // Simplified endpoint, always using POST
         const options = {
@@ -27,8 +28,8 @@
             const res = await fetch(API_URL + endpoint, options);
             if (res.ok) {
                 const gptResult = await res.json();
-                userContent = gptResult.response;
-                console.log("UserContent: ", userContent)
+                userContent = gptResult.scriptContent;
+                userTitle = gptResult.scriptTitle;
             } else {
                 errorMessage = `Server error: ${res.status}`;
             }
@@ -36,8 +37,8 @@
             errorMessage = `Network error: ${(err as Error).message}`;
         } finally {
             isGenerating = false;
-            if (userContent) {
-                createScript($authStore.currentUser?.uid, userContent)
+            if (userContent && userTitle) {
+                createScript($authStore.currentUser?.uid, userContent, userTitle)
             }
         }
     }

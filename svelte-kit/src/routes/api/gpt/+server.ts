@@ -17,6 +17,13 @@ const brainstormPrompt: string = `You are a helpful assistant who provides, user
                                 so that it can be read by an HTML Script parser. Make sure that everything
                                 you state in the response is in HTML please.`
 
+const brainstormTitlePrompt: string = `You are a helpful assitant who provides, users with a good document title
+                                    based on the prompt they provide. Assume that you have already given the user
+                                    a bunch of key helpful pointers to help them out with a video. Provide a title
+                                    for this document based on the prompt you are provided. Try to keep it under 10
+                                    words or less. The less words you provide the better, but don't be shy of
+                                    providing more words for the title if needed.`
+
 // TODO: Make GPT format this is bullet point HTML so it can generate a new script
 async function brainstormGPT(openai: OpenAI, userInput: string): Promise<string | null> {
     const completion = await openai.chat.completions.create({
@@ -24,6 +31,24 @@ async function brainstormGPT(openai: OpenAI, userInput: string): Promise<string 
             { 
                 role: "system", 
                 content: brainstormPrompt
+            },
+            {
+                role: "user",
+                content: userInput
+            }
+        ],
+        model: "gpt-3.5-turbo",
+    });
+  
+    return completion.choices[0].message.content;
+}
+
+async function brainstormTitleGPT(openai: OpenAI, userInput: string): Promise<string | null> {
+    const completion = await openai.chat.completions.create({
+        messages: [
+            { 
+                role: "system", 
+                content: brainstormTitlePrompt
             },
             {
                 role: "user",
@@ -50,17 +75,20 @@ export const POST: RequestHandler = async ({ request }) => {
 
     // Use the OpenAI API here
     let gptResult: string | null;
+    let gptTitleResult: string | null;
 
     if (data && data.prompt) {
         gptResult = await brainstormGPT(openai, data.prompt);
+        gptTitleResult = await brainstormTitleGPT(openai, data.prompt);
     } else {
         let randomIdea: string = "";
         gptResult = await brainstormGPT(openai, "I'm not really sure what to write about");
+        gptTitleResult = "Random Ideas";
     }
     
-    if (gptResult) {
-        return json({ success: true, response: gptResult })
+    if (gptResult && gptTitleResult) {
+        return json({ success: true, scriptContent: gptResult, scriptTitle: gptTitleResult })
     } else {
-        return json({ success: false, response: ""})
+        return json({ success: false, scriptContent: "", scriptTitle: "" })
     }
 }
