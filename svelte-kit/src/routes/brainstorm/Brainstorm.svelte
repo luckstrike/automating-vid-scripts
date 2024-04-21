@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { createScript } from "$lib/scriptFunctions/scriptFunctions";
+	import { authStore } from "$lib/stores/authStore";
+
     let brainstorm_text: string = "";
     let isGenerating: boolean = false;
     let errorMessage: string | null = null;
@@ -9,6 +12,8 @@
     async function handleGenerate(userPrompt?: string): Promise<void> {
         isGenerating = true;
         errorMessage = null;
+
+        let userContent: string | null = null;
 
         const endpoint = "/gpt";  // Simplified endpoint, always using POST
         const options = {
@@ -21,8 +26,9 @@
         try {
             const res = await fetch(API_URL + endpoint, options);
             if (res.ok) {
-                const data = await res.json();
-                console.log(data.response);
+                const gptResult = await res.json();
+                userContent = gptResult.response;
+                console.log("UserContent: ", userContent)
             } else {
                 errorMessage = `Server error: ${res.status}`;
             }
@@ -30,6 +36,9 @@
             errorMessage = `Network error: ${(err as Error).message}`;
         } finally {
             isGenerating = false;
+            if (userContent) {
+                createScript($authStore.currentUser?.uid, userContent)
+            }
         }
     }
 
