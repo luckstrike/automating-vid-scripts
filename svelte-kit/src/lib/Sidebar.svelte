@@ -3,7 +3,7 @@
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
 	import { authHandlers } from './stores/authStore';
-	import { scriptSaveStatus } from './stores/scriptStore';
+	import { scriptMetaIdStore, scriptSaveStatus } from './stores/scriptStore';
 	import { get } from 'svelte/store';
 
     function activateLink(index: number, event: MouseEvent) {
@@ -62,6 +62,8 @@
                 on:click={() => authHandlers.logout()}>
                 {link.name}
             </a>
+        {:else if link.name == 'Script' && (!$scriptMetaIdStore || !$scriptMetaIdStore)}
+            <!-- Don't render anything, as there is no active script here to load -->
         {:else}
             <a 
                 href={link.anchor}
