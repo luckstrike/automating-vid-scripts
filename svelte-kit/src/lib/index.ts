@@ -15,6 +15,20 @@ export interface TextContent {
     uid: string
 }
 
+// POTENTIAL TODO: Combine Script and ScriptMetaData
+export interface ScriptMetaData {
+    content: DocumentReference<TextContent>,
+    created: Timestamp,
+    doc_name: string,
+    uid: string,
+    updated: Timestamp
+}
+
+export interface GPTRequest {
+    prompt?: string
+}
+
+// Converters
 export const textContentConverter: FirestoreDataConverter<TextContent> = {
     toFirestore(textContent: TextContent): DocumentData {
         return { ...textContent };
@@ -30,15 +44,6 @@ export const textContentConverter: FirestoreDataConverter<TextContent> = {
         };
     }
 };
-
-// POTENTIAL TODO: Combine Script and ScriptMetaData
-export interface ScriptMetaData {
-    content: DocumentReference<TextContent>,
-    created: Timestamp,
-    doc_name: string,
-    uid: string,
-    updated: Timestamp
-}
 
 export const scriptMetaDataConverter: FirestoreDataConverter<ScriptMetaData> = {
     toFirestore(scriptMetaData: ScriptMetaData): DocumentData {

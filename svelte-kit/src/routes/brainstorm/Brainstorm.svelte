@@ -22,7 +22,7 @@
             const res = await fetch(API_URL + endpoint, options);
             if (res.ok) {
                 const data = await res.json();
-                console.log(data);
+                console.log(data.response);
             } else {
                 errorMessage = `Server error: ${res.status}`;
             }

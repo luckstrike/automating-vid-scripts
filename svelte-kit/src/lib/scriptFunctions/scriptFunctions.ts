@@ -5,7 +5,7 @@ import { goto } from '$app/navigation';
 import { auth, db } from '$lib/firebase/firebase.client';
 
 // TODO: Move all common script related database functions here
-export async function createScript(currentUserUid?: string): Promise<void> {
+export async function createScript(currentUserUid?: string, userContent: string = ""): Promise<void> {
     if (!currentUserUid) {
         console.error("No user UID found");
         return;
@@ -19,7 +19,7 @@ export async function createScript(currentUserUid?: string): Promise<void> {
     try {
         // Create the textContent document to hold the script's text content
         const contentDocRef: DocumentReference<TextContent> = await addDoc(collection(db, contentCollection).withConverter(textContentConverter), {
-            content: "",
+            content: userContent,
             uid: currentUserUid
         });
 
