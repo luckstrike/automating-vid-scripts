@@ -14,7 +14,7 @@
         const options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: userPrompt || "RANDOM_PROMPT" })
+            body: JSON.stringify({ prompt: userPrompt || "" })
         };
 
         // Fetching the result + error handling

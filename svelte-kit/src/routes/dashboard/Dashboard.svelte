@@ -13,10 +13,12 @@
     import { faCaretDown, faPlus } from '@fortawesome/free-solid-svg-icons'
 
     // Script Type Import
-    import type { Script } from '$lib/index.ts'
+    import type { Script, TextContent, ScriptMetaData } from '$lib/index.ts'
 
     // Redirecting to another route
     import { goto } from '$app/navigation'
+
+    import { createScript } from '$lib/scriptFunctions/scriptFunctions';
 
     // TODO: Not a fan of how this just updates the global variables, fix this later
 
@@ -150,61 +152,8 @@
         }
     }
 
-    interface TextContent {
-        content: string,
-        uid: string
-    }
-
-    interface ScriptMetaData {
-        content: DocumentReference<TextContent>,
-        created: Timestamp,
-        doc_name: string,
-        uid: string,
-        updated: Timestamp
-    }
-
     const contentCollection: string = "textcontent";
     const scriptMetaInfoCollection: string = "documents";
-
-    async function createScript() {
-        let currentUserUid = $authStore.currentUser?.uid; // get's the uid
-
-        if (!currentUserUid) {
-            console.error("No user UID found");
-            return;
-        }
-
-        try {
-            // Creating the textContent document to hold the script's text content
-            const contentDocRef: DocumentReference<TextContent> = await addDoc(collection(db, contentCollection), {
-                content: "",
-                uid: currentUserUid
-            });
-
-            console.log("Document written with ID: ", contentDocRef.id);
-
-            // Creating the documents document that holds the script's meta data info and a 
-            // reference to the script's content data
-
-            const metaDataDocRef: DocumentReference<ScriptMetaData> = await addDoc(collection(db, scriptMetaInfoCollection), {
-                content: contentDocRef, // reference to the previously made textContent document
-                created: Timestamp.now(),
-                doc_name: "Untitled Document",
-                uid: currentUserUid,
-                updated: Timestamp.now()
-            });
-
-            console.log("Document written with ID: ", metaDataDocRef.id);
-
-            // Updating the store's to reference the newly created script
-            scriptIdStore.set(contentDocRef.id)
-            scriptMetaIdStore.set(metaDataDocRef.id)
-
-            goto(`/script/${contentDocRef.id}`);
-        } catch (e) {
-            console.error("Error creating documents:", e)
-        }
-    }
 
     let sortModeActive: string | null = 'last-updated';
 
@@ -219,7 +168,7 @@
             <div class="rectangle-container">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <div class="script-rectangle" id="new-script" on:click={() => createScript()}>
+                <div class="script-rectangle" id="new-script" on:click={() => createScript($authStore.currentUser?.uid)}>
                     <Fa icon={faPlus} />
                 </div>
                 <div class="script-title">Create a New Script</div>
