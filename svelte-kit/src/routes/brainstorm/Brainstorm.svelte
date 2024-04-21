@@ -65,7 +65,7 @@
             on:click={() => handleGenerate(brainstorm_text)}
             disabled={brainstorm_text == "" || isGenerating}
         >
-            {#if isGenerating}
+            {#if isGenerating && brainstorm_text != ""}
                 Generating Idea...
             {:else}
                 Generate Idea
@@ -76,7 +76,7 @@
             on:click={() =>  handleGenerate()}
             disabled={brainstorm_text !== ""}
         >
-            {#if isGenerating}
+            {#if isGenerating && brainstorm_text == ""}
                 Generating Random Idea...
             {:else}
                 Generate Random Idea
