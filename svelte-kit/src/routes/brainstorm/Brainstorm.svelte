@@ -49,7 +49,8 @@
 
 <div class="container">
     <!--Creating a textbox with placeholder text for brainstorming ideas-->
-    <p>Do you have a topic that you want to make a video about? Provide it here:</p>
+    <h1>Kickstart your writing process!</h1>
+    <h3>Do you have a topic that you want to make a video about? Provide it here:</h3>
     <input id="idea-generation-input"
         type="text"
         placeholder="or try generating a random idea..."

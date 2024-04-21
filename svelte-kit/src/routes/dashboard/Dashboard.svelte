@@ -152,6 +152,15 @@
         }
     }
 
+    function truncateText(text: string) {
+        let maxLength: number = 35;
+        
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength) + '...';
+        }
+        return text;
+    }
+
     const contentCollection: string = "textcontent";
     const scriptMetaInfoCollection: string = "documents";
 
@@ -181,7 +190,7 @@
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <!-- svelte-ignore a11y-no-static-element-interactions -->
                     <div class="script-rectangle" on:click={() => getScript(item)}></div>
-                    <div class="script-title">{item.name}</div>
+                    <div class="script-title">{truncateText(item.name)}</div>
                 </div>
             {/each}
 
@@ -330,5 +339,7 @@
     tr.table-row:hover {
         background-color: lightgray;
     }
+
+    
 
 </style>
