@@ -1,5 +1,5 @@
 import { getFirestore, collection, addDoc, DocumentReference, Timestamp } from 'firebase/firestore';
-import type { TextContent, ScriptMetaData } from '$lib/index.ts'
+import { type TextContent, type ScriptMetaData, textContentConverter, scriptMetaDataConverter } from '$lib/index.ts'
 import { scriptIdStore, scriptMetaIdStore } from '$lib/stores/scriptStore';
 import { goto } from '$app/navigation';
 import { auth, db } from '$lib/firebase/firebase.client';
@@ -18,13 +18,13 @@ export async function createScript(currentUserUid?: string): Promise<void> {
 
     try {
         // Create the textContent document to hold the script's text content
-        const contentDocRef: DocumentReference<TextContent> = await addDoc(collection(db, contentCollection), {
+        const contentDocRef: DocumentReference<TextContent> = await addDoc(collection(db, contentCollection).withConverter(textContentConverter), {
             content: "",
             uid: currentUserUid
         });
 
         // Create the document that holds the script's meta data info and a reference to the script's content data
-        const metaDataDocRef: DocumentReference<ScriptMetaData> = await addDoc(collection(db, scriptMetaInfoCollection), {
+        const metaDataDocRef: DocumentReference<ScriptMetaData> = await addDoc(collection(db, scriptMetaInfoCollection).withConverter(scriptMetaDataConverter), {
             content: contentDocRef, // Reference to the previously made textContent document
             created: Timestamp.now(),
             doc_name: "Untitled Document",

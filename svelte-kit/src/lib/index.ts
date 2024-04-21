@@ -1,5 +1,5 @@
 // place files you want to import through the `$lib` alias in this folder.
-import type { DocumentReference, Timestamp } from "firebase/firestore";
+import type { DocumentData, DocumentReference, FirestoreDataConverter, QueryDocumentSnapshot, SnapshotOptions, Timestamp } from "firebase/firestore";
 
 // Interfaces
 export interface Script {
@@ -15,6 +15,22 @@ export interface TextContent {
     uid: string
 }
 
+export const textContentConverter: FirestoreDataConverter<TextContent> = {
+    toFirestore(textContent: TextContent): DocumentData {
+        return { ...textContent };
+    },
+    fromFirestore(
+        snapshot: QueryDocumentSnapshot,
+        options: SnapshotOptions
+    ): TextContent {
+        const data = snapshot.data(options)!;
+        return {
+            content: data.content,
+            uid: data.uid
+        };
+    }
+};
+
 // POTENTIAL TODO: Combine Script and ScriptMetaData
 export interface ScriptMetaData {
     content: DocumentReference<TextContent>,
@@ -23,3 +39,22 @@ export interface ScriptMetaData {
     uid: string,
     updated: Timestamp
 }
+
+export const scriptMetaDataConverter: FirestoreDataConverter<ScriptMetaData> = {
+    toFirestore(scriptMetaData: ScriptMetaData): DocumentData {
+        return { ...scriptMetaData };
+    },
+    fromFirestore(
+        snapshot: QueryDocumentSnapshot,
+        options: SnapshotOptions
+    ): ScriptMetaData {
+        const data = snapshot.data(options)!;
+        return {
+            content: data.content,
+            created: data.created,
+            doc_name: data.doc_name,
+            uid: data.uid,
+            updated: data.updated
+        };
+    }
+};
