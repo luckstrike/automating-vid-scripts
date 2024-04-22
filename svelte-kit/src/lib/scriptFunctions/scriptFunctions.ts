@@ -1,5 +1,5 @@
 import { getFirestore, collection, addDoc, DocumentReference, Timestamp } from 'firebase/firestore';
-import { type TextContent, type ScriptMetaData, textContentConverter, scriptMetaDataConverter } from '$lib/index.ts'
+import { type TextContent, type ScriptMetaData, textContentConverter, scriptMetaDataConverter } from '$lib/index'
 import { scriptIdStore, scriptMetaIdStore } from '$lib/stores/scriptStore';
 import { goto } from '$app/navigation';
 import { auth, db } from '$lib/firebase/firebase.client';

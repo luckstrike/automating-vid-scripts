@@ -64,7 +64,6 @@ async function brainstormTitleGPT(openai: OpenAI, userInput: string): Promise<st
     return completion.choices[0].message.content;
 }
 
-// /api/randomidea POST
 export const POST: RequestHandler = async ({ request }) => {
 
     let data: GPTRequest | null = null;

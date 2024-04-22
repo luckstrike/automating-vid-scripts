@@ -16,7 +16,7 @@
         let userContent: string | null = null;
         let userTitle: string | null = null;
 
-        const endpoint = "/gpt";  // Simplified endpoint, always using POST
+        const endpoint = "/brainstorm";  // Simplified endpoint, always using POST
         const options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
