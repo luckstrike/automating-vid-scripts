@@ -1,6 +1,9 @@
 import type { GPTRequest } from '$lib';
 import { json, type RequestHandler } from '@sveltejs/kit'
 import OpenAI from "openai";
+import * as dotenv from 'dotenv';
+
+dotenv.config()
 
 // Setting up access to the OpenAI API
 const OPENAI_API_KEY: string | undefined = process.env.OPENAI_API_KEY;
