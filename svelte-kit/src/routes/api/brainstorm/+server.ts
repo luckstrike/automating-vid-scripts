@@ -1,4 +1,4 @@
-import type { GPTRequest } from '$lib';
+import type { UserPrompt } from '$lib';
 import { json, type RequestHandler } from '@sveltejs/kit'
 import OpenAI from "openai";
 import * as dotenv from 'dotenv';
@@ -66,12 +66,12 @@ async function brainstormTitleGPT(openai: OpenAI, userInput: string): Promise<st
 
 export const POST: RequestHandler = async ({ request }) => {
 
-    let data: GPTRequest | null = null;
+    let data: UserPrompt | null = null;
 
     try {
-        data = await request.json() as GPTRequest;
+        data = await request.json() as UserPrompt;
     } catch (e) {
-        console.error("Unable to handle a POST request /api/randomidea")
+        console.error("Unable to handle a POST request /api/brainstorm")
         return json({ success: false, error: "Bad request" }, { status: 400 })
     }
 

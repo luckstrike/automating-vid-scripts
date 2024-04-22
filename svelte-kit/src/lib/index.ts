@@ -24,8 +24,12 @@ export interface ScriptMetaData {
     updated: Timestamp
 }
 
-export interface GPTRequest {
+export interface UserPrompt {
     prompt?: string
+}
+
+export interface UserProvidedURL {
+    url?: string
 }
 
 // Converters
