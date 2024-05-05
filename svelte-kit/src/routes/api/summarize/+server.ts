@@ -22,8 +22,7 @@ const summarizePrompt: string = `You are a helpful assitant that summarizes the 
                                  parsed data from a website. Your goal is to take thaat data that you are
                                  provided and then summarize into more concise points. You can use either
                                  bullet point, paragraphs or short sentences to summarize it, whatever
-                                 seems the best to handle whatever data you receive. Just make sure that
-                                 whatever your response is, is formatted in HTML please.`
+                                 seems the best to handle whatever data you receive.`
 
 // Basically the idea is to:
 // 1. Check if the site can be parsed (by using RobotParser to check the robots.txt file)
