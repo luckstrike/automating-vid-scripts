@@ -2,14 +2,38 @@
     let summarize_url:string | null = null;
     let selectedOption:string | null = null;
 
-    function handleSummarize(selectedOption: string | null, summarize_url: string | null) {
-        // Change this to actual logic later
-        if (selectedOption == "detailed-summary") {
-            console.log("Summarizing with detailed summary...")
-        } else if ("bullet-points") {
-            console.log("Summarizing with bullet points...")
-        } else {
-            console.log("Something went wrong...")
+    let isGenerating: boolean = false;
+    let errorMessage: string | null = null;
+
+    const tempAddr: string = "localhost:5173"
+    const API_URL: string = `http://${tempAddr}/api`;
+
+    async function handleGenerate(userProvidedURL?: string| null): Promise<void> {
+        isGenerating = true;
+        errorMessage = null;
+
+        let summary: string | null = null;
+
+        const endpoint = "/summarize";  // Simplified endpoint, always using POST
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: userProvidedURL || "" })
+        };
+
+        // Fetching the result + error handling
+        try {
+            const res = await fetch(API_URL + endpoint, options);
+            if (res.ok) {
+                const gptResult = await res.json();
+                summary = gptResult.summary;
+
+                console.log("Result obtained: ", summary)
+            } else {
+                errorMessage = `Server error: ${res.status}`;
+            }
+        } catch (err) {
+            errorMessage = `Network error: ${(err as Error).message}`;
         }
     }
 
@@ -37,7 +61,7 @@
         <button 
             id="start-summary" 
             disabled={!(selectedOption && summarize_url)}
-            on:click={() => handleSummarize(selectedOption, summarize_url)}
+            on:click={() =>  handleGenerate(summarize_url)}
             >
             Summarize
         </button>

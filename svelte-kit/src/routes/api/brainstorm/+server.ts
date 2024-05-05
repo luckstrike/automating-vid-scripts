@@ -27,7 +27,6 @@ const brainstormTitlePrompt: string = `You are a helpful assitant who provides, 
                                     words or less. The less words you provide the better, but don't be shy of
                                     providing more words for the title if needed.`
 
-// TODO: Make GPT format this is bullet point HTML so it can generate a new script
 async function brainstormGPT(openai: OpenAI, userInput: string): Promise<string | null> {
     const completion = await openai.chat.completions.create({
         messages: [
