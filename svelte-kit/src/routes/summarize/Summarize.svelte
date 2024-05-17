@@ -1,4 +1,6 @@
 <script lang="ts">
+    import Modal from '$lib/Modal.svelte'
+
     let summarize_url:string | null = null;
     let selectedOption:string | null = null;
 
@@ -7,6 +9,15 @@
 
     const tempAddr: string = "localhost:5173"
     const API_URL: string = `http://${tempAddr}/api`;
+
+    let showModal: boolean = false;
+    let modalContent: string = '';
+
+    // Set's showModal (the global variable) to false
+    const closeModal = () => {
+        showModal = false;
+        modalContent = ''; // reset the content as well
+    };
 
     async function handleGenerate(userProvidedURL?: string| null): Promise<void> {
         isGenerating = true;
@@ -24,17 +35,36 @@
         // Fetching the result + error handling
         try {
             const res = await fetch(API_URL + endpoint, options);
+            
+            // Create a cool pop up window
+            showModal = true;
+
             if (res.ok) {
                 const gptResult = await res.json();
                 summary = gptResult.summary;
 
-                console.log("Result obtained: ", summary)
+                if (summary != null) {
+                    modalContent = summary;
+                } else {
+                    modalContent = `Uh oh, seems like there was an issue with getting a summary.
+                                    It seems like the website either doesn't allow scraping
+                                    or was unable to scrape the website. Please try another link
+                                    or try again.`
+                }
             } else {
                 errorMessage = `Server error: ${res.status}`;
+
+                modalContent = `Uh oh, seems like there was an issue with getting a summary.`
             }
         } catch (err) {
             errorMessage = `Network error: ${(err as Error).message}`;
+
+            modalContent = `Uh oh, seems like there wwas an issue with getting a summary.
+                                Either the website does not allow for scraping or something
+                                went wrong. Try again later or try a different link.`
         }
+
+        isGenerating = false;
     }
 
 </script>
@@ -46,6 +76,10 @@
         placeholder="Enter URL here..."
         bind:value={summarize_url}
     />
+    <Modal show={showModal} onClose={closeModal} content={modalContent}>
+        <h1>Here's what we got back:</h1>
+    </Modal>
+
     <p>How would you like the summary to be provided?</p>
     <div class="radio-buttons">
         <div class="radio-option">
@@ -60,9 +94,9 @@
 
         <button 
             id="start-summary" 
-            disabled={!(selectedOption && summarize_url)}
+            disabled={!(selectedOption && summarize_url) || isGenerating}
             on:click={() =>  handleGenerate(summarize_url)}
-            >
+        >
             Summarize
         </button>
     </div>

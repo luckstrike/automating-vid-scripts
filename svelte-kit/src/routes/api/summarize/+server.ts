@@ -24,12 +24,6 @@ const summarizePrompt: string = `You are a helpful assitant that summarizes the 
                                  bullet point, paragraphs or short sentences to summarize it, whatever
                                  seems the best to handle whatever data you receive.`
 
-// Basically the idea is to:
-// 1. Check if the site can be parsed (by using RobotParser to check the robots.txt file)
-// 1. Parse the HTML from the site (if allowed) with cheeerio
-// 2. Throw that into GPT so it can summarize it
-
-
 async function checkIfAllowed(userAgent: string, url: string) {
     try {
         const robotsTxtUrl = new URL('/robots.txt', url).href;
@@ -72,8 +66,6 @@ async function summarizeParsedInfo(openai: OpenAI, HTMLResult: string): Promise<
 async function parseURL(url: string) {
     try {
         // Fetch the webpage
-
-        console.log("Parsing")
         const { data } = await axios.get(url);
 
         // Load the HTML into Cheerio
@@ -137,6 +129,6 @@ export const POST: RequestHandler = async ({ request }) => {
     if (URLSummary) {
         return json({success: true, summary: URLSummary})
     } else {
-        return json({success: false, summary: ""})
+        return json({success: false, summary: null})
     }
 }
