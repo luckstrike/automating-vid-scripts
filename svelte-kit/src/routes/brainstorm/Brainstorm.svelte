@@ -106,7 +106,7 @@
         color: white;
         font-size: 18px;
         font-weight: bold;
-        flex: 0 0 85%;
+        flex: 100%;
     }
 
     #idea-generation-input {

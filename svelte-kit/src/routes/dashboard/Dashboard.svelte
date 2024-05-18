@@ -253,7 +253,7 @@
         flex-direction: column; /* Stack children vertically */
         align-items: center; /* Center children horizontally */
         height: 100vh; /* Full viewport height */
-        flex: 0 0 85%;
+        flex: 100%;
     }
 
     .clickable-icon {

@@ -46,16 +46,25 @@
     })
 </script>
 
-<div class="container">
+<div class="layout-container">
     {#if $authStore.currentUser}
         <Sidebar />
     {/if}
-    <slot />
+
+    <main class="main-content">
+        <slot />
+    </main>
 </div>
 
 <style>
-    .container {
+    .layout-container {
         display: flex;
         height: 100vh;
     }
+
+    .main-content {
+        flex: 1; /* Take up remaining space */
+        overflow: auto; /* Scroll if content overflows */
+    }
+
 </style>

@@ -10,6 +10,6 @@
     .script {
         display: flex;
         flex-direction: column;
-        flex: 0 0 80%;
+        flex: 100%;
     }
 </style>

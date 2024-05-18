@@ -129,7 +129,7 @@
         color: #ffffff;
         font-size: 20px;
         font-weight: bold;
-        flex: 0 0 85%;
+        flex: 100%;
     }
 
     .radio-buttons {
