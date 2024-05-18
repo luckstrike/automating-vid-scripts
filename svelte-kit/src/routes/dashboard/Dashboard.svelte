@@ -5,7 +5,7 @@
     import { scriptIdStore, scriptMetaIdStore } from "$lib/stores/scriptStore"
 
 	import type { User } from 'firebase/auth';
-    import { DocumentReference, DocumentSnapshot, Timestamp, addDoc, collection, getDoc, getDocs, query, where } from 'firebase/firestore';
+    import { DocumentReference, DocumentSnapshot, Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
     import { onMount } from 'svelte';
 
     // Icon Imports
@@ -120,6 +120,36 @@
         }
     }
 
+    async function deleteScript(item: Script) {
+        if (!currentUser) {
+            console.error("No user authenticated");
+            return;
+        }
+        
+        try {
+            if (item.metaDocId && item.content) {
+                // Ensure item.content is a string path if it's not a DocumentReference
+                let contentDocRef: DocumentReference;
+                if (typeof item.content === 'string') {
+                    contentDocRef = doc(db, item.content);
+                } else {
+                    contentDocRef = item.content as DocumentReference;
+                }
+
+                const metaDocRef: DocumentReference = doc(db, "documents", item.metaDocId);
+
+                await deleteDoc(metaDocRef);
+                console.log(`Document with ID ${metaDocRef.id} deleted successfully`);
+
+                await deleteDoc(contentDocRef);
+                console.log(`Document with ID ${contentDocRef.id} deleted successfully`);
+            }
+
+            filteredData = filteredData.filter(script => script.metaDocId !== item.metaDocId);
+        } catch (error) {
+            console.error("Error deleting document:", error);
+        }
+    }
 
     // TODO: Make these functions not die when no data is loaded or available
     // Function to toggle and sort by name
@@ -229,12 +259,18 @@
                             />
                         </div>
                     </th>
+                    <th class="table-action">
+                        Action
+                    </th>
                 </thead>
                 <tbody>
                 {#each filteredData as item}
                     <tr class="table-row" on:click={() => getScript(item)}>
                     <td class="table-name">{item.name}</td>
                     <td class="table-date">{item.lastUpdatedString}</td>
+                    <td class="delete-script">
+                        <button on:click|stopPropagation={() => deleteScript(item)}>Delete</button>
+                    </td>
                     </tr>
                 {/each}
                 </tbody>
@@ -319,16 +355,25 @@
 
     /* Makes the Name column only take up 70% of the table width*/
     .table-name {
-        width: 70%;
+        width: 65%;
         padding: 10px;
         border-bottom: 1px solid #2f2f2f;
     }
 
     /* Makes the Last Updated dates only take up 30% of the table width*/
     .table-date {
-        width: 30%;
+        width: 25%;
         padding: 10 px;
         border-bottom: 1px solid #2f2f2f;
+    }
+
+    .table-action {
+        width: 5%;
+        border-bottom: 1px solid #2f2f2f;
+    }
+
+    .delete-script {
+        padding-right: 10px;
     }
     
     .table-row {
