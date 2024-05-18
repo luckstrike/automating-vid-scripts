@@ -2,7 +2,6 @@
     import Modal from '$lib/Modal.svelte'
 
     let summarize_url:string | null = null;
-    let selectedOption:string | null = null;
 
     let isGenerating: boolean = false;
     let errorMessage: string | null = null;
@@ -81,25 +80,14 @@
     </Modal>
 
     <p>How would you like the summary to be provided?</p>
-    <div class="radio-buttons">
-        <div class="radio-option">
-            <input type="radio" id="detailed-summary" name="options" value="detailed-summary" checked bind:group={selectedOption}>
-            <label for="detailed-summary">Detailed Summary</label>
-        </div>
-
-        <div class="radio-option">
-            <input type="radio" id="bullet-points" name="options" value="bullet-points" bind:group={selectedOption}>
-            <label for="bullet-points">Bullet Points</label>
-        </div>
-
-        <button 
-            id="start-summary" 
-            disabled={!(selectedOption && summarize_url) || isGenerating}
-            on:click={() =>  handleGenerate(summarize_url)}
-        >
-            Summarize
-        </button>
-    </div>
+        
+    <button 
+        id="start-summary" 
+        disabled={!(summarize_url) || isGenerating}
+        on:click={() =>  handleGenerate(summarize_url)}
+    >
+        Summarize
+    </button>
 
 </div>
 
@@ -130,21 +118,6 @@
         font-size: 20px;
         font-weight: bold;
         flex: 100%;
-    }
-
-    .radio-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        font-weight: 100;
-        font-size: 16px;
-        border: none;
-    }
-
-    .radio-option {
-        display: flex;
-        align-items: center;  /* To align items vertically centered */
-        gap: 8px;             /* Gap between radio and label */
     }
 
     #summarize-url-input {
