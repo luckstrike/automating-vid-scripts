@@ -125,6 +125,12 @@
             console.error("No user authenticated");
             return;
         }
+
+        const confirmed = window.confirm("Are you sure you want to delete this script?")
+
+        if (!confirmed) {
+            return;
+        }
         
         try {
             if (item.metaDocId && item.content) {
@@ -143,6 +149,10 @@
 
                 await deleteDoc(contentDocRef);
                 console.log(`Document with ID ${contentDocRef.id} deleted successfully`);
+
+                // Reset the script stores as well
+                scriptIdStore.set(null);
+                scriptMetaIdStore.set(null);
             }
 
             filteredData = filteredData.filter(script => script.metaDocId !== item.metaDocId);
