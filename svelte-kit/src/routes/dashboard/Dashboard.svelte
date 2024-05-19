@@ -193,7 +193,7 @@
     }
 
     function truncateText(text: string) {
-        let maxLength: number = 35;
+        let maxLength: number = 25;
         
         if (text.length > maxLength) {
             return text.substring(0, maxLength) + '...';

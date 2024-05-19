@@ -57,7 +57,7 @@ async function summarizeParsedInfo(openai: OpenAI, HTMLResult: string): Promise<
                 content: HTMLResult
             }
         ],
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o",
     });
   
     return completion.choices[0].message.content;

@@ -39,7 +39,7 @@ async function brainstormGPT(openai: OpenAI, userInput: string): Promise<string 
                 content: userInput
             }
         ],
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o",
     });
   
     return completion.choices[0].message.content;
@@ -57,7 +57,7 @@ async function brainstormTitleGPT(openai: OpenAI, userInput: string): Promise<st
                 content: userInput
             }
         ],
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o",
     });
   
     return completion.choices[0].message.content;
