@@ -57,7 +57,7 @@ async function summarizeParsedInfo(openai: OpenAI, HTMLResult: string): Promise<
                 content: HTMLResult
             }
         ],
-        model: "gpt-4o",
+        model: "gpt-4o-mini",
     });
   
     return completion.choices[0].message.content;
