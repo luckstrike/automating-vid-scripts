@@ -4,7 +4,9 @@ import { createUserWithEmailAndPassword,
         updateEmail, 
         updatePassword,
         signInWithEmailAndPassword,
-        verifyBeforeUpdateEmail } from 'firebase/auth';
+        verifyBeforeUpdateEmail, 
+        signInWithPopup,
+        GoogleAuthProvider} from 'firebase/auth';
 
 import { writable } from 'svelte/store';    
 import { auth } from '$lib/firebase/firebase.client';
@@ -57,6 +59,18 @@ export const authHandlers = {
             throw new Error('No current user');
         } else {
             await updatePassword(auth.currentUser, password);
+        }
+    },
+    loginWithGoogle: async () => {
+        const provider = new GoogleAuthProvider();
+
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            console.log("Signed in with Google:", user);
+        } catch (error) {
+            console.error("Error signing in with Google", error);
+            throw error;
         }
     }
 }

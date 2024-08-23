@@ -1,5 +1,6 @@
 <script lang='ts'>
 	import { authHandlers, authStore } from "./stores/authStore";
+    import DeviconGoogle from '~icons/devicon/google';
 
     // TODO: Add in Google Auth log in
     // You can probably have a button that says "Log in with Google"
@@ -45,6 +46,20 @@
         console.log("???:", $authStore.currentUser);
     }
 
+    async function handleGoogleSignIn() {
+        try {
+            // Try logging in the user with Google
+            await authHandlers.loginWithGoogle();
+
+            // If the user is authenticated then redirect them to
+            // the dashboard
+            if ($authStore.currentUser) {
+                window.location.href = '/dashboard';
+            }
+        } catch (error) {
+            console.error("Google sign-in failed", error);
+        }
+    }
 </script>
 
 <div class="container">
@@ -72,7 +87,13 @@
                 <p class="switch-text">Log In</p>
             </button>
         {:else}
-            Don't have an account?
+            Or Login With...
+            <button class="google-login" on:click={handleGoogleSignIn}>              
+              <DeviconGoogle style="font-size: 1.5em"></DeviconGoogle>
+            </button>
+            <div>
+              Don't have an account?
+            </div>
             <button class="switch-mode" on:click={() => {signUp = true;}}>
                 <p class="switch-text">Sign Up</p>
             </button>
@@ -131,5 +152,13 @@
     .switch-text {
         text-decoration: none;
         color: #0070f3;
+    }
+
+    .google-login {
+        background-color: #0070f3;
+        border-radius: 10px;
+        border: none;
+        padding: 5px;
+        flex-direction: row;
     }
 </style>
