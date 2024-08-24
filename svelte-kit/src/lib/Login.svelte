@@ -105,6 +105,7 @@
 		{#if signUp}
 			<div class="flex flex-col items-center text-white">
 				<button
+					class="bg-yellow-500 px-4 py-2 rounded-lg"
 					on:click={() => {
 						signUp = false;
 					}}
@@ -116,6 +117,7 @@
 			<div class="flex flex-col text-center items-center text-white">
 				<div>Don't have an account?</div>
 				<button
+					class="bg-yellow-500 px-4 py-2 rounded-lg"
 					on:click={() => {
 						signUp = true;
 					}}

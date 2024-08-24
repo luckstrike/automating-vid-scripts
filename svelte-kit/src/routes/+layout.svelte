@@ -57,7 +57,7 @@
 	});
 </script>
 
-<div class="flex h-screen">
+<div class="flex flex-row h-screen">
 	{#if $authStore.currentUser}
 		<Sidebar />
 	{/if}
