@@ -57,7 +57,7 @@
 	});
 </script>
 
-<div class="layout-container">
+<div class="flex h-screen">
 	{#if $authStore.currentUser}
 		<Sidebar />
 	{/if}
@@ -68,14 +68,8 @@
 </div>
 
 <style>
-	.layout-container {
-		display: flex;
-		height: 100vh;
-	}
-
 	.main-content {
 		flex: 1; /* Take up remaining space */
 		overflow: auto; /* Scroll if content overflows */
 	}
 </style>
-

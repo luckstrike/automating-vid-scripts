@@ -62,27 +62,39 @@
 	}
 </script>
 
-<div class="container">
-	<h1 class="welcome-title">Howdy there, welcome to VidScripts</h1>
-	<h2 class="welcome-title">{signUp ? 'Sign Up' : 'Log In'}</h2>
-	<button class="google-login" on:click={handleGoogleSignIn}>
+<div class="flex flex-col h-screen w-screen justify-center items-center">
+	<div class="text-4xl font-bold text-white p-4">Howdy there, welcome to VidScripts</div>
+	<div class="text-2xl text-white">{signUp ? 'Sign Up' : 'Log In'}</div>
+	<button
+		class="flex flex-row space-x-2 px-6 py-4 m-4 bg-white rounded-md items-center"
+		on:click={handleGoogleSignIn}
+	>
 		<DeviconGoogle style="font-size: 1.5em"></DeviconGoogle>
-		Continue with Google
+		<div class="font-semibold">Continue with Google</div>
 	</button>
-	<form>
-		<input bind:value={email} class="info-input" type="text" placeholder="Email" />
-		<input bind:value={password} class="info-input" type="password" placeholder="Password" />
+	<form class="flex flex-col space-y-2 items-center w-full max-w-md">
+		<input bind:value={email} class="p-2 rounded-lg w-full" type="text" placeholder="Email" />
+		<input
+			bind:value={password}
+			class="p-2 rounded-lg w-full"
+			type="password"
+			placeholder="Password"
+		/>
 
 		{#if signUp}
 			<input
 				bind:value={confirmPassword}
-				class="info-input"
+				class="p-2 rounded-lg w-full"
 				type="password"
 				placeholder="Confirm Password"
 			/>
 		{/if}
 
-		<button on:click|preventDefault={handleSubmit} class="action" type="submit">
+		<button
+			on:click|preventDefault={handleSubmit}
+			class="bg-blue-600 text-white p-2 rounded-lg w-full"
+			type="submit"
+		>
 			{#if signUp}
 				Sign Up
 			{:else}
@@ -91,89 +103,26 @@
 		</button>
 
 		{#if signUp}
-			Already have an account?
-			<button
-				class="switch-mode"
-				on:click={() => {
-					signUp = false;
-				}}
-			>
-				<p class="switch-text">Log In</p>
-			</button>
+			<div class="flex flex-col items-center text-white">
+				<button
+					on:click={() => {
+						signUp = false;
+					}}
+				>
+					Log In
+				</button>
+			</div>
 		{:else}
-			Or Login With...
-			<div>Don't have an account?</div>
-			<button
-				class="switch-mode"
-				on:click={() => {
-					signUp = true;
-				}}
-			>
-				<p class="switch-text">Sign Up</p>
-			</button>
+			<div class="flex flex-col text-center items-center text-white">
+				<div>Don't have an account?</div>
+				<button
+					on:click={() => {
+						signUp = true;
+					}}
+				>
+					Sign Up
+				</button>
+			</div>
 		{/if}
 	</form>
 </div>
-
-<style>
-	.welcome-title {
-		color: #fff;
-	}
-
-	.container {
-		display: flex;
-		flex-direction: column;
-		flex: 0 0 100%;
-		height: 100vh;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.container form {
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		text-align: center;
-	}
-
-	.switch-mode {
-		border: none;
-		cursor: pointer;
-		color: #0070f3;
-		background-color: transparent;
-		padding: 0;
-		margin: 0;
-	}
-
-	.info-input {
-		border: none;
-		border-radius: 10px;
-		width: 300px;
-		height: 40px;
-		margin: 5px;
-	}
-
-	.action {
-		border: none;
-		border-radius: 10px;
-		width: 300px;
-		height: 40px;
-		margin: 5px;
-		background-color: #0070f3;
-	}
-
-	.switch-text {
-		text-decoration: none;
-		color: #0070f3;
-	}
-
-	.google-login {
-		background-color: #0070f3;
-		border-radius: 10px;
-		border: none;
-		padding: 5px;
-		flex-direction: column;
-		width: 25%;
-		text-align: center;
-	}
-</style>
