@@ -302,7 +302,7 @@
 						<tr class="table-row" on:click={() => getScript(item)}>
 							<td class="table-name">{item.name}</td>
 							<td class="table-date">{item.lastUpdatedString}</td>
-							<td class="pr-2 items-center">
+							<td class="px-2 items-center">
 								<button
 									class="bg-red-500 hover:bg-red-700 border-black rounded-md px-2 py-1 text-white"
 									on:click|stopPropagation={() => deleteScript(item)}>Delete</button
