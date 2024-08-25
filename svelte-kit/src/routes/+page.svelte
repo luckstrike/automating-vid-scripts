@@ -4,7 +4,7 @@
 	import { authStore } from '$lib/stores/authStore';
 </script>
 
-<div class="h-screen w-screen">
+<div class="flex h-screen w-screen">
 	{#if !$authStore.isLoading && !$authStore.currentUser}
 		<Login />
 	{/if}
