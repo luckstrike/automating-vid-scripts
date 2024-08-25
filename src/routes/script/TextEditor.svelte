@@ -279,9 +279,9 @@
 <!-- Code Block, Quote Block, Horizontal Rule (just like a horizontal line) -->
 <div class="flex flex-col h-screen w-full items-center">
 	{#if editor}
-		<div class="pt-2">
+		<div class="w-full pt-2 text-center">
 			<input
-				class="bg-transparent text-center text-white font-bold text-xl border-solid border-2 border-white rounded-lg"
+				class="bg-transparent w-1/2 text-center text-white font-bold text-xl border-solid border-2 border-white rounded-lg"
 				type="text"
 				bind:value={scriptTitle}
 				on:input={handleScriptTitleInput}
