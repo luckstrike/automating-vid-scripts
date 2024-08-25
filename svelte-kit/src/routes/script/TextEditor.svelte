@@ -369,6 +369,7 @@
 		height: 98%;
 		padding: 0.5em;
 		color: white;
+		overflow-y: auto;
 	}
 
 	:global(.tiptap:focus) {
