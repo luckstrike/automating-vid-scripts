@@ -72,6 +72,7 @@
 		<DeviconGoogle style="font-size: 1.5em"></DeviconGoogle>
 		<div class="font-semibold">Continue with Google</div>
 	</button>
+  <div class="text-xl text-white pb-2">Or login with an email:</div>
 	<form class="flex flex-col space-y-2 items-center w-full max-w-md">
 		<input bind:value={email} class="p-2 rounded-lg w-full" type="text" placeholder="Email" />
 		<input
@@ -115,7 +116,7 @@
 			</div>
 		{:else}
 			<div class="flex flex-col text-center items-center text-white">
-				<div>Don't have an account?</div>
+				<div class="text-md">Don't have an account?</div>
 				<button
 					class="bg-yellow-500 px-4 py-2 rounded-lg"
 					on:click={() => {
