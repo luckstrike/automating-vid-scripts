@@ -62,7 +62,7 @@
 		<Sidebar />
 	{/if}
 
-	<main>
+	<main class="flex-grow h-screen">
 		<slot />
 	</main>
 </div>

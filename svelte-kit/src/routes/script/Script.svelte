@@ -5,7 +5,3 @@
 <div>
 	<TextEditor />
 </div>
-
-<style>
-</style>
-

@@ -277,18 +277,18 @@
 
 <!-- Potential Future Buttons -->
 <!-- Code Block, Quote Block, Horizontal Rule (just like a horizontal line) -->
-<div class="flex flex-col h-screen w-screen items-center bg-red-300">
+<div class="flex flex-col h-screen w-full items-center">
 	{#if editor}
-		<div class="">
+		<div class="pt-2">
 			<input
+				class="bg-transparent text-center text-white font-bold text-xl border-solid border-2 border-white rounded-lg"
 				type="text"
 				bind:value={scriptTitle}
 				on:input={handleScriptTitleInput}
-				class="document-title"
 			/>
 		</div>
 		<!-- Toolbar Section -->
-		<div class="flex flex-row space-x-4">
+		<div class="flex flex-row justify-center space-x-4 p-3">
 			<!-- Save Button -->
 			<button
 				on:click={() => saveScript(editor, 'textcontent', $scriptIdStore)}
@@ -355,21 +355,23 @@
 			</button>
 		</div>
 	{/if}
-
-	<div class="tiptap" bind:this={element} />
+	<div class="flex-grow overflow-auto w-full">
+		<div class="h-full w-full" bind:this={element} />
+	</div>
 </div>
 
-<style lang="postcss">
+<style>
 	:global(.tiptap) {
-		display: flex;
-		flex: row;
-		border: 1px solid #ddd;
-		border-radius: 5px;
+		border: 1px solid black;
+		border-radius: 10px;
+		margin: auto;
+		max-width: 80%;
+		height: 98%;
 		padding: 0.5em;
-		min-height: 85vh;
-		overflow: hidden;
-		scroll-behavior: smooth; /* This is so that the text box can scroll */
 		color: white;
-		font-size: 18px;
+	}
+
+	:global(.tiptap:focus) {
+		outline: none;
 	}
 </style>

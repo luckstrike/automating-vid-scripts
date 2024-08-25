@@ -2,10 +2,6 @@
 	import Script from './Script.svelte';
 </script>
 
-<div class="flex flex-shrink">
+<div>
 	<Script />
 </div>
-
-<style>
-</style>
-
