@@ -229,7 +229,7 @@
 	let sortModeActive: string | null = 'last-updated';
 </script>
 
-<div class="flex flex-col items-center w-screen">
+<div class="flex flex-col items-center">
 	{#if !isLoading}
 		<div class="text-3xl font-bold text-white mt-4">
 			Howdy {currentUser?.email}! Ready to start script writing?
@@ -412,4 +412,3 @@
 		background-color: lightgray;
 	}
 </style>
-

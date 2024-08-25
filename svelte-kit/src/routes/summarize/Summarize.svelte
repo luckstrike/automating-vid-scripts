@@ -67,7 +67,7 @@
 	}
 </script>
 
-<div class="flex flex-col space-y-3 items-center align-middle justify-center h-screen w-screen">
+<div class="flex flex-col flex-grow space-y-3 items-center align-middle justify-center h-screen">
 	<p class="text-lg text-white">
 		Please provide the URL of the website you would like to summarize:
 	</p>
@@ -101,4 +101,3 @@
 		padding: 0px 10px 0px 10px;
 	}
 </style>
-
