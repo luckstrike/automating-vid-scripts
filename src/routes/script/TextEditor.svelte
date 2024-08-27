@@ -281,14 +281,14 @@
 	{#if editor}
 		<div class="w-full pt-2 text-center">
 			<input
-				class="bg-transparent w-1/2 text-center text-white font-bold text-xl border-solid border-2 border-white rounded-lg"
+				class="bg-transparent w-1/2 text-center text-[#d9d9d9] font-bold text-xl border-solid border-2 border-[#d9d9d9] rounded-lg"
 				type="text"
 				bind:value={scriptTitle}
 				on:input={handleScriptTitleInput}
 			/>
 		</div>
 		<!-- Toolbar Section -->
-		<div class="flex flex-row justify-center space-x-4 p-3">
+		<div class="flex flex-row justify-center space-x-4 p-3 text-[#d9d9d9]">
 			<!-- Save Button -->
 			<button
 				on:click={() => saveScript(editor, 'textcontent', $scriptIdStore)}
@@ -368,8 +368,9 @@
 		max-width: 80%;
 		height: 98%;
 		padding: 0.5em;
-		color: white;
+		color: black;
 		overflow-y: auto;
+    background-color: #D9D9D9;
 	}
 
 	:global(.tiptap:focus) {
