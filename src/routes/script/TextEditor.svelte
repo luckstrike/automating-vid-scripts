@@ -240,7 +240,29 @@
           class: 'border-2 border-black rounded-lg p-2 bg-[#d9d9d9] min-h-[85vh] max-h-[85vh] overflow-y-auto outline-none',
         },
       },
+      onCreate({ editor }) {
+        if ($scriptIdStore) {
+          getScriptContent(db, 'textcontent', $scriptIdStore).then((result) => {
+            if (result) {
+              editor.commands.setContent(result.content);
+            }
+          });
+        }
+
+        if ($scriptMetaIdStore) {
+          getScriptContent(db, 'documents', $scriptMetaIdStore).then((result) => {
+            if (result) {
+              scriptTitle = result.doc_name;
+            }
+          });
+        }
+      },
+      onUpdate({ editor }) {
+        $scriptSaveStatus = true;
+      }
     });
+
+    const unsubscribe = auth.onAuthStateChanged((user) => {});
   });
 </script>
 
