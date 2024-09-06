@@ -45,7 +45,7 @@
 	let faIconSize = '1.5x';
 
 	let element: any; // figure out this type later
-	let editor: Readable<Editor>;
+	let editor: Editor;
   let editorContainer: HTMLElement;
 
 	let scriptTitle: string = ''; // the script's title
@@ -281,13 +281,79 @@
         </button>
       </div>
     </BubbleMenu>
-  {/if}
 
-  <div class="flex flex-row p-2 text-white">
-    <p>Toolbar Here!</p>
-  </div>
+		<div class="w-full pt-2 text-center">
+			<input
+				class="bg-transparent w-1/2 text-center text-[#d9d9d9] font-bold text-xl border-solid border-2 border-[#d9d9d9] rounded-lg"
+				type="text"
+				bind:value={scriptTitle}
+				on:input={handleScriptTitleInput}
+			/>
+		</div>
+
+    <div class="flex flex-row justify-center space-x-4 p-3 text-[#d9d9d9]">
+      <!-- Save Button -->
+      <button
+        on:click={() => saveScript(editor, 'textcontent', $scriptIdStore)}
+      >
+        <Fa class="toolbar-icons" icon={faSave} />
+      </button>
+
+      <!-- Bold Button -->
+      <button
+        on:click={() => editor.chain().focus().toggleBold().run()}
+      >
+        <Fa class="toolbar-icons" icon={faBold} />
+      </button>
+
+      <!-- Italic Button -->
+			<button
+				on:click={() => editor.chain().focus().toggleItalic().run()}
+			>
+				<Fa class="toolbar-icons" icon={faItalic} />
+			</button>
+
+			<!-- Underline Button -->
+			<button
+				on:click={() => editor.chain().focus().toggleUnderline().run()}
+			>
+				<Fa class="toolbar-icons" icon={faUnderline} />
+			</button>
+
+			<!-- Undo Button -->
+			<button
+				on:click={() => editor.chain().focus().undo().run()}
+			>
+				<Fa class="toolbar-icons" icon={faUndo} />
+			</button>
+
+			<!-- Redo Button -->
+			<button
+				on:click={() => editor.chain().focus().redo().run()}
+			>
+				<Fa class="toolbar-icons" icon={faRedo} />
+			</button>
+
+			<!-- Bullet List Button -->
+			<button
+				on:click={() => editor.chain().focus().toggleBulletList().run()}
+			>
+				<Fa class="toolbar-icons" icon={faList} />
+			</button>
+
+			<!-- Ordered List Button -->
+			<button
+				on:click={() => editor.chain().focus().toggleOrderedList().run()}
+			>
+				<Fa class="toolbar-icons" icon={faListOl} />
+			</button>
+    </div>
+
+  {/if}
+  
   <div bind:this={editorContainer} class="w-[90%]">
-    <EditorContent editor={$editor}/>
+
+  <EditorContent editor={$editor}/>
   </div>
 </div>
 
