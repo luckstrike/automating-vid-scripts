@@ -21,9 +21,9 @@
 	import { scriptIdStore, scriptMetaIdStore, scriptSaveStatus } from '$lib/stores/scriptStore';
 
 	// Text Editor Imports
-	import { Editor } from '@tiptap/core';
 	import StarterKit from '@tiptap/starter-kit';
 	import Underline from '@tiptap/extension-underline';
+  import { BubbleMenu, createEditor, Editor, EditorContent } from 'svelte-tiptap';
 
 	// Icon Imports
 	import Fa from 'svelte-fa';
@@ -45,7 +45,8 @@
 	let faIconSize = '1.5x';
 
 	let element: any; // figure out this type later
-	let editor: Editor;
+	let editor: Readable<Editor>;
+  let editorContainer: HTMLElement;
 
 	let scriptTitle: string = ''; // the script's title
 
@@ -66,6 +67,7 @@
 	async function getScriptContent(db: Firestore, collectionName: string, docId: string) {
 		const docRef: DocumentReference = await doc(db, collectionName, docId);
 
+        BubbleMenu
 		try {
 			const docSnap: DocumentSnapshot | null = await getDoc(docRef);
 			if (docSnap.exists()) {
@@ -226,154 +228,46 @@
 		}, 500) as unknown as number; // delay in milliseconds (plus assertions for TypeScript to stop yelling at me)
 	}
 
-	onMount(() => {
-		editor = new Editor({
-			element: element,
-			extensions: [StarterKit, Underline],
-			content: '',
-			onTransaction: () => {
-				// force re-render so `editor.isActive` works as expected
-				editor = editor;
-			},
-			onCreate({ editor }) {
-				// Updating the content to the correct script
-				// TODO: Add saving your doc (and a warning before leaving the script tab to save a document)
-				//       Auto-saving would be cool but not sure how to do that
-				if ($scriptIdStore) {
-					getScriptContent(db, 'textcontent', $scriptIdStore).then((result) => {
-						if (result) {
-							editor.commands.setContent(result.content);
-						}
-					});
-				}
-
-				if ($scriptMetaIdStore) {
-					getScriptContent(db, 'documents', $scriptMetaIdStore).then((result) => {
-						if (result) {
-							scriptTitle = result.doc_name;
-						}
-					});
-				}
-			},
-			onUpdate({ editor }) {
-				// Everytime something new is typed/updated, the save button becomes active
-				$scriptSaveStatus = true;
-			}
-		});
-
-		const unsubscribe = auth.onAuthStateChanged((user) => {});
-
-		return unsubscribe;
-	});
-
-	onDestroy(() => {
-		if (editor) {
-			editor.destroy();
-		}
-	});
+  onMount(() => {
+    editor = createEditor({
+      extensions: [
+        StarterKit,
+        Underline,
+      ],
+      content: '',
+      editorProps: {
+        attributes: {
+          class: 'border-2 border-black rounded-lg p-2 bg-[#d9d9d9] min-h-[85vh] max-h-[85vh] overflow-y-auto outline-none',
+        },
+      },
+    });
+  });
 </script>
 
 <!-- TODO: Add in a way to change font size (so you have titles) -->
 
 <!-- Potential Future Buttons -->
 <!-- Code Block, Quote Block, Horizontal Rule (just like a horizontal line) -->
-<div class="flex flex-col h-screen w-full items-center">
-	{#if editor}
-		<div class="w-full pt-2 text-center">
-			<input
-				class="bg-transparent w-1/2 text-center text-[#d9d9d9] font-bold text-xl border-solid border-2 border-[#d9d9d9] rounded-lg"
-				type="text"
-				bind:value={scriptTitle}
-				on:input={handleScriptTitleInput}
-			/>
-		</div>
-		<!-- Toolbar Section -->
-		<div class="flex flex-row justify-center space-x-4 p-3 text-[#d9d9d9]">
-			<!-- Save Button -->
-			<button
-				on:click={() => saveScript(editor, 'textcontent', $scriptIdStore)}
-				class={$scriptSaveStatus ? 'updates' : 'no-updates'}
-			>
-				<Fa class="toolbar-icons" icon={faSave} />
-			</button>
-			<!-- Bold Button -->
-			<button
-				on:click={() => editor.chain().focus().toggleBold().run()}
-				disabled={!editor.can().chain().focus().toggleBold().run()}
-				class={editor.isActive('bold') ? 'is-active' : ''}
-			>
-				<Fa class="toolbar-icons" icon={faBold} />
-			</button>
 
-			<!-- Italic Button -->
-			<button
-				on:click={() => editor.chain().focus().toggleItalic().run()}
-				disabled={!editor.can().chain().focus().toggleItalic().run()}
-				class={editor.isActive('italic') ? 'is-active' : ''}
-			>
-				<Fa class="toolbar-icons" icon={faItalic} />
-			</button>
+<div class="flex flex-col justify-center items-center h-screen w-full p-4">
+  <!-- Bubble Menu Stuff -->
+  {#if editor}
+    <BubbleMenu editor={$editor}>
+      <div class="flex flex-row bg-red-500 text-[#d9d9d9]">
+        <button>
+          Test
+        </button>
+      </div>
+    </BubbleMenu>
+  {/if}
 
-			<!-- Underline Button -->
-			<button
-				on:click={() => editor.chain().focus().toggleUnderline().run()}
-				class={editor.isActive('underline') ? 'is-active' : ''}
-			>
-				<Fa class="toolbar-icons" icon={faUnderline} />
-			</button>
-
-			<!-- Undo Button -->
-			<button
-				on:click={() => editor.chain().focus().undo().run()}
-				disabled={!editor.can().chain().focus().undo().run()}
-			>
-				<Fa class="toolbar-icons" icon={faUndo} />
-			</button>
-
-			<!-- Redo Button -->
-			<button
-				on:click={() => editor.chain().focus().redo().run()}
-				disabled={!editor.can().chain().focus().redo().run()}
-			>
-				<Fa class="toolbar-icons" icon={faRedo} />
-			</button>
-
-			<!-- Bullet List Button -->
-			<button
-				on:click={() => editor.chain().focus().toggleBulletList().run()}
-				class={editor.isActive('bulletList') ? 'is-active' : ''}
-			>
-				<Fa class="toolbar-icons" icon={faList} />
-			</button>
-
-			<!-- Ordered List Button -->
-			<button
-				on:click={() => editor.chain().focus().toggleOrderedList().run()}
-				class={editor.isActive('orderedList') ? 'is-active' : ''}
-			>
-				<Fa class="toolbar-icons" icon={faListOl} />
-			</button>
-		</div>
-	{/if}
-	<div class="flex-grow overflow-auto w-full">
-		<div class="h-full w-full" bind:this={element} />
-	</div>
+  <div class="flex flex-row p-2 text-white">
+    <p>Toolbar Here!</p>
+  </div>
+  <div bind:this={editorContainer} class="w-[90%]">
+    <EditorContent editor={$editor}/>
+  </div>
 </div>
 
 <style>
-	:global(.tiptap) {
-		border: 1px solid black;
-		border-radius: 10px;
-		margin: auto;
-		max-width: 80%;
-		height: 98%;
-		padding: 0.5em;
-		color: black;
-		overflow-y: auto;
-    background-color: #D9D9D9;
-	}
-
-	:global(.tiptap:focus) {
-		outline: none;
-	}
 </style>
