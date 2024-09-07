@@ -291,59 +291,69 @@
 			/>
 		</div>
 
-    <div class="flex flex-row justify-center space-x-4 p-3 text-[#d9d9d9]">
+    <div class="flex flex-row justify-center space-x-4 p-3 text-white">
       <!-- Save Button -->
       <button
-        on:click={() => saveScript(editor, 'textcontent', $scriptIdStore)}
+        on:click={() => saveScript($editor, 'textcontent', $scriptIdStore)}
+        class:text-black={$scriptSaveStatus}
       >
         <Fa class="toolbar-icons" icon={faSave} />
       </button>
 
       <!-- Bold Button -->
       <button
-        on:click={() => editor.chain().focus().toggleBold().run()}
+        on:click={() => $editor.chain().focus().toggleBold().run()}
+        class:text-black={$editor.isActive('bold')}
       >
         <Fa class="toolbar-icons" icon={faBold} />
       </button>
 
       <!-- Italic Button -->
 			<button
-				on:click={() => editor.chain().focus().toggleItalic().run()}
+				on:click={() => $editor.chain().focus().toggleItalic().run()}
+        class:text-black={$editor.isActive('italic')}
 			>
 				<Fa class="toolbar-icons" icon={faItalic} />
 			</button>
 
 			<!-- Underline Button -->
 			<button
-				on:click={() => editor.chain().focus().toggleUnderline().run()}
+				on:click={() => $editor.chain().focus().toggleUnderline().run()}
+        class:text-black={$editor.isActive('underline')}
 			>
 				<Fa class="toolbar-icons" icon={faUnderline} />
 			</button>
 
 			<!-- Undo Button -->
 			<button
-				on:click={() => editor.chain().focus().undo().run()}
+				on:click={() => $editor.chain().focus().undo().run()}
+        class:text-gray-400={!$editor.can().chain().focus().undo().run()}
+        disabled={!$editor.can().chain().focus().undo().run()}
 			>
 				<Fa class="toolbar-icons" icon={faUndo} />
 			</button>
 
 			<!-- Redo Button -->
 			<button
-				on:click={() => editor.chain().focus().redo().run()}
+				on:click={() => $editor.chain().focus().redo().run()}
+        class:text-gray-400={!$editor.can().chain().focus().redo().run()}
+        disabled={!$editor.can().chain().focus().redo().run()}
 			>
 				<Fa class="toolbar-icons" icon={faRedo} />
 			</button>
 
 			<!-- Bullet List Button -->
 			<button
-				on:click={() => editor.chain().focus().toggleBulletList().run()}
+				on:click={() => $editor.chain().focus().toggleBulletList().run()}
+        class:text-black={$editor.isActive('bulletList')}
 			>
 				<Fa class="toolbar-icons" icon={faList} />
 			</button>
 
 			<!-- Ordered List Button -->
 			<button
-				on:click={() => editor.chain().focus().toggleOrderedList().run()}
+				on:click={() => $editor.chain().focus().toggleOrderedList().run()}
+        class:text-black={$editor.isActive('orderedList')}
 			>
 				<Fa class="toolbar-icons" icon={faListOl} />
 			</button>
@@ -351,11 +361,20 @@
 
   {/if}
   
-  <div bind:this={editorContainer} class="w-[90%]">
+  <div bind:this={editorContainer} class="w-[90%] prose">
 
   <EditorContent editor={$editor}/>
   </div>
 </div>
 
 <style>
+  :global(.tiptap ul) {
+    list-style-type: disc;
+    padding-left: 1.5em;
+  }
+
+  :global(.tiptap ol) {
+    list-style-type: decimal;
+    padding-left: 1.5em;
+  }
 </style>
