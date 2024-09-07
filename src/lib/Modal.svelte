@@ -15,12 +15,24 @@
 </script>
 
 {#if show}
-    <div class="modal-overlay" on:click={onClose}>
-        <div class="modal-content" on:click|stopPropagation>
+    <div class="flex inset-0 fixed bg-black/50 items-center justify-center z-50" on:click={onClose}>
+        <div class="flex flex-col p-10 max-w-[50%] rounded-lg text-white bg-[#2f2f2f]" on:click|stopPropagation>
             <slot></slot>
-            <p>{content}</p>
-            <button on:click="{copyToClipboard}">Copy</button>
-            <button on:click="{onClose}">Close</button>
+            <p class="p-2 overflow-y-scroll items-center justify-center">{content}</p>
+            <div class="flex flex-row space-x-2">
+              <button 
+                class="p-1 rounded-lg bg-blue-500" 
+                on:click="{copyToClipboard}"
+              >
+                Copy
+              </button>
+              <button
+                class="p-1 rounded-lg bg-blue-500" 
+                on:click="{onClose}"
+              >
+                Close
+              </button>
+            </div>
         </div>
     </div>
 {/if}

@@ -67,28 +67,35 @@
 	}
 </script>
 
-<div class="flex flex-col flex-grow space-y-3 items-center align-middle justify-center h-screen">
-	<p class="text-lg text-white">
-		Please provide the URL of the website you would like to summarize:
-	</p>
-	<input
-		id="summarize-url-input"
-		type="text"
-		placeholder="Enter URL here..."
-		bind:value={summarize_url}
-	/>
-	<Modal show={showModal} onClose={closeModal} content={modalContent}>
-		<h1>Here's what we got back:</h1>
-	</Modal>
+<div class="flex flex-col w-full h-screen">
+  <div class="flex flex-col flex-grow space-y-3 items-center align-middle justify-center">
+    <p class="text-lg text-white">
+      Please provide the URL of the website you would like to summarize:
+    </p>
+    <input
+      id="summarize-url-input"
+      type="text"
+      placeholder="Enter URL here..."
+      bind:value={summarize_url}
+    />
+    <!-- Why the -mt-3? Since I'm using space-y-3 this causes that to also be applied to the 
+        overlay, so adding this in fixes the issue some-->
 
-	<button
-		class="p-2 disabled:bg-gray-400 disabled:cursor-not-allowed bg-blue-600 rounded-lg text-white"
-		disabled={!summarize_url || isGenerating}
-		on:click={() => handleGenerate(summarize_url)}
-	>
-		Summarize
-	</button>
+    <button
+      class="p-2 disabled:bg-gray-400 disabled:cursor-not-allowed bg-blue-600 rounded-lg text-white"
+      disabled={!summarize_url || isGenerating}
+      on:click={() => handleGenerate(summarize_url)}
+    >
+      Summarize
+    </button>
+  </div>
+
+  <Modal show={showModal} onClose={closeModal} content={modalContent}>
+    <h1>Here's what we got back:</h1>
+  </Modal>
 </div>
+
+
 
 <style>
 	#summarize-url-input {
