@@ -38,6 +38,10 @@
 		faSave
 	} from '@fortawesome/free-solid-svg-icons';
 
+  import IonRocketSharp from '~icons/ion/rocket-sharp';
+  import MaterialSymbolsSearch from '~icons/material-symbols/search';
+  import PhPencilFill from '~icons/ph/pencil-fill';
+
 	// Script Type Import
 	import type { Script } from '$lib/index.ts';
 
@@ -275,9 +279,18 @@
   <!-- Bubble Menu Stuff -->
   {#if editor}
     <BubbleMenu editor={$editor}>
-      <div class="flex flex-row bg-red-500 text-[#d9d9d9]">
-        <button>
-          Test
+      <div class="flex flex-row p-2 space-x-2 rounded-md border-black border-2 items-center bg-[#2f2f2f] text-[#d9d9d9]">
+        <button class="flex flex-row space-x-1">
+          <div>Generate</div>
+          <IonRocketSharp/>
+        </button>
+        <button class="flex flex-row space-x-1">
+          <div>Search</div>
+          <MaterialSymbolsSearch/>
+        </button>
+        <button class="flex flex-row space-x-1">
+          <div>Rephrase</div>
+          <PhPencilFill/>
         </button>
       </div>
     </BubbleMenu>
