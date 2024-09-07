@@ -23,7 +23,7 @@
 	// Text Editor Imports
 	import StarterKit from '@tiptap/starter-kit';
 	import Underline from '@tiptap/extension-underline';
-  import { BubbleMenu, createEditor, Editor, EditorContent } from 'svelte-tiptap';
+  import { BubbleMenu, createEditor, Editor, EditorContent, FloatingMenu } from 'svelte-tiptap';
 
 	// Icon Imports
 	import Fa from 'svelte-fa';
@@ -276,8 +276,8 @@
 <!-- Code Block, Quote Block, Horizontal Rule (just like a horizontal line) -->
 
 <div class="flex flex-col justify-center items-center h-screen w-full p-4">
-  <!-- Bubble Menu Stuff -->
   {#if editor}
+    <!-- Bubble Menu Stuff -->
     <BubbleMenu editor={$editor}>
       <div class="flex flex-row p-2 space-x-2 rounded-md border-black border-2 items-center bg-[#2f2f2f] text-[#d9d9d9]">
         <button class="flex flex-row space-x-1">
@@ -294,6 +294,12 @@
         </button>
       </div>
     </BubbleMenu>
+
+    <FloatingMenu editor={$editor}>
+      <button class="pl-2 pr-2 rounded-md bg-[#2f2f2f] text-[#d9d9d9]">
+        Generate Script
+      </button>
+    </FloatingMenu>
 
 		<div class="w-full pt-2 text-center">
 			<input
