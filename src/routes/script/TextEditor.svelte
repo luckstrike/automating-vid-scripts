@@ -241,7 +241,7 @@
       content: '',
       editorProps: {
         attributes: {
-          class: 'border-2 border-black rounded-lg p-2 bg-[#d9d9d9] min-h-[85vh] max-h-[85vh] overflow-y-auto outline-none',
+          class: 'border-2 border-black rounded-lg p-2 bg-[#d9d9d9] min-h-[88vh] max-h-[88vh] overflow-y-auto outline-none',
         },
       },
       onCreate({ editor }) {
@@ -380,7 +380,7 @@
 
   {/if}
   
-  <div bind:this={editorContainer} class="w-[90%] prose">
+  <div bind:this={editorContainer} class="w-[80%] prose">
 
   <EditorContent editor={$editor}/>
   </div>
