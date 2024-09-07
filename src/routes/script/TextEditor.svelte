@@ -279,16 +279,16 @@
   {#if editor}
     <!-- Bubble Menu Stuff -->
     <BubbleMenu editor={$editor}>
-      <div class="flex flex-row p-2 space-x-2 rounded-md border-black border-2 items-center bg-[#2f2f2f] text-[#d9d9d9]">
-        <button class="flex flex-row space-x-1">
+      <div class="flex flex-row rounded-md items-center bg-[#2f2f2f] text-[#d9d9d9]">
+        <button class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md">
           <div>Generate</div>
           <IonRocketSharp/>
         </button>
-        <button class="flex flex-row space-x-1">
+        <button class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md">
           <div>Search</div>
           <MaterialSymbolsSearch/>
         </button>
-        <button class="flex flex-row space-x-1">
+        <button class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md">
           <div>Rephrase</div>
           <PhPencilFill/>
         </button>
@@ -296,7 +296,7 @@
     </BubbleMenu>
 
     <FloatingMenu editor={$editor}>
-      <button class="pl-2 pr-2 rounded-md bg-[#2f2f2f] text-[#d9d9d9]">
+      <button class="pl-1 pr-1 rounded-sm bg-[#2f2f2f] text-[#d9d9d9] hover:bg-[#1f1f1f]">
         Generate Script
       </button>
     </FloatingMenu>
