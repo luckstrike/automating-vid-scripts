@@ -62,6 +62,8 @@
   let editor: any;
   let editorContainer: HTMLElement;
 
+  let isGenerating: boolean = false;
+
   let scriptTitle: string = ""; // the script's title
 
   let scriptLoaded = false; // updates whenever the script is done loading
@@ -301,23 +303,25 @@
     if (text) {
       // Fetching the result + error handling
       try {
-        console.log("querying gpt");
+        isGenerating = true;
         const res = await fetch(API_URL + endpoint, options);
 
         if (res.ok) {
           const gptResult = await res.json();
           textToInsert = gptResult.gptContent;
-          console.log(textToInsert);
         } else {
+          isGenerating = false;
           console.error(`Server error: ${res.status}`);
         }
       } catch (err) {
+        isGenerating = false;
         console.error(`Network error: ${(err as Error).message}`);
       }
     }
 
     if (textToInsert) {
       insertTextAfterSelection(textToInsert);
+      isGenerating = false;
     }
   }
 
@@ -373,6 +377,8 @@
       >
         <button
           class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
+          class:text-red-400={isGenerating}
+          disabled={isGenerating}
           on:click={() => generateTextWithGPT()}
         >
           <div>Generate</div>
