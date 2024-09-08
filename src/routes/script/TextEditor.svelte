@@ -283,6 +283,44 @@
     $editor.commands.insertContentAt(to, textToInsert);
   };
 
+  async function generateTextWithGPT() {
+    const text: string = getSelectedText();
+    let textToInsert: string = "";
+
+    const tempAddr: string = "localhost:5173";
+    const API_URL: string = `http://${tempAddr}/api`;
+
+    const endpoint = "/script"; // Simplified endpoint, always using POST
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userSelection: text || "" }),
+    };
+
+    // Query GPT and get a result back only if we have some selected text
+    if (text) {
+      // Fetching the result + error handling
+      try {
+        console.log("querying gpt");
+        const res = await fetch(API_URL + endpoint, options);
+
+        if (res.ok) {
+          const gptResult = await res.json();
+          textToInsert = gptResult.gptContent;
+          console.log(textToInsert);
+        } else {
+          console.error(`Server error: ${res.status}`);
+        }
+      } catch (err) {
+        console.error(`Network error: ${(err as Error).message}`);
+      }
+    }
+
+    if (textToInsert) {
+      insertTextAfterSelection(textToInsert);
+    }
+  }
+
   onMount(() => {
     editor = createEditor({
       extensions: [StarterKit, Underline],
@@ -335,6 +373,7 @@
       >
         <button
           class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
+          on:click={() => generateTextWithGPT()}
         >
           <div>Generate</div>
           <IonRocketSharp />
