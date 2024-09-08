@@ -381,7 +381,7 @@
           disabled={isGenerating}
           on:click={() => generateTextWithGPT()}
         >
-          <div>Generate</div>
+          <div>Expand</div>
           <IonRocketSharp />
         </button>
         <button
