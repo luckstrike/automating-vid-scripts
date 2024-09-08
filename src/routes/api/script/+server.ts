@@ -12,8 +12,7 @@ const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 const generatePrompt: string = `You are an excellent writer who can reword and expand on any type of text. A user
                                 has provided you with text that you are to help them rewrite. If the text is too short
                                 to expand upon or rewrite you can simply just return the text back and write something
-                                in your response like [not enough text provided]. The content you receive may or may not
-                                be formatted in HTML so please return any results in HTML formatting.`
+                                in your response like [not enough text provided].`
 
 async function sendToGPT(openai: OpenAI, prompt: string, userInput: string): Promise<string | null> {
   const completion = await openai.chat.completions.create({
