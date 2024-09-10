@@ -285,9 +285,14 @@
     $editor.commands.insertContentAt(to, textToInsert);
   };
 
-  async function generateTextWithGPT() {
+  const replaceSelectedText = (textToInsert: string): void => {
+    $editor.commands.insertContent(textToInsert);
+  };
+
+
+  async function generateTextWithGPT(actionType: string) {
     const text: string = getSelectedText();
-    let textToInsert: string = "";
+    let textFromAI: string = "";
 
     const tempAddr: string = "localhost:5173";
     const API_URL: string = `http://${tempAddr}/api`;
@@ -296,7 +301,7 @@
     const options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userSelection: text || "" }),
+      body: JSON.stringify({ userSelection: text || "" , actionType: actionType }),
     };
 
     // Query GPT and get a result back only if we have some selected text
@@ -308,7 +313,7 @@
 
         if (res.ok) {
           const gptResult = await res.json();
-          textToInsert = gptResult.gptContent;
+          textFromAI = gptResult.gptContent;
         } else {
           isGenerating = false;
           console.error(`Server error: ${res.status}`);
@@ -319,10 +324,15 @@
       }
     }
 
-    if (textToInsert) {
-      insertTextAfterSelection(textToInsert);
-      isGenerating = false;
+    if (textFromAI) {
+      if (actionType == "expand") {
+        insertTextAfterSelection(textFromAI);
+      } else if (actionType == "rephrase") {
+        replaceSelectedText(textFromAI);
+      }
     }
+
+    isGenerating = false;
   }
 
   onMount(() => {
@@ -379,7 +389,7 @@
           class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
           class:text-red-400={isGenerating}
           disabled={isGenerating}
-          on:click={() => generateTextWithGPT()}
+          on:click={() => generateTextWithGPT("expand")}
         >
           <div>Expand</div>
           <IonRocketSharp />
@@ -392,6 +402,9 @@
         </button>
         <button
           class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
+          class:text-red-400={isGenerating}
+          disabled={isGenerating}
+          on:click={() => generateTextWithGPT("rephrase")}
         >
           <div>Rephrase</div>
           <PhPencilFill />

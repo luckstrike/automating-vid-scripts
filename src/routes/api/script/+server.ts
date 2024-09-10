@@ -56,7 +56,13 @@ export const POST: RequestHandler = async ({ request }) => {
   let gptResult: string | null = "";
 
   if (data && data.userSelection) {
-    gptResult = await sendToGPT(openai, generatePrompt, data.userSelection);
+    if (data.actionType == "expand") {
+      gptResult = await sendToGPT(openai, generatePrompt, data.userSelection);
+    } else if (data.actionType == "rephrase") {
+      gptResult = await sendToGPT(openai, rephrasePrompt, data.userSelection);
+    } else {
+      return json({ success: false, gptContent: "" })
+    }
   }
   if (gptResult) {
     return json({ success: true, gptContent: gptResult })
