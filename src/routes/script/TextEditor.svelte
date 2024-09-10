@@ -396,12 +396,6 @@
         </button>
         <button
           class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
-        >
-          <div>Search</div>
-          <MaterialSymbolsSearch />
-        </button>
-        <button
-          class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
           class:text-red-400={isGenerating}
           disabled={isGenerating}
           on:click={() => generateTextWithGPT("rephrase")}
@@ -409,6 +403,14 @@
           <div>Rephrase</div>
           <PhPencilFill />
         </button>
+        <!-- Commented out until I figure out how to do search
+        <button
+          class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
+        >
+          <div>Search</div>
+          <MaterialSymbolsSearch />
+        </button>
+        -->
       </div>
     </BubbleMenu>
 
