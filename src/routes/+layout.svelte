@@ -17,13 +17,11 @@
 	$: {
 		if (!$page.url.pathname.startsWith('/script')) {
 			scriptSaveStatus.set(false);
-			console.log('routes/+layout.svelte: Resetting the scriptSaveStatus to false!');
 		}
 	}
 
 	onMount(() => {
 		const unsubscribe = auth.onAuthStateChanged((user) => {
-			console.log('Current User: ', user);
 			// Updates the current user in the authStore
 			// TODO: Change any to User (I need to find out how to use the User type from firebase)
 

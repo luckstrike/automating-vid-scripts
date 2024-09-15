@@ -10,7 +10,6 @@
 	let userEmail: string | null;
 
 	authStore.subscribe((curr: any) => {
-		console.log('Current User: ', curr?.currentUser);
 		userEmail = curr?.currentUser?.email;
 	});
 </script>
