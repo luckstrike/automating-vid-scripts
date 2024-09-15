@@ -8,13 +8,6 @@ import { json, type RequestHandler } from "@sveltejs/kit";
 
 import type { UserPrompt } from "$lib";
 import OpenAI from "openai";
-import * as dotenv from "dotenv";
-
-dotenv.config();
-
-// Setting up access to the OpenAI API
-const OPENAI_API_KEY: string | undefined = process.env.OPENAI_API_KEY;
-const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
 const summarizePrompt: string = `You are a helpful assitant that summarizes the input from a user.
                                  The user will typically provide a URL which is then parsed for data,
@@ -27,18 +20,10 @@ const summarizePrompt: string = `You are a helpful assitant that summarizes the 
 async function checkIfAllowed(userAgent: string, url: string) {
   try {
     const robotsTxtUrl = new URL("/robots.txt", url).href;
-
-    // Fetch the robots.txt using axios
-    const response = await axios.get(robotsTxtUrl);
-    const robotsTxt = response.data;
-
-    // Parse robots.txt
+    const response = await fetch(robotsTxtUrl);
+    const robotsTxt = await response.text();
     const robots = robotsParser(robotsTxtUrl, robotsTxt);
-
-    // Check if allowed
-    const isAllowed = robots.isAllowed(url, userAgent);
-
-    return isAllowed;
+    return robots.isAllowed(url, userAgent);
   } catch (error) {
     console.error(`Error fetching robots.txt for ${url}:`, error);
     return false;
@@ -68,75 +53,63 @@ async function summarizeParsedInfo(
 
 async function parseURL(url: string) {
   try {
-    // Fetch the webpage
-    const { data } = await axios.get(url);
-
-    // Load the HTML into Cheerio
+    const response = await fetch(url);
+    const data = await response.text();
     const $ = cheerio.load(data);
-
-    const pageText: string = $("body").text();
-
-    return pageText;
+    return $("body").text();
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error(`Axios error: ${error.message}`);
-      console.error(`Response status: ${error.response?.status}`);
-      console.error(`Response data: ${error.response?.data}`);
-    } else {
-      console.error(`Unexpected error: ${error}`);
-    }
+    console.error(`Error parsing URL ${url}:`, error);
     return "";
   }
 }
 
 async function runParser(
+  openai: OpenAI,
   userAgent: string,
   url: string,
 ): Promise<string | null> {
-  let pageHTMLResult: string | null;
-  let summarizedResult: string | null;
-
   if (await checkIfAllowed(userAgent, url)) {
-    pageHTMLResult = await parseURL(url);
-
-    // Now summarize the result using ChatGPT
-    if (pageHTMLResult != "") {
-      summarizedResult = await summarizeParsedInfo(openai, pageHTMLResult);
-      return summarizedResult;
-    } else {
-      console.error("Error in runParser, no data was parsed!");
-      return null;
+    const pageHTMLResult = await parseURL(url);
+    if (pageHTMLResult) {
+      return await summarizeParsedInfo(openai, pageHTMLResult);
     }
+    console.error("Error in runParser, no data was parsed!");
   } else {
-    console.error(
-      "Uh oh, seems like we're not allowed to scrape this website :(",
-    );
+    console.error("Not allowed to scrape this website.");
   }
-
   return null;
 }
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, platform }) => {
+  const OPENAI_API_KEY =
+    platform?.env?.OPENAI_API_KEY || import.meta.env.VITE_OPENAI_API_KEY;
+
+  if (!OPENAI_API_KEY) {
+    console.error("OpenAI API key not found");
+    return json(
+      { success: false, error: "Server configuration error" },
+      { status: 500 },
+    );
+  }
+
+  const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+
   let data: UserProvidedURL | null = null;
-
-  let URLSummary: string | null = null;
-
   const userAgent = request.headers.get("user-agent") || "unknown";
 
   try {
     data = (await request.json()) as UserProvidedURL;
   } catch (e) {
-    console.error("Unable to handle a POST request /api/randomidea");
+    console.error("Unable to handle a POST request /api/summarize");
     return json({ success: false, error: "Bad request" }, { status: 400 });
   }
 
-  if (data && data.url) {
-    URLSummary = await runParser(userAgent, data.url);
+  if (data?.url) {
+    const URLSummary = await runParser(openai, userAgent, data.url);
+    if (URLSummary) {
+      return json({ success: true, summary: URLSummary });
+    }
   }
 
-  if (URLSummary) {
-    return json({ success: true, summary: URLSummary });
-  } else {
-    return json({ success: false, summary: null });
-  }
+  return json({ success: false, summary: null });
 };
