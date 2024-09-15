@@ -294,8 +294,8 @@
     const text: string = getSelectedText();
     let textFromAI: string = "";
 
-    const tempAddr: string = "localhost:5173";
-    const API_URL: string = `http://${tempAddr}/api`;
+    const baseURL: string = import.meta.env.VITE_PUBLIC_BASE_URL || import.meta.env.PUBLIC_BASE_URL || '';
+    const API_URL: string = `${baseURL}/api`;
 
     const endpoint = "/script"; // Simplified endpoint, always using POST
     const options = {

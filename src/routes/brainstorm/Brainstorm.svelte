@@ -6,8 +6,9 @@
 	let isGenerating: boolean = false;
 	let errorMessage: string | null = null;
 
-	const tempAddr: string = 'localhost:5173';
-	const API_URL: string = `http://${tempAddr}/api`;
+
+  const baseURL: string = import.meta.env.VITE_PUBLIC_BASE_URL || import.meta.env.PUBLIC_BASE_URL || '';
+	const API_URL: string = `${baseURL}/api`;
 
 	async function handleGenerate(userPrompt?: string): Promise<void> {
 		isGenerating = true;
@@ -44,7 +45,7 @@
 	}
 </script>
 
-<div class="flex flex-col flex-grow items-center justify-center h-screen text-white">
+<div class="flex flex-col flex-grow items-center justify-center h-screen w-full text-white">
 	<!--Creating a textbox with placeholder text for brainstorming ideas-->
 	<div class="text-4xl font-bold py-4">Kickstart your writing process!</div>
 	<div class="text-lg">

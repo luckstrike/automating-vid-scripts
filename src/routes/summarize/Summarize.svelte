@@ -6,8 +6,8 @@
   let isGenerating: boolean = false;
   let errorMessage: string | null = null;
 
-  const tempAddr: string = "localhost:5173";
-  const API_URL: string = `http://${tempAddr}/api`;
+  const baseURL: string = import.meta.env.VITE_PUBLIC_BASE_URL || import.meta.env.PUBLIC_BASE_URL || '';
+  const API_URL: string = `${baseURL}/api`;
 
   let showModal: boolean = false;
   let modalContent: string = "";
