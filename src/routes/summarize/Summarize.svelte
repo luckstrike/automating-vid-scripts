@@ -69,15 +69,18 @@
   }
 </script>
 
-<div class="flex flex-col w-full h-screen">
+<div class="flex flex-col text-white w-full h-screen">
   <div
     class="flex flex-col flex-grow space-y-3 items-center align-middle justify-center"
   >
-    <p class="text-lg text-white">
+    <div class="text-4xl font-bold">
+      Ready to summarize a page?
+    </div>
+    <p class="text-lg">
       Please provide the URL of the website you would like to summarize:
     </p>
     <input
-      id="summarize-url-input"
+      class="text-black w-[50%] rounded-xl p-2 box-border border-none font-xl"
       type="text"
       placeholder="Enter URL here..."
       bind:value={summarize_url}
@@ -98,15 +101,3 @@
     <h1>Here's what we got back:</h1>
   </Modal>
 </div>
-
-<style>
-  #summarize-url-input {
-    width: 50%;
-    height: 40px;
-    font-size: 18px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    border: none;
-    padding: 0px 10px 0px 10px;
-  }
-</style>

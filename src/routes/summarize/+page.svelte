@@ -3,14 +3,6 @@
     import Summarize from "./Summarize.svelte";
 </script>
 
-<div class="container">
+<div class="mx-auto">
     <Summarize />
 </div>
-
-<style>
-    .container {
-        display: flex;
-        height: 100vh;
-        flex: 0 0 100%;
-    }
-</style>

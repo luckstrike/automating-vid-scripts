@@ -3,14 +3,6 @@
     import Brainstorm from "./Brainstorm.svelte";
 </script>
 
-<div class="container">
+<div class="mx-auto">
     <Brainstorm />
 </div>
-
-<style>
-    .container {
-        display: flex;
-        height: 100vh;
-        flex: 0 0 100%;
-    }
-</style>

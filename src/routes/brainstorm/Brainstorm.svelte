@@ -45,7 +45,7 @@
 	}
 </script>
 
-<div class="flex flex-col flex-grow items-center justify-center h-screen w-full text-white">
+<div class="flex flex-col flex-grow items-center justify-center h-screen text-white">
 	<!--Creating a textbox with placeholder text for brainstorming ideas-->
 	<div class="text-4xl font-bold py-4">Kickstart your writing process!</div>
 	<div class="text-lg">
