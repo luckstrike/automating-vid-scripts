@@ -1,4 +1,4 @@
-import type { UserSelection } from "$lib";
+import type { UserSelection, Env } from "$lib";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import OpenAI from "openai";
 
@@ -38,10 +38,18 @@ async function sendToGPT(
   return completion.choices[0].message.content;
 }
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, platform }) => {
   // Get the API key from the environment
-  const OPENAI_API_KEY =
-    import.meta.env.VITE_OPENAI_API_KEY || import.meta.env.OPENAI_API_KEY || "";
+  let OPENAI_API_KEY: string | undefined;
+
+  if (typeof platform !== "undefined" && "env" in platform) {
+    // Cloudflare Pages environment
+    OPENAI_API_KEY = (platform.env as Env).OPENAI_API_KEY;
+  } else {
+    // SvelteKit local development environment
+    OPENAI_API_KEY =
+      import.meta.env.VITE_OPENAI_API_KEY || process.env.OPENAI_API_KEY;
+  }
 
   if (!OPENAI_API_KEY) {
     console.error("OpenAI API key not found");

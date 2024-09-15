@@ -1,4 +1,4 @@
-import type { UserPrompt } from "$lib";
+import type { UserPrompt, Env } from "$lib";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import OpenAI from "openai";
 
@@ -56,23 +56,23 @@ async function brainstormTitleGPT(
         content: userInput,
       },
     ],
-    model: "gpt-4o",
+    model: "gpt-4o-mini",
   });
 
   return completion.choices[0].message.content;
 }
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, platform }) => {
   // Get the API key from the environment
-  const OPENAI_API_KEY =
-    import.meta.env.VITE_OPENAI_API_KEY || import.meta.env.OPENAI_API_KEY || "";
+  let OPENAI_API_KEY: string | undefined;
 
-  if (!OPENAI_API_KEY) {
-    console.error("OpenAI API key not found");
-    return json(
-      { success: false, error: "Server configuration error" },
-      { status: 500 },
-    );
+  if (typeof platform !== "undefined" && "env" in platform) {
+    // Cloudflare Pages environment
+    OPENAI_API_KEY = (platform.env as Env).OPENAI_API_KEY;
+  } else {
+    // SvelteKit local development environment
+    OPENAI_API_KEY =
+      import.meta.env.VITE_OPENAI_API_KEY || process.env.OPENAI_API_KEY;
   }
 
   // Initialize OpenAI client here

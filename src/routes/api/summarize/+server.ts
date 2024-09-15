@@ -3,7 +3,7 @@ import robotsParser from "robots-parser";
 import * as cheerio from "cheerio";
 
 // Importing Svelte Stuff
-import type { UserProvidedURL } from "$lib";
+import type { UserProvidedURL, Env } from "$lib";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 import type { UserPrompt } from "$lib";
@@ -81,15 +81,16 @@ async function runParser(
 }
 
 export const POST: RequestHandler = async ({ request, platform }) => {
-  const OPENAI_API_KEY =
-    import.meta.env.VITE_OPENAI_API_KEY || import.meta.env.OPENAI_API_KEY || "";
+  // Get the API key from the environment
+  let OPENAI_API_KEY: string | undefined;
 
-  if (!OPENAI_API_KEY) {
-    console.error("OpenAI API key not found");
-    return json(
-      { success: false, error: "Server configuration error" },
-      { status: 500 },
-    );
+  if (typeof platform !== "undefined" && "env" in platform) {
+    // Cloudflare Pages environment
+    OPENAI_API_KEY = (platform.env as Env).OPENAI_API_KEY;
+  } else {
+    // SvelteKit local development environment
+    OPENAI_API_KEY =
+      import.meta.env.VITE_OPENAI_API_KEY || process.env.OPENAI_API_KEY;
   }
 
   const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
