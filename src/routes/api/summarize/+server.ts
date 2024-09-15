@@ -82,7 +82,7 @@ async function runParser(
 
 export const POST: RequestHandler = async ({ request, platform }) => {
   const OPENAI_API_KEY =
-    platform?.env?.OPENAI_API_KEY || import.meta.env.VITE_OPENAI_API_KEY;
+    import.meta.env.VITE_OPENAI_API_KEY || import.meta.env.OPENAI_API_KEY || "";
 
   if (!OPENAI_API_KEY) {
     console.error("OpenAI API key not found");

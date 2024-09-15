@@ -65,8 +65,7 @@ async function brainstormTitleGPT(
 export const POST: RequestHandler = async ({ request }) => {
   // Get the API key from the environment
   const OPENAI_API_KEY =
-    (typeof process !== "undefined" && process.env.OPENAI_API_KEY) || // Node.js environment
-    import.meta.env.VITE_OPENAI_API_KEY; // Vite environment
+    import.meta.env.VITE_OPENAI_API_KEY || import.meta.env.OPENAI_API_KEY || "";
 
   if (!OPENAI_API_KEY) {
     console.error("OpenAI API key not found");
