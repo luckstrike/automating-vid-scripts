@@ -42,6 +42,8 @@
 <div class="flex flex-row h-screen">
   {#if $page.url.pathname === "/"}
     <Landing />
+  {:else if $page.url.pathname === "/login"}
+    <slot />
   {:else}
     <Sidebar />
     <slot />
