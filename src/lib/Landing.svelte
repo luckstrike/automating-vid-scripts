@@ -18,14 +18,16 @@
       Login
     </button>
   </div>
-  <div class="flex flex-row flex-grow items-center justify-between pl-4 pr-4">
+  <div
+    class="flex flex-row flex-grow items-center justify-between pl-4 pr-4 overflow-y-hidden"
+  >
     <button on:click={() => (slide = (slide - 1) % maxSlides)}>
       <EmojioneMonotoneLeftArrow class="text-4xl text-blue-600" />
     </button>
 
     {#if slide == 0}
       <div
-        class="flex flex-row w-screen h-screen justify-center items-center space-x-8"
+        class="flex flex-row w-screen h-full justify-center items-center space-x-8"
       >
         <div
           class="max-w-[30%] text-7xl font-bold bg-gradient-to-b from-[#5CA4ED] to-[#97D9E1] text-transparent bg-clip-text"
@@ -47,7 +49,7 @@
     {/if}
 
     {#if slide == 1}
-      <div class="flex flex-row w-screen h-screen justify-center items-center">
+      <div class="flex flex-row w-screen h-full justify-center items-center">
         <div
           class="max-w-[30%] text-7xl font-bold bg-gradient-to-b from-[#5CA4ED] to-[#97D9E1] text-transparent bg-clip-text"
         >
@@ -57,7 +59,7 @@
     {/if}
 
     {#if slide == 2}
-      <div class="flex flex-row w-screen h-screen justify-center items-center">
+      <div class="flex flex-row w-screen h-full justify-center items-center">
         <div class="max-w-[30%]">
           <div
             class="text-7xl font-bold bg-gradient-to-b from-[#5CA4ED] to-[#97D9E1] text-transparent bg-clip-text"
