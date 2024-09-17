@@ -35,7 +35,7 @@
           Write your video scripts with a helping hand
         </div>
         <div
-          class="w-[45%] h-[100%] flex flex-col bg-[#d9d9d9] rounded-lg translate-y-[15%] p-8"
+          class="w-[50%] h-[100%] flex flex-col bg-[#d9d9d9] rounded-lg translate-y-[15%] hover:translate-y-[12%] transition duration-300 ease-in-out p-8"
         >
           <div class="font-bold text-3xl">The Generational Ford Mustang</div>
           <br />
