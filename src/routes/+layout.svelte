@@ -43,6 +43,7 @@
   {#if $page.url.pathname === "/"}
     <Landing />
   {:else}
+    <Sidebar />
     <slot />
   {/if}
 </div>
