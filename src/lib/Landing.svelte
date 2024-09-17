@@ -1,6 +1,7 @@
 <script lang="ts">
   import EmojioneMonotoneLeftArrow from "~icons/emojione-monotone/left-arrow";
   import EmojioneMonotoneRightArrow from "~icons/emojione-monotone/right-arrow";
+  import { goto } from "$app/navigation";
 
   // Used to determine which "slide" to show the user
   let slide: number = 0;
@@ -10,9 +11,12 @@
 <div class="flex flex-col w-screen h-screen p-2">
   <div class="flex flex-row space-x-4 justify-end items-center p-2 text-white">
     <div>Home</div>
-    <button class="bg-blue-600 rounded-lg pt-2 pb-2 pl-4 pr-4 font-semibold"
-      >Login</button
+    <button
+      class="bg-blue-600 rounded-lg pt-2 pb-2 pl-4 pr-4 font-semibold"
+      on:click={() => goto("/login")}
     >
+      Login
+    </button>
   </div>
   <div class="flex flex-row flex-grow items-center justify-between pl-4 pr-4">
     <button on:click={() => (slide = (slide - 1) % maxSlides)}>

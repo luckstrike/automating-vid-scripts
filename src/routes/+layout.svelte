@@ -40,7 +40,11 @@
 </script>
 
 <div class="flex flex-row h-screen">
-  <Landing />
+  {#if $page.url.pathname === "/"}
+    <Landing />
+  {:else}
+    <slot />
+  {/if}
 </div>
 
 <style>
