@@ -10,7 +10,7 @@
       >Login</button
     >
   </div>
-  <div class="flex flex-row flex-grow items-center justify-between">
+  <div class="flex flex-row flex-grow items-center justify-between pl-4 pr-4">
     <button>
       <EmojioneMonotoneLeftArrow class="text-4xl text-blue-600" />
     </button>
@@ -20,8 +20,16 @@
       Write your video scripts with a helping hand
     </div>
     <div
-      class="max-w-[37%] h-[90%] flex flex-grow bg-[#d9d9d9] rounded-lg"
-    ></div>
+      class="w-[43%] h-[100%] flex flex-col bg-[#d9d9d9] rounded-lg translate-y-[15%] p-8"
+    >
+      <div class="font-bold text-3xl">The Generational Ford Mustang</div>
+      <br />
+      <br />
+      <div class="text-3xl select-all">
+        The Ford Mustang has been around the block for a long time. In fact it’s
+        gone through a lot of generations throughout it’s existence.
+      </div>
+    </div>
     <button>
       <EmojioneMonotoneRightArrow class="text-4xl text-blue-600" />
     </button>
