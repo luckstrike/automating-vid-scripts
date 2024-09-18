@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<div class="flex flex-row w-screen h-full justify-center items-center">
+<div class="flex flex-row w-full h-full justify-center items-center">
   <div class="max-w-[30%]">
     <div
       class="text-7xl font-bold bg-gradient-to-b from-[#5CA4ED] to-[#97D9E1] text-transparent bg-clip-text"
