@@ -3,6 +3,6 @@
     import Summarize from "./Summarize.svelte";
 </script>
 
-<div class="mx-auto">
+<div class="w-full h-full">
     <Summarize />
 </div>

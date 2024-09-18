@@ -3,6 +3,6 @@
     import Brainstorm from "./Brainstorm.svelte";
 </script>
 
-<div class="mx-auto">
+<div class="w-full h-full">
     <Brainstorm />
 </div>

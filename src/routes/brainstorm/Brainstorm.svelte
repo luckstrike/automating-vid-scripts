@@ -45,10 +45,10 @@
 	}
 </script>
 
-<div class="flex flex-col flex-grow items-center justify-center h-screen text-white">
+<div class="flex flex-col flex-grow items-center justify-center h-screen w-full text-white">
 	<!--Creating a textbox with placeholder text for brainstorming ideas-->
-	<div class="text-4xl font-bold py-4">Kickstart your writing process!</div>
-	<div class="text-lg">
+	<div class="text-4xl font-bold">Kickstart your writing process!</div>
+	<div class="text-lg p-2">
 		Do you have a topic that you want to make a video about? Provide it here:
 	</div>
 	<input
