@@ -2,6 +2,6 @@
 	import Script from './Script.svelte';
 </script>
 
-<div class="mx-auto">
+<div class="w-full h-full">
 	<Script />
 </div>

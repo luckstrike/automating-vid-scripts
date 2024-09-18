@@ -6,6 +6,6 @@
 	import Script from '../Script.svelte';
 </script>
 
-<div>
+<div class="w-full h-full">
 	<Script />
 </div>
