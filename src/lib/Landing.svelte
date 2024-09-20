@@ -1,6 +1,4 @@
 <script lang="ts">
-  import EmojioneMonotoneLeftArrow from "~icons/emojione-monotone/left-arrow";
-  import EmojioneMonotoneRightArrow from "~icons/emojione-monotone/right-arrow";
   import { goto } from "$app/navigation";
   import Slide1 from "./landingSlides/Slide1.svelte";
   import Slide2 from "./landingSlides/Slide2.svelte";
@@ -21,14 +19,22 @@
     </button>
   </div>
   <div
-    class="hidden md:flex md:flex-row md:items-center md:justify-center md:flex-grow"
+    class="hidden lg:flex lg:flex-row lg:items-center lg:justify-center lg:flex-grow"
   >
     <Carousel {slides} />
   </div>
 
-  <div class="flex flex-col md:hidden">
-    <Slide1 />
-    <Slide2 />
-    <Slide3 />
+  <div
+    class="flex flex-col snap-y snap-mandatory h-screen overflow-y-scroll space-y-4 lg:hidden"
+  >
+    <div class="snap-start h-screen flex flex-col items-center justify-center">
+      <Slide1 />
+    </div>
+    <div class="snap-start h-full flex flex-col items-center justify-center">
+      <Slide2 />
+    </div>
+    <div class="snap-start h-full flex flex-col items-center justify-center">
+      <Slide3 />
+    </div>
   </div>
 </div>

@@ -2,7 +2,7 @@
 </script>
 
 <div
-  class="flex flex-col lg:flex-row lg:w-full lg:h-full justify-between space-y-8 lg:space-y-0 items-center p-4"
+  class="flex flex-col flex-grow overflow-y-auto lg:flex-row lg:w-full min-h-screen justify-center space-y-8 lg:space-y-0 items-center p-4"
 >
   <div class="lg:max-w-[30%]">
     <div
@@ -15,7 +15,7 @@
     </div>
   </div>
   <div
-    class="flex flex-col lg:max-w-[45%] text-white space-y-3 items-center align-middle justify-center"
+    class="flex flex-col lg:max-w-[45%] text-white items-center align-middle justify-center"
   >
     <div class="text-center text-4xl font-bold">Ready to summarize a page?</div>
     <p class="text-lg">
