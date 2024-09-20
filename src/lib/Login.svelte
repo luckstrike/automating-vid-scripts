@@ -91,65 +91,67 @@
       </button>
     </div>
     <div class="text-xl text-white">Or login with an email:</div>
-    <form class="flex flex-col space-y-2 items-center w-full max-w-md">
-      <input
-        bind:value={email}
-        class="p-2 rounded-lg w-full"
-        type="text"
-        placeholder="Email"
-      />
-      <input
-        bind:value={password}
-        class="p-2 rounded-lg w-full"
-        type="password"
-        placeholder="Password"
-      />
-
-      {#if signUp}
+    <div class="w-full flex justify-center">
+      <form class="flex flex-col space-y-2 items-center w-full max-w-md">
         <input
-          bind:value={confirmPassword}
+          bind:value={email}
+          class="p-2 rounded-lg w-full"
+          type="text"
+          placeholder="Email"
+        />
+        <input
+          bind:value={password}
           class="p-2 rounded-lg w-full"
           type="password"
-          placeholder="Confirm Password"
+          placeholder="Password"
         />
-      {/if}
 
-      <button
-        on:click|preventDefault={handleSubmit}
-        class="bg-blue-600 text-white p-2 rounded-lg w-full"
-        type="submit"
-      >
         {#if signUp}
-          Sign Up
-        {:else}
-          Log In
+          <input
+            bind:value={confirmPassword}
+            class="p-2 rounded-lg w-full"
+            type="password"
+            placeholder="Confirm Password"
+          />
         {/if}
-      </button>
 
-      {#if signUp}
-        <div class="flex flex-col items-center text-white">
-          <button
-            class="bg-yellow-500 px-4 py-2 rounded-lg"
-            on:click={() => {
-              signUp = false;
-            }}
-          >
-            Log In
-          </button>
-        </div>
-      {:else}
-        <div class="flex flex-col text-center items-center text-white">
-          <div class="text-md">Don't have an account?</div>
-          <button
-            class="bg-yellow-500 px-4 py-2 rounded-lg"
-            on:click={() => {
-              signUp = true;
-            }}
-          >
+        <button
+          on:click|preventDefault={handleSubmit}
+          class="bg-blue-600 text-white p-2 rounded-lg w-full"
+          type="submit"
+        >
+          {#if signUp}
             Sign Up
-          </button>
-        </div>
-      {/if}
-    </form>
+          {:else}
+            Log In
+          {/if}
+        </button>
+
+        {#if signUp}
+          <div class="flex flex-col items-center text-white">
+            <button
+              class="bg-yellow-500 px-4 py-2 rounded-lg"
+              on:click={() => {
+                signUp = false;
+              }}
+            >
+              Log In
+            </button>
+          </div>
+        {:else}
+          <div class="flex flex-col text-center items-center text-white">
+            <div class="text-md">Don't have an account?</div>
+            <button
+              class="bg-yellow-500 px-4 py-2 rounded-lg"
+              on:click={() => {
+                signUp = true;
+              }}
+            >
+              Sign Up
+            </button>
+          </div>
+        {/if}
+      </form>
+    </div>
   </div>
 </div>
