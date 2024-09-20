@@ -20,7 +20,7 @@
 <div class="flex items-center w-full">
   <button
     on:click={prevSlide}
-    class="flex-shrink-0 p-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
+    class="p-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
   >
     <EmojioneMonotoneLeftArrow class="text-4xl" />
   </button>
@@ -42,7 +42,7 @@
 
   <button
     on:click={nextSlide}
-    class="flex-shrink-0 p-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
+    class="p-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
   >
     <EmojioneMonotoneRightArrow class="text-4xl" />
   </button>

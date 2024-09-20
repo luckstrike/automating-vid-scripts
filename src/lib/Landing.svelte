@@ -9,7 +9,7 @@
 </script>
 
 <div class="flex flex-col w-screen h-screen p-2">
-  <div class="flex flex-row space-x-4 justify-end text-white">
+  <div class="flex flex-row space-x-4 justify-end text-white mb-4">
     <button on:click={() => goto("/")}> Home </button>
     <button
       class="bg-blue-600 rounded-lg pt-2 pb-2 pl-4 pr-4 font-semibold"
@@ -18,14 +18,14 @@
       Login
     </button>
   </div>
-  <div
-    class="hidden lg:flex lg:flex-row lg:items-center lg:justify-center lg:flex-grow"
-  >
-    <Carousel {slides} />
+  <div class="flex-grow flex justify-center items-center">
+    <div class="hidden lg:block w-full max-w-[75%]">
+      <Carousel {slides} />
+    </div>
   </div>
 
   <div
-    class="flex flex-col flex-grow snap-y snap-mandatory overflow-y-scroll p-2 lg:hidden"
+    class="lg:hidden w-full flex flex-col snap-y snap-mandatory overflow-y-auto"
   >
     <div class="snap-start min-h-full overflow-y-scroll">
       <Slide1 />
