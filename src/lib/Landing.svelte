@@ -21,8 +21,14 @@
     </button>
   </div>
   <div
-    class="flex flex-grow items-center justify-between pl-4 pr-4 overflow-y-hidden"
+    class="hidden md:flex md:flex-row md:items-center md:justify-center md:flex-grow"
   >
     <Carousel {slides} />
+  </div>
+
+  <div class="flex flex-col md:hidden">
+    <Slide1 />
+    <Slide2 />
+    <Slide3 />
   </div>
 </div>

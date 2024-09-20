@@ -1,21 +1,23 @@
 <script lang="ts">
 </script>
 
-<div class="flex flex-row w-full h-full justify-center items-center">
-  <div class="max-w-[30%]">
+<div
+  class="flex flex-col lg:flex-row lg:w-full lg:h-full justify-between space-y-8 lg:space-y-0 items-center p-4"
+>
+  <div class="lg:max-w-[30%]">
     <div
-      class="text-7xl font-bold bg-gradient-to-b from-[#5CA4ED] to-[#97D9E1] text-transparent bg-clip-text"
+      class="text-center text-6xl font-bold bg-gradient-to-b from-[#5CA4ED] to-[#97D9E1] text-transparent bg-clip-text"
     >
       Long article you wanna use? Easy*
     </div>
-    <div class="text-white">
+    <div class="text-center text-white text-sm">
       *In cases where the site allows for web scraping
     </div>
   </div>
   <div
-    class="flex flex-col max-w-[45%] text-white space-y-3 items-center align-middle justify-center"
+    class="flex flex-col lg:max-w-[45%] text-white space-y-3 items-center align-middle justify-center"
   >
-    <div class="text-4xl font-bold">Ready to summarize a page?</div>
+    <div class="text-center text-4xl font-bold">Ready to summarize a page?</div>
     <p class="text-lg">
       Please provide the URL of the website you would like to summarize:
     </p>
@@ -24,8 +26,6 @@
       type="text"
       placeholder="Enter URL here..."
     />
-    <!-- Why the -mt-3? Since I'm using space-y-3 this causes that to also be applied to the 
-              overlay, so adding this in fixes the issue some-->
 
     <button
       class="p-2 disabled:bg-gray-400 disabled:cursor-not-allowed bg-blue-600 rounded-lg text-white"

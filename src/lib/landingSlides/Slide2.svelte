@@ -1,18 +1,22 @@
 <script lang="ts">
 </script>
 
-<div class="flex flex-row w-full h-full justify-center items-center space-x-8">
+<div
+  class="flex flex-col lg:flex-row lg:w-full lg:h-full justify-center items-center lg:space-x-8"
+>
   <div
-    class="max-w-[30%] text-7xl font-bold bg-gradient-to-b from-[#5CA4ED] to-[#97D9E1] text-transparent bg-clip-text"
+    class="lg:max-w-[30%] text-center text-7xl font-bold bg-gradient-to-b from-[#5CA4ED] to-[#97D9E1] text-transparent bg-clip-text"
   >
     Writer's block? No Problem
   </div>
   <div
-    class="flex flex-col max-w-[45%] items-center align-middle justify-center text-white p-4"
+    class="flex flex-col lg:max-w-[45%] items-center align-middle justify-center text-white"
   >
     <!--Creating a textbox with placeholder text for brainstorming ideas-->
-    <div class="text-4xl font-bold py-4">Kickstart your writing process!</div>
-    <div class="text-lg">
+    <div class="text-center text-4xl font-bold py-4">
+      Kickstart your writing process!
+    </div>
+    <div class="text-center text-lg">
       Do you have a topic that you want to make a video about? Provide it here:
     </div>
     <input
