@@ -63,8 +63,8 @@
   }
 </script>
 
-<div class="flex flex-col h-full w-full p-2">
-  <div class="flex flex-row space-x-4 justify-end text-white mb-4">
+<div class="flex flex-col w-screen h-screen">
+  <div class="flex flex-row space-x-4 justify-end text-white p-2">
     <button on:click={() => goto("/")}> Home </button>
     <button
       class="bg-blue-600 rounded-lg pt-2 pb-2 pl-4 pr-4 font-semibold"
@@ -75,7 +75,7 @@
   </div>
 
   <div
-    class="flex-grow h-full text-center justify-center items-center space-y-2 p-4"
+    class="flex flex-col w-full h-full items-center justify-center p-4 space-y-4"
   >
     <div class="text-center text-4xl font-bold text-white">
       Howdy there, Welcome to VidScripts

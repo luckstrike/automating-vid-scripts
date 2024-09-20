@@ -2,11 +2,11 @@
   import Login from "$lib/Login.svelte";
   import { authStore } from "$lib/stores/authStore";
   import { goto } from "$app/navigation";
-  import { onMount } from 'svelte';
+  import { onMount } from "svelte";
 
   function handleAuthState(user) {
     if (user) {
-      goto("/dashboard")
+      goto("/dashboard");
     }
   }
 
