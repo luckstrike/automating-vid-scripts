@@ -19,7 +19,7 @@
     </button>
   </div>
   <div class="flex-grow flex justify-center items-center">
-    <div class="hidden lg:block w-full max-w-[75%]">
+    <div class="hidden lg:block max-w-[75%]">
       <Carousel {slides} />
     </div>
   </div>

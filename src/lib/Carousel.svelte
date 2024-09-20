@@ -25,10 +25,11 @@
     <EmojioneMonotoneLeftArrow class="text-4xl" />
   </button>
 
+  <!-- 100.1% is kind of a hacky solution, but it works... --->
   <div class="flex-grow overflow-hidden">
     <div
       class="flex transition-transform duration-300 ease-in-out"
-      style="transform: translateX(-{currentSlide * 100}%)"
+      style="transform: translateX(-{currentSlide * 100.1}%)"
     >
       {#each slides as slide, index (index)}
         <div class="w-full flex-shrink-0 flex justify-center items-center">
