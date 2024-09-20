@@ -2,22 +2,19 @@
 </script>
 
 <div
-  class="flex flex-col lg:flex-row lg:w-full min-h-screen justify-center items-center lg:space-x-8"
+  class="flex flex-col flex-grow min-h-full lg:flex-row lg:w-full justify-center space-y-4 lg:space-x-8"
 >
   <div
-    class="lg:max-w-[30%] text-center text-7xl font-bold bg-gradient-to-b from-[#5CA4ED] to-[#97D9E1] text-transparent bg-clip-text"
+    class="lg:max-w-[30%] text-center text-5xl font-bold bg-gradient-to-b from-[#5CA4ED] to-[#97D9E1] text-transparent bg-clip-text"
   >
     Writer's block? No Problem
   </div>
   <div
-    class="flex flex-col lg:max-w-[45%] items-center align-middle justify-center text-white"
+    class="flex flex-col lg:max-w-[45%] items-center justify-center space-y-1 text-white"
   >
     <!--Creating a textbox with placeholder text for brainstorming ideas-->
-    <div class="text-center text-4xl font-bold py-4">
-      Kickstart your writing process!
-    </div>
-    <div class="text-center text-lg">
-      Do you have a topic that you want to make a video about? Provide it here:
+    <div class="text-center font-semibold text-xl">
+      Generate a starting script with the press of a button
     </div>
     <input
       class="w-full h-10 rounded-lg px-2 text-black"

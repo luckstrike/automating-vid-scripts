@@ -2,11 +2,11 @@
 </script>
 
 <div
-  class="flex flex-col flex-grow overflow-y-auto lg:flex-row lg:w-full min-h-screen justify-center space-y-8 lg:space-y-0 items-center p-4"
+  class="flex flex-col flex-grow overflow-y-auto min-h-full lg:flex-row lg:w-full justify-center space-y-8 lg:space-y-0 items-center p-4"
 >
   <div class="lg:max-w-[30%]">
     <div
-      class="text-center text-6xl font-bold bg-gradient-to-b from-[#5CA4ED] to-[#97D9E1] text-transparent bg-clip-text"
+      class="text-center text-5xl font-bold bg-gradient-to-b from-[#5CA4ED] to-[#97D9E1] text-transparent bg-clip-text"
     >
       Long article you wanna use? Easy*
     </div>
