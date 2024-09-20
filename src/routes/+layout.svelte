@@ -10,6 +10,7 @@
   import { browser } from "$app/environment";
   import { page } from "$app/stores";
   import Landing from "$lib/Landing.svelte";
+  import HamburgerMenu from "$lib/HamburgerMenu.svelte";
 
   // This sets the scriptSaveStatus store to false whenever it
   // isn't the route being accessed (basically resetting it)
@@ -45,8 +46,15 @@
   {:else if $page.url.pathname === "/login"}
     <slot />
   {:else}
-    <Sidebar />
-    <slot />
+    <div class="flex flex-col lg:flex-row w-screen h-screen">
+      <div class="hidden lg:flex">
+        <Sidebar />
+      </div>
+      <div class="lg:hidden">
+        <HamburgerMenu />
+      </div>
+      <slot />
+    </div>
   {/if}
 </div>
 
