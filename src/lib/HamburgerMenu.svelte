@@ -17,7 +17,7 @@
   <div class="text-right">
     <button
       on:click={toggleMenu}
-      class="text-4xl text-white p-2 focus:outline-none"
+      class="bg-gray-700 rounded-lg text-4xl p-1 text-center text-white focus:outline-none"
     >
       ☰
     </button>
@@ -29,7 +29,7 @@
         class="fixed inset-0 bg-gray-800 bg-opacity-90 z-50"
       >
         <div
-          class="flex flex-col items-center justify-center h-full text-white"
+          class="flex flex-col space-y-4 font-bold items-center justify-center h-full text-white"
         >
           <button on:click={toggleMenu} class="absolute top-4 right-4 text-2xl">
             X

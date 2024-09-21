@@ -249,37 +249,41 @@
   let sortModeActive: string | null = "last-updated";
 </script>
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col space-y-2 p-2">
   {#if !isLoading}
-    <div class="text-3xl font-bold text-white mt-4">
+    <div class="text-center text-xl font-bold text-white">
       Howdy {currentUser?.email}! Ready to start script writing?
     </div>
-    <p class="text-lg text-white">
+    <p class="text-center text-sm text-white">
       or create a new script with Brainstorm or Summarize a URL!
     </p>
 
-    <div class="flex flex-row flex-wrap items-center align-middle mt-6">
-      <div class="rectangle-container">
+    <div class="flex flex-row space-x-4 overflow-x-scroll p-2">
+      <div class="">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div
-          class="script-rectangle"
-          id="new-script"
+        <button
+          class="flex w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center hover:scale-110"
           on:click={() => createScript($authStore.currentUser?.uid)}
         >
-          <Fa icon={faPlus} />
-        </div>
-        <div class="script-title">Create a New Script</div>
+          <Fa class="text-2xl" icon={faPlus} />
+        </button>
+        <div class="text-center text-sm text-white">Create a New Script</div>
       </div>
 
       <!-- Shows only the first 3 items in the query-->
       <!-- Not sure if this sorts them by last updated though -->
       {#each previewData as item}
-        <div class="rectangle-container">
+        <div class="">
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div class="script-rectangle" on:click={() => getScript(item)}></div>
-          <div class="script-title">{truncateText(item.name)}</div>
+          <button
+            class="flex w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center hover:scale-110"
+            on:click={() => getScript(item)}
+          ></button>
+          <div class="text-center text-sm text-white">
+            {truncateText(item.name)}
+          </div>
         </div>
       {/each}
     </div>
@@ -357,43 +361,9 @@
     flex: 100%;
   }
 
-  .clickable-icon {
-    cursor: pointer;
-    display: flex;
-    flex: row;
-    justify-items: center;
-  }
-
-  .script-rectangle {
-    width: 18.7vh; /* Trying to make this follow the 8.5 */
-    height: 24.2vh; /* Trying to make this follow the 11 */
-    background-color: #fff;
-    border-radius: 5px; /* Might remove the rounded corners */
-    margin-left: 25px;
-    margin-right: 25px;
-    margin-bottom: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition:
-      transform 0.3s ease,
-      background-color 0.3s ease;
-  }
-
   .script-rectangle:hover {
     background-color: lightgray;
     transform: scale(110%);
-  }
-
-  .script-title {
-    color: #fff;
-    margin-top: 10px;
-    text-align: center;
-  }
-
-  #new-script {
-    font-size: 36px;
-    color: #2f2f2f;
   }
 
   .script-list {
@@ -426,10 +396,6 @@
   .table-action {
     width: 5%;
     border-bottom: 1px solid #2f2f2f;
-  }
-
-  .delete-script {
-    padding-right: 10px;
   }
 
   .table-row {
