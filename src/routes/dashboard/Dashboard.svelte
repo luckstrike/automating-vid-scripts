@@ -288,10 +288,10 @@
       {/each}
     </div>
 
-    <div class="script-list">
+    <div class="flex">
       <table class="script-table">
         <thead>
-          <th class="table-name">
+          <th class="border-b border-black w-[65%] p-2">
             <div
               class="cursor-pointer flex flex-row items-center space-x-2"
               on:click={() => setActiveButton("name")}
@@ -309,7 +309,7 @@
               />
             </div>
           </th>
-          <th class="table-date">
+          <th class="border-b border-black w-[25%] p-2">
             <div
               class="cursor-pointer flex flex-row items-center space-x-2"
               on:click={() => setActiveButton("last-updated")}
@@ -327,13 +327,18 @@
               />
             </div>
           </th>
-          <th class="table-action"> Action </th>
+          <th class="border-b border-black w-[5%]"> Action </th>
         </thead>
         <tbody>
           {#each filteredData as item}
-            <tr class="table-row" on:click={() => getScript(item)}>
-              <td class="table-name">{item.name}</td>
-              <td class="table-date">{item.lastUpdatedString}</td>
+            <tr
+              class="border-b border-black transition-colors duration-300 ease-in-out hover:bg-gray-300"
+              on:click={() => getScript(item)}
+            >
+              <td class="border-b border-black w-[65%] p-2">{item.name}</td>
+              <td class="border-b border-black w-[25%] p-2"
+                >{item.lastUpdatedString}</td
+              >
               <td class="px-2 items-center">
                 <button
                   class="bg-red-500 hover:bg-red-700 border-black rounded-md px-2 py-1 text-white"
@@ -352,58 +357,11 @@
 </div>
 
 <style>
-  /* Empty for now */
-  .container {
-    display: flex; /* Activate Flexbox */
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center children horizontally */
-    height: 100vh; /* Full viewport height */
-    flex: 100%;
-  }
-
-  .script-rectangle:hover {
-    background-color: lightgray;
-    transform: scale(110%);
-  }
-
-  .script-list {
-    display: flex;
-    margin-top: 5vh;
-  }
-
   .script-table {
     border-collapse: collapse;
     width: 100vh;
     text-align: left;
     background-color: white;
     border-radius: 10px;
-  }
-
-  /* Makes the Name column only take up 70% of the table width*/
-  .table-name {
-    width: 65%;
-    padding: 10px;
-    border-bottom: 1px solid #2f2f2f;
-  }
-
-  /* Makes the Last Updated dates only take up 30% of the table width*/
-  .table-date {
-    width: 25%;
-    padding: 10 px;
-    border-bottom: 1px solid #2f2f2f;
-  }
-
-  .table-action {
-    width: 5%;
-    border-bottom: 1px solid #2f2f2f;
-  }
-
-  .table-row {
-    border-bottom: 1px solid #2f2f2f;
-    transition: background-color 0.3s ease;
-  }
-
-  tr.table-row:hover {
-    background-color: lightgray;
   }
 </style>
