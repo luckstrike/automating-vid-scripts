@@ -291,7 +291,7 @@
     <div class="flex">
       <table class="script-table">
         <thead>
-          <th class="border-b border-black w-[65%] p-2">
+          <th class="border-b border-black text-sm w-[65%] p-2">
             <div
               class="cursor-pointer flex flex-row items-center space-x-2"
               on:click={() => setActiveButton("name")}
@@ -309,7 +309,7 @@
               />
             </div>
           </th>
-          <th class="border-b border-black w-[25%] p-2">
+          <th class="border-b border-black text-sm w-[25%] p-2">
             <div
               class="cursor-pointer flex flex-row items-center space-x-2"
               on:click={() => setActiveButton("last-updated")}
@@ -327,7 +327,9 @@
               />
             </div>
           </th>
-          <th class="border-b border-black w-[5%]"> Action </th>
+          <th class="border-b border-black text-center text-sm w-[10%]">
+            Action
+          </th>
         </thead>
         <tbody>
           {#each filteredData as item}
@@ -335,13 +337,15 @@
               class="border-b border-black transition-colors duration-300 ease-in-out hover:bg-gray-300"
               on:click={() => getScript(item)}
             >
-              <td class="border-b border-black w-[65%] p-2">{item.name}</td>
-              <td class="border-b border-black w-[25%] p-2"
+              <td class="border-b border-black text-sm w-[65%] p-2"
+                >{item.name}</td
+              >
+              <td class="border-b border-black text-sm w-[25%] p-2"
                 >{item.lastUpdatedString}</td
               >
-              <td class="px-2 items-center">
+              <td class="p-2 items-center">
                 <button
-                  class="bg-red-500 hover:bg-red-700 border-black rounded-md px-2 py-1 text-white"
+                  class="w-full bg-red-500 hover:bg-red-700 border-black rounded-md px-2 py-1 text-center text-white text-sm"
                   on:click|stopPropagation={() => deleteScript(item)}
                   >Delete</button
                 >
