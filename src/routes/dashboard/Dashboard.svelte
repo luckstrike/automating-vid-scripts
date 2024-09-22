@@ -235,7 +235,7 @@
   }
 
   function truncateText(text: string) {
-    let maxLength: number = 25;
+    let maxLength: number = 20;
 
     if (text.length > maxLength) {
       return text.substring(0, maxLength) + "...";
@@ -249,7 +249,7 @@
   let sortModeActive: string | null = "last-updated";
 </script>
 
-<div class="flex flex-col space-y-2 p-2">
+<div class="flex flex-col space-y-2 p-2 lg:items-center">
   {#if !isLoading}
     <div class="text-center text-xl font-bold text-white">
       Howdy {currentUser?.email}! Ready to start script writing?
@@ -258,27 +258,24 @@
       or create a new script with Brainstorm or Summarize a URL!
     </p>
 
-    <div class="flex flex-row space-x-4 overflow-x-scroll p-2">
-      <div class="">
+    <div class="flex flex-row overflow-x-scroll space-x-4 lg:items-center">
+      <div class="flex flex-col">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <button
-          class="flex w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center hover:scale-110"
+          class="flex flex-row w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center hover:scale-110"
           on:click={() => createScript($authStore.currentUser?.uid)}
         >
           <Fa class="text-2xl" icon={faPlus} />
         </button>
         <div class="text-center text-sm text-white">Create a New Script</div>
       </div>
-
-      <!-- Shows only the first 3 items in the query-->
-      <!-- Not sure if this sorts them by last updated though -->
       {#each previewData as item}
-        <div class="">
+        <div class="flex flex-col">
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <button
-            class="flex w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center hover:scale-110"
+            class="flex flex-row w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center hover:scale-110"
             on:click={() => getScript(item)}
           ></button>
           <div class="text-center text-sm text-white">
