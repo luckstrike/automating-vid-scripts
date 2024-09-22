@@ -17,9 +17,9 @@
   <div class="text-right">
     <button
       on:click={toggleMenu}
-      class="bg-gray-700 rounded-lg text-4xl p-1 text-center text-white focus:outline-none"
+      class="rounded-lg w-12 h-12 text-white focus:outline-none inline-flex items-center justify-center"
     >
-      ☰
+      <span class="text-2xl leading-none relative top-[-1px]">☰</span>
     </button>
   </div>
   {#if isOpen}
