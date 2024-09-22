@@ -2,7 +2,7 @@
   import Sidebar from "$lib/Sidebar.svelte";
   import "../global.css";
   import "../app.css";
-
+  import { goto } from "$app/navigation";
   import { onMount } from "svelte";
   import { auth } from "$lib/firebase/firebase.client";
   import { authStore } from "$lib/stores/authStore";
@@ -19,6 +19,14 @@
   $: {
     if (!$page.url.pathname.startsWith("/script")) {
       scriptSaveStatus.set(false);
+    }
+
+    if (
+      !$authStore.isLoading &&
+      !$authStore.currentUser &&
+      !$page.url.pathname.startsWith("/login")
+    ) {
+      goto("/");
     }
   }
 

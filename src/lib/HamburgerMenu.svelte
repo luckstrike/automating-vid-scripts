@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { fade } from "svelte/transition";
+  import { authHandlers } from "./stores/authStore";
   let isOpen = false;
 
   const toggleMenu = () => {
@@ -8,8 +9,13 @@
   };
 
   function changeTabs(subdirectory: string) {
-    goto(subdirectory);
     isOpen = !isOpen;
+    goto(subdirectory);
+  }
+
+  function logOut() {
+    isOpen = !isOpen;
+    authHandlers.logout();
   }
 </script>
 
@@ -38,7 +44,7 @@
           <button on:click={() => changeTabs("/brainstorm")}>Brainstorm</button>
           <button on:click={() => changeTabs("/script")}>Script</button>
           <button on:click={() => changeTabs("/summarize")}>Summarize</button>
-          <button on:click={() => changeTabs("/")}>Log Out</button>
+          <button on:click={() => logOut()}>Log Out</button>
         </div>
       </div>
     </div>
