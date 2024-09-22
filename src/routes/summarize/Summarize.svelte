@@ -6,7 +6,10 @@
   let isGenerating: boolean = false;
   let errorMessage: string | null = null;
 
-  const baseURL: string = import.meta.env.VITE_PUBLIC_BASE_URL || import.meta.env.PUBLIC_BASE_URL || '';
+  const baseURL: string =
+    import.meta.env.VITE_PUBLIC_BASE_URL ||
+    import.meta.env.PUBLIC_BASE_URL ||
+    "";
   const API_URL: string = `${baseURL}/api`;
 
   let showModal: boolean = false;
@@ -73,14 +76,12 @@
   <div
     class="flex flex-col flex-grow space-y-3 items-center align-middle justify-center"
   >
-    <div class="text-4xl font-bold">
-      Ready to summarize a page?
-    </div>
-    <p class="text-lg">
+    <div class="text-center text-2xl font-bold">Ready to summarize a page?</div>
+    <p class="text-center text-lg">
       Please provide the URL of the website you would like to summarize:
     </p>
     <input
-      class="text-black w-[50%] rounded-xl p-2 box-border border-none font-xl"
+      class="text-black w-3/4 rounded-xl p-2 box-border border-none font-xl"
       type="text"
       placeholder="Enter URL here..."
       bind:value={summarize_url}
