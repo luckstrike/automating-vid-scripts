@@ -10,7 +10,7 @@
     >
       Write your video scripts with a helping hand
     </div>
-    <div class="text-center lg:text-center font-semibold text-white text-lg">
+    <div class="text-center lg:text-center text-white text-xl">
       Select some text to either expand on it or rephrase it
     </div>
   </div>

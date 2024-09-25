@@ -13,7 +13,7 @@
     class="flex flex-col lg:max-w-[45%] items-center justify-center space-y-1 text-white"
   >
     <!--Creating a textbox with placeholder text for brainstorming ideas-->
-    <div class="text-center font-semibold text-xl">
+    <div class="text-center text-xl">
       Generate a starting script with the press of a button
     </div>
     <input
