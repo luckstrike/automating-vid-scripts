@@ -289,19 +289,24 @@
     $editor.commands.insertContent(textToInsert);
   };
 
-
   async function generateTextWithGPT(actionType: string) {
     const text: string = getSelectedText();
     let textFromAI: string = "";
 
-    const baseURL: string = import.meta.env.VITE_PUBLIC_BASE_URL || import.meta.env.PUBLIC_BASE_URL || '';
+    const baseURL: string =
+      import.meta.env.VITE_PUBLIC_BASE_URL ||
+      import.meta.env.PUBLIC_BASE_URL ||
+      "";
     const API_URL: string = `${baseURL}/api`;
 
     const endpoint = "/script"; // Simplified endpoint, always using POST
     const options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userSelection: text || "" , actionType: actionType }),
+      body: JSON.stringify({
+        userSelection: text || "",
+        actionType: actionType,
+      }),
     };
 
     // Query GPT and get a result back only if we have some selected text
@@ -424,7 +429,7 @@
 
     <div class="w-full pt-2 text-center">
       <input
-        class="bg-transparent w-1/2 text-center text-[#d9d9d9] font-bold text-xl border-solid border-2 border-[#d9d9d9] rounded-lg"
+        class="bg-transparent w-3/4 text-center text-[#d9d9d9] font-bold text-lg border-solid border-2 border-[#d9d9d9] rounded-lg"
         type="text"
         bind:value={scriptTitle}
         on:input={handleScriptTitleInput}
@@ -500,7 +505,7 @@
     </div>
   {/if}
 
-  <div bind:this={editorContainer} class="w-[80%] prose">
+  <div bind:this={editorContainer} class="w-[95%] prose">
     <EditorContent editor={$editor} />
   </div>
 </div>

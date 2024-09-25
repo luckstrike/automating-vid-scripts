@@ -2,7 +2,7 @@
   import Sidebar from "$lib/Sidebar.svelte";
   import "../global.css";
   import "../app.css";
-
+  import { goto } from "$app/navigation";
   import { onMount } from "svelte";
   import { auth } from "$lib/firebase/firebase.client";
   import { authStore } from "$lib/stores/authStore";
@@ -10,6 +10,7 @@
   import { browser } from "$app/environment";
   import { page } from "$app/stores";
   import Landing from "$lib/Landing.svelte";
+  import HamburgerMenu from "$lib/HamburgerMenu.svelte";
 
   // This sets the scriptSaveStatus store to false whenever it
   // isn't the route being accessed (basically resetting it)
@@ -18,6 +19,14 @@
   $: {
     if (!$page.url.pathname.startsWith("/script")) {
       scriptSaveStatus.set(false);
+    }
+
+    if (
+      !$authStore.isLoading &&
+      !$authStore.currentUser &&
+      !$page.url.pathname.startsWith("/login")
+    ) {
+      goto("/");
     }
   }
 
@@ -45,8 +54,15 @@
   {:else if $page.url.pathname === "/login"}
     <slot />
   {:else}
-    <Sidebar />
-    <slot />
+    <div class="flex flex-col lg:flex-row w-screen h-screen">
+      <div class="hidden lg:flex">
+        <Sidebar />
+      </div>
+      <div class="lg:hidden">
+        <HamburgerMenu />
+      </div>
+      <slot />
+    </div>
   {/if}
 </div>
 

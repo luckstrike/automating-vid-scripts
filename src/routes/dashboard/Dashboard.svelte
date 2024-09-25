@@ -235,7 +235,7 @@
   }
 
   function truncateText(text: string) {
-    let maxLength: number = 25;
+    let maxLength: number = 20;
 
     if (text.length > maxLength) {
       return text.substring(0, maxLength) + "...";
@@ -249,45 +249,46 @@
   let sortModeActive: string | null = "last-updated";
 </script>
 
-<div class="flex flex-col items-center">
+<div class="flex flex-col space-y-2 p-2 lg:items-center">
   {#if !isLoading}
-    <div class="text-3xl font-bold text-white mt-4">
+    <div class="text-center text-xl font-bold text-white">
       Howdy {currentUser?.email}! Ready to start script writing?
     </div>
-    <p class="text-lg text-white">
+    <p class="text-center text-sm text-white">
       or create a new script with Brainstorm or Summarize a URL!
     </p>
 
-    <div class="flex flex-row flex-wrap items-center align-middle mt-6">
-      <div class="rectangle-container">
+    <div class="flex flex-row overflow-x-scroll space-x-4 lg:items-center">
+      <div class="flex flex-col">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div
-          class="script-rectangle"
-          id="new-script"
+        <button
+          class="flex flex-row w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center hover:scale-110"
           on:click={() => createScript($authStore.currentUser?.uid)}
         >
-          <Fa icon={faPlus} />
-        </div>
-        <div class="script-title">Create a New Script</div>
+          <Fa class="text-2xl" icon={faPlus} />
+        </button>
+        <div class="text-center text-sm text-white">Create a New Script</div>
       </div>
-
-      <!-- Shows only the first 3 items in the query-->
-      <!-- Not sure if this sorts them by last updated though -->
       {#each previewData as item}
-        <div class="rectangle-container">
+        <div class="flex flex-col">
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div class="script-rectangle" on:click={() => getScript(item)}></div>
-          <div class="script-title">{truncateText(item.name)}</div>
+          <button
+            class="flex flex-row w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center hover:scale-110"
+            on:click={() => getScript(item)}
+          ></button>
+          <div class="text-center text-sm text-white">
+            {truncateText(item.name)}
+          </div>
         </div>
       {/each}
     </div>
 
-    <div class="script-list">
+    <div class="flex">
       <table class="script-table">
         <thead>
-          <th class="table-name">
+          <th class="border-b border-black text-sm w-[65%] p-2">
             <div
               class="cursor-pointer flex flex-row items-center space-x-2"
               on:click={() => setActiveButton("name")}
@@ -305,7 +306,7 @@
               />
             </div>
           </th>
-          <th class="table-date">
+          <th class="border-b border-black text-sm w-[25%] p-2">
             <div
               class="cursor-pointer flex flex-row items-center space-x-2"
               on:click={() => setActiveButton("last-updated")}
@@ -323,16 +324,25 @@
               />
             </div>
           </th>
-          <th class="table-action"> Action </th>
+          <th class="border-b border-black text-center text-sm w-[10%]">
+            Action
+          </th>
         </thead>
         <tbody>
           {#each filteredData as item}
-            <tr class="table-row" on:click={() => getScript(item)}>
-              <td class="table-name">{item.name}</td>
-              <td class="table-date">{item.lastUpdatedString}</td>
-              <td class="px-2 items-center">
+            <tr
+              class="border-b border-black transition-colors duration-300 ease-in-out hover:bg-gray-300"
+              on:click={() => getScript(item)}
+            >
+              <td class="border-b border-black text-sm w-[65%] p-2"
+                >{item.name}</td
+              >
+              <td class="border-b border-black text-sm w-[25%] p-2"
+                >{item.lastUpdatedString}</td
+              >
+              <td class="p-2 items-center">
                 <button
-                  class="bg-red-500 hover:bg-red-700 border-black rounded-md px-2 py-1 text-white"
+                  class="w-full bg-red-500 hover:bg-red-700 border-black rounded-md px-2 py-1 text-center text-white text-sm"
                   on:click|stopPropagation={() => deleteScript(item)}
                   >Delete</button
                 >
@@ -348,96 +358,11 @@
 </div>
 
 <style>
-  /* Empty for now */
-  .container {
-    display: flex; /* Activate Flexbox */
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center children horizontally */
-    height: 100vh; /* Full viewport height */
-    flex: 100%;
-  }
-
-  .clickable-icon {
-    cursor: pointer;
-    display: flex;
-    flex: row;
-    justify-items: center;
-  }
-
-  .script-rectangle {
-    width: 18.7vh; /* Trying to make this follow the 8.5 */
-    height: 24.2vh; /* Trying to make this follow the 11 */
-    background-color: #fff;
-    border-radius: 5px; /* Might remove the rounded corners */
-    margin-left: 25px;
-    margin-right: 25px;
-    margin-bottom: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition:
-      transform 0.3s ease,
-      background-color 0.3s ease;
-  }
-
-  .script-rectangle:hover {
-    background-color: lightgray;
-    transform: scale(110%);
-  }
-
-  .script-title {
-    color: #fff;
-    margin-top: 10px;
-    text-align: center;
-  }
-
-  #new-script {
-    font-size: 36px;
-    color: #2f2f2f;
-  }
-
-  .script-list {
-    display: flex;
-    margin-top: 5vh;
-  }
-
   .script-table {
     border-collapse: collapse;
     width: 100vh;
     text-align: left;
     background-color: white;
     border-radius: 10px;
-  }
-
-  /* Makes the Name column only take up 70% of the table width*/
-  .table-name {
-    width: 65%;
-    padding: 10px;
-    border-bottom: 1px solid #2f2f2f;
-  }
-
-  /* Makes the Last Updated dates only take up 30% of the table width*/
-  .table-date {
-    width: 25%;
-    padding: 10 px;
-    border-bottom: 1px solid #2f2f2f;
-  }
-
-  .table-action {
-    width: 5%;
-    border-bottom: 1px solid #2f2f2f;
-  }
-
-  .delete-script {
-    padding-right: 10px;
-  }
-
-  .table-row {
-    border-bottom: 1px solid #2f2f2f;
-    transition: background-color 0.3s ease;
-  }
-
-  tr.table-row:hover {
-    background-color: lightgray;
   }
 </style>
