@@ -258,7 +258,9 @@
       or create a new script with Brainstorm or Summarize a URL!
     </p>
 
-    <div class="flex flex-row overflow-x-scroll space-x-4 lg:items-center">
+    <div
+      class="flex flex-row overflow-x-scroll space-x-4 md:justify-center lg:items-center"
+    >
       <div class="flex flex-col">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
