@@ -259,7 +259,7 @@
     </p>
 
     <div
-      class="flex flex-row overflow-x-scroll space-x-4 md:justify-center lg:items-center"
+      class="flex flex-row overflow-x-scroll space-x-4 md:justify-center md:items-center"
     >
       <div class="flex flex-col">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
