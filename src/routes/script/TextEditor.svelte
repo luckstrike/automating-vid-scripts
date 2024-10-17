@@ -340,10 +340,19 @@
     isGenerating = false;
   }
 
-  onMount(() => {
+  onMount(async () => {
+    let contentResult: string = "";
+    if ($scriptIdStore) {
+      await getScriptContent(db, "textcontent", $scriptIdStore).then((result) => {
+        if (result) {
+          contentResult = result.content;
+        }
+      });
+    }
+
     editor = createEditor({
       extensions: [StarterKit, Underline],
-      content: "",
+      content: contentResult,
       editorProps: {
         attributes: {
           class:
@@ -351,14 +360,6 @@
         },
       },
       onCreate({ editor }) {
-        if ($scriptIdStore) {
-          getScriptContent(db, "textcontent", $scriptIdStore).then((result) => {
-            if (result) {
-              editor.commands.setContent(result.content);
-            }
-          });
-        }
-
         if ($scriptMetaIdStore) {
           getScriptContent(db, "documents", $scriptMetaIdStore).then(
             (result) => {
