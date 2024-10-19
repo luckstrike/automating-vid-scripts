@@ -343,11 +343,13 @@
   onMount(async () => {
     let contentResult: string = "";
     if ($scriptIdStore) {
-      await getScriptContent(db, "textcontent", $scriptIdStore).then((result) => {
-        if (result) {
-          contentResult = result.content;
-        }
-      });
+      await getScriptContent(db, "textcontent", $scriptIdStore).then(
+        (result) => {
+          if (result) {
+            contentResult = result.content;
+          }
+        },
+      );
     }
 
     editor = createEditor({
@@ -400,6 +402,7 @@
           <div>Expand</div>
           <IonRocketSharp />
         </button>
+        <div class="inline-block h-8 items-center w-0.5 bg-[#a2a2a2]"></div>
         <button
           class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
           class:text-red-400={isGenerating}
