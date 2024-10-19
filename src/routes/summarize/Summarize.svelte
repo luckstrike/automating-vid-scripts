@@ -99,6 +99,6 @@
   </div>
 
   <Modal show={showModal} onClose={closeModal} content={modalContent}>
-    <h1>Here's what we got back:</h1>
+    <p class="text-xl font-bold">Here's what we got back:</p>
   </Modal>
 </div>
