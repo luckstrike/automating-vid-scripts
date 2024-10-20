@@ -259,13 +259,14 @@
     </p>
 
     <div
-      class="flex flex-row overflow-x-scroll space-x-4 md:justify-center md:items-center"
+      class="flex flex-row overflow-x-scroll space-x-4 md:justify-center md:items-center p-4"
     >
       <div class="flex flex-col">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <button
-          class="flex flex-row w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center hover:scale-110"
+          class="flex flex-row w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center
+          transition-transform duration-500 ease-in-out hover:scale-110 hover:origin-center"
           on:click={() => createScript($authStore.currentUser?.uid)}
         >
           <Fa class="text-2xl" icon={faPlus} />
@@ -277,7 +278,8 @@
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <button
-            class="flex flex-row w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center hover:scale-110"
+            class="flex flex-row w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center
+            transition-transform duration-500 ease-in-out hover:scale-110 hover:origin-center"
             on:click={() => getScript(item)}
           ></button>
           <div class="text-center text-sm text-white">
@@ -287,7 +289,7 @@
       {/each}
     </div>
 
-    <div class="flex">
+    <div class="flex justify-center">
       <table class="script-table">
         <thead>
           <th class="border-b border-black text-sm w-[65%] p-2">
