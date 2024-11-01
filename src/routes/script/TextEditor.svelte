@@ -41,6 +41,7 @@
     faBold,
     faItalic,
     faUnderline,
+    faStrikethrough,
     faUndo,
     faRedo,
     faList,
@@ -472,6 +473,14 @@
         class:text-black={$editor.isActive("underline")}
       >
         <Fa class="toolbar-icons" icon={faUnderline} />
+      </button>
+
+      <!-- Strikethrough Button -->
+      <button
+        on:click={() => $editor.chain().focus().toggleStrike().run()}
+        class:text-black={$editor.isActive("strike")}
+      >
+        <Fa class="toolbar-icons" icon={faStrikethrough} />
       </button>
 
       <!-- Undo Button -->
