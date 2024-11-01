@@ -133,9 +133,6 @@
       content: scriptContent,
     })
       .then(() => {
-        console.log(
-          "saveHTMLtoDatabase() Success: Document sucessfully updated",
-        );
         saveResult = true;
       })
       .catch((error) => {
@@ -189,15 +186,10 @@
       return titleResult;
     }
 
-    console.log("metaDocRef: ", metaDocRef);
-
     await updateDoc(metaDocRef, {
       updated: Timestamp.now(),
     })
       .then(() => {
-        console.log(
-          "saveScript() Success: Document last updated time sucessfully updated",
-        );
         titleResult = true;
       })
       .catch((error) => {
@@ -210,10 +202,7 @@
       });
 
     // Error-checking
-    if (result && titleResult) {
-      // Everything went well!
-      console.log("saveScript() Success: Everything went well!");
-    } else {
+    if (!result || !titleResult) {
       // Something broke
       console.error("saveScript() Error: Something went wrong... :(");
       console.log(result);
@@ -270,6 +259,17 @@
       let collectionName: string = "documents";
       updateScriptTitle(collectionName, target.value);
     }, 500) as unknown as number; // delay in milliseconds (plus assertions for TypeScript to stop yelling at me)
+  }
+
+  async function handleScriptInput() {
+    // Clear the previous timeout, if there's one
+    if (timeoutId !== undefined) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(() => {
+      saveScript($editor, "textcontent", $scriptIdStore);
+    }, 500) as unknown as number; // delay in milliseconds (plus assertiong for TypeScript to stop yelling at me)
   }
 
   // Gets the selected text from the script
@@ -343,11 +343,13 @@
   onMount(async () => {
     let contentResult: string = "";
     if ($scriptIdStore) {
-      await getScriptContent(db, "textcontent", $scriptIdStore).then((result) => {
-        if (result) {
-          contentResult = result.content;
-        }
-      });
+      await getScriptContent(db, "textcontent", $scriptIdStore).then(
+        (result) => {
+          if (result) {
+            contentResult = result.content;
+          }
+        },
+      );
     }
 
     editor = createEditor({
@@ -371,6 +373,7 @@
         }
       },
       onUpdate({ editor }) {
+        handleScriptInput();
         $scriptSaveStatus = true;
       },
     });
