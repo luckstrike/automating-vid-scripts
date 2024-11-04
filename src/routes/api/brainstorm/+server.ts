@@ -17,8 +17,8 @@ const brainstormTitlePrompt: string = `You are a helpful assitant who provides, 
                                     based on the prompt they provide. Assume that you have already given the user
                                     a bunch of key helpful pointers to help them out with a video. Provide a title
                                     for this document based on the prompt you are provided. Try to keep it under 10
-                                    words or less. The less words you provide the better, but don't be shy of
-                                    providing more words for the title if needed.`;
+                                    words or less, don't provide it in quotes. The less words you provide the better, 
+                                    but don't be shy of providing more words for the title if needed.`;
 
 async function brainstormGPT(
   openai: OpenAI,
