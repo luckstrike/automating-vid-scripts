@@ -9,9 +9,8 @@ const brainstormPrompt: string = `You are a helpful assistant who provides, user
                                 about a random topic that could be turned into a video. The topic may be
                                 about anything, you can decide that! Just make sure to focus on one topic 
                                 and if you feel like it provide the user with some pointers they can use to
-                                branch from that idea. Also please make sure to format all of this as HTML,
-                                so that it can be read by an HTML Script parser. Make sure that everything
-                                you state in the response is in HTML please.`;
+                                branch from that idea. Also please make sure to format all of this in HTML,
+                                just the tags, you dont have to specify it's html at the start or end.`;
 
 const brainstormTitlePrompt: string = `You are a helpful assitant who provides, users with a good document title
                                     based on the prompt they provide. Assume that you have already given the user
