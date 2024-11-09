@@ -60,13 +60,15 @@
     <slot />
   {:else}
     <div class="flex flex-col lg:flex-row w-screen h-screen">
-      <div class="hidden lg:flex">
+      <div class="hidden lg:block overflow-y-auto min-h-screen">
         <Sidebar />
       </div>
       <div class="lg:hidden">
         <HamburgerMenu />
       </div>
-      <slot />
+      <div class="flex-1 overflow-y-auto">
+        <slot />
+      </div>
     </div>
   {/if}
 </div>
