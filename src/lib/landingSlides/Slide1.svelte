@@ -15,14 +15,10 @@
     </div>
   </div>
   <div
-    class="flex flex-col bg-[#d9d9d9] rounded-lg lg:translate-y-[15%] lg:hover:translate-y-[12%] transition duration-300 ease-in-out p-8"
+    class="flex flex-col"
   >
-    <div class="font-bold text-3xl">The Generational Ford Mustang</div>
-    <br />
-    <br />
-    <div class="text-3xl select-all">
-      The Ford Mustang has been around the block for a long time. In fact it’s
-      gone through a lot of generations throughout it’s existence.
-    </div>
+  <div>
+      <video src="rephrase.mp4" autoplay muted loop></video>
+  </div>
   </div>
 </div>
