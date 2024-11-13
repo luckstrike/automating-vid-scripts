@@ -13,7 +13,7 @@
     class="flex flex-col lg:max-w-[45%] items-center justify-center space-y-1 text-white"
   >
     <div class="flex flew-rox p-2 space-x-2">
-      <video src="brainstorm.mp4" autoplay muted></video>
+      <video src="brainstorm.mp4" autoplay muted loop></video>
     </div>
   </div>
 </div>

@@ -18,7 +18,7 @@
     class="flex flex-col lg:max-w-[45%] text-white items-center space-y-2 align-middle justify-center"
   >
     <div>
-      <video src="summarize.mp4" muted autoplay></video>
+      <video src="summarize.mp4" muted autoplay loop></video>
     </div>
   </div>
 </div>
