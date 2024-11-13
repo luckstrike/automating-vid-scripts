@@ -17,19 +17,8 @@
   <div
     class="flex flex-col lg:max-w-[45%] text-white items-center space-y-2 align-middle justify-center"
   >
-    <p class="text-center text-lg">
-      Please provide the URL of the website you would like to summarize:
-    </p>
-    <input
-      class="text-black w-full rounded-xl p-2 box-border border-none font-xl"
-      type="text"
-      placeholder="Enter URL here..."
-    />
-
-    <button
-      class="p-2 disabled:bg-gray-400 disabled:cursor-not-allowed bg-blue-600 rounded-lg text-white"
-    >
-      Summarize
-    </button>
+    <div>
+      <video src="summarize.mp4" muted autoplay></video>
+    </div>
   </div>
 </div>
