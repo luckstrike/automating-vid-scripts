@@ -249,112 +249,117 @@
   let sortModeActive: string | null = "last-updated";
 </script>
 
-<div class="flex flex-col space-y-2 p-2 lg:items-center">
+<div class="flex flex-col min-h-screen pb-20 lg:pb-0">
   {#if !isLoading}
-    <div class="text-center text-xl font-bold text-white">
-      Howdy {currentUser?.email}! Ready to start script writing?
-    </div>
-    <p class="text-center text-sm text-white">
-      or create a new script with Brainstorm or Summarize a URL!
-    </p>
-
-    <div
-      class="flex flex-row overflow-x-scroll space-x-4 md:justify-center md:items-center p-4"
-    >
-      <div class="flex flex-col">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <button
-          class="flex flex-row w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center
-          transition-transform duration-500 ease-in-out hover:scale-110 hover:origin-center"
-          on:click={() => createScript($authStore.currentUser?.uid)}
-        >
-          <Fa class="text-2xl" icon={faPlus} />
-        </button>
-        <div class="text-center text-sm text-white">Create a New Script</div>
-      </div>
-      {#each previewData as item}
-        <div class="flex flex-col">
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <button
-            class="flex flex-row w-[18.7vh] h-[24.2vh] bg-white rounded-md items-center justify-center
-            transition-transform duration-500 ease-in-out hover:scale-110 hover:origin-center"
-            on:click={() => getScript(item)}
-          ></button>
-          <div class="text-center text-sm text-white">
-            {truncateText(item.name)}
-          </div>
+    <div class="flex flex-col space-y-2">
+      <div class="text-center">
+        <div class="text-center text-xl font-bold text-white">
+          Howdy {currentUser?.email}! Ready to start script writing?
         </div>
-      {/each}
-    </div>
+        <p class="text-center text-sm text-white">
+          or create a new script with Brainstorm or Summarize a URL!
+        </p>
+      </div>
 
-    <div class="flex justify-center">
-      <table class="script-table">
-        <thead>
-          <th class="border-b border-black text-sm w-[65%] p-2">
-            <div
-              class="cursor-pointer flex flex-row items-center space-x-2"
-              on:click={() => setActiveButton("name")}
-              role="button"
-              tabindex="0"
-              on:keydown={(event) =>
-                handleKeydown(event, () => setActiveButton("name"))}
+      <!-- Scrollable cards section -->
+      <div class="w-full px-4 overflow-x-auto">
+        <div class="flex space-x-4 py-4">
+          <div class="flex flex-col items-center">
+            <button
+              class="w-48 h-64 bg-white rounded-lg flex items-center justify-center transition-transform gover:scale-105 flex-shrink-0"
+              on:click={() => createScript($authStore.currentUser?.uid)}
             >
-              <div>Name</div>
-              <Fa
-                icon={faCaretDown}
-                style="color: {sortModeActive == 'name'
-                  ? '#2f2f2f'
-                  : 'lightgray'}"
-              />
-            </div>
-          </th>
-          <th class="border-b border-black text-sm w-[25%] p-2">
-            <div
-              class="cursor-pointer flex flex-row items-center space-x-2"
-              on:click={() => setActiveButton("last-updated")}
-              role="button"
-              tabindex="0"
-              on:keydown={(event) =>
-                handleKeydown(event, () => setActiveButton("last-updated"))}
-            >
-              <div>Last Updated</div>
-              <Fa
-                icon={faCaretDown}
-                style="color: {sortModeActive == 'last-updated'
-                  ? '#2f2f2f'
-                  : 'lightgray'}"
-              />
-            </div>
-          </th>
-          <th class="border-b border-black text-center text-sm w-[10%]">
-            Action
-          </th>
-        </thead>
-        <tbody>
-          {#each filteredData as item}
-            <tr
-              class="border-b border-black transition-colors duration-300 ease-in-out hover:bg-gray-300"
-              on:click={() => getScript(item)}
-            >
-              <td class="border-b border-black text-sm w-[65%] p-2"
-                >{item.name}</td
+              <Fa class="text-2xl" icon={faPlus} />
+            </button>
+            <div class="text-sm text-white mt-2">Create a New Script</div>
+          </div>
+
+          {#each previewData as item}
+            <div class="flex flex-col items-center">
+              <button
+                class="w-48 h-64 bg-white rounded-lg flex items-center justify-center transition-transform gover:scale-105 flex-shrink-0"
               >
-              <td class="border-b border-black text-sm w-[25%] p-2"
-                >{item.lastUpdatedString}</td
-              >
-              <td class="p-2 items-center">
-                <button
-                  class="w-full bg-red-500 hover:bg-red-700 border-black rounded-md px-2 py-1 text-center text-white text-sm"
-                  on:click|stopPropagation={() => deleteScript(item)}
-                  >Delete</button
-                >
-              </td>
-            </tr>
+              </button>
+              <div class="text-sm text-white mt-2">
+                {truncateText(item.name)}
+              </div>
+            </div>
           {/each}
-        </tbody>
-      </table>
+        </div>
+      </div>
+
+      <!-- Table section -->
+      <div class="rounded-lg bg-white overflow-hidden">
+        <table class="w-full">
+          <thead class="bg-white">
+            <tr>
+              <th
+                class="p-4 text-left border-b border-black text-sm font-medium w-[65%]"
+              >
+                <div
+                  class="cursor-pointer flex flex-row items-center space-x-2"
+                  on:click={() => setActiveButton("name")}
+                  role="button"
+                  tabindex="0"
+                  on:keydown={(event) =>
+                    handleKeydown(event, () => setActiveButton("name"))}
+                >
+                  <div>Name</div>
+                  <Fa
+                    icon={faCaretDown}
+                    style="color: {sortModeActive == 'name'
+                      ? '#2f2f2f'
+                      : 'lightgray'}"
+                  />
+                </div>
+              </th>
+              <th
+                class="p-4 text-left border-b border-black text-sm font-medium w-[25%]"
+              >
+                <div
+                  class="cursor-pointer flex flex-row items-center space-x-2"
+                  on:click={() => setActiveButton("last-updated")}
+                  role="button"
+                  tabindex="0"
+                  on:keydown={(event) =>
+                    handleKeydown(event, () => setActiveButton("last-updated"))}
+                >
+                  <div>Last Updated</div>
+                  <Fa
+                    icon={faCaretDown}
+                    style="color: {sortModeActive == 'last-updated'
+                      ? '#2f2f2f'
+                      : 'lightgray'}"
+                  />
+                </div>
+              </th>
+              <th
+                class="p-4 text-center border-b border-black text-sm font-medium w-[10%]"
+              >
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {#each filteredData as item}
+              <tr
+                class="hover:bg-gray-100 cursor-pointer"
+                on:click={() => getScript(item)}
+              >
+                <td class="p-4 text-sm border-b">{item.name}</td>
+                <td class="p-4 text-sm border-b">{item.lastUpdatedString}</td>
+                <td class="p-4 text-sm border-b">
+                  <button
+                    class="w-full bg-red-500 hover:bg-red-700 border-black rounded-md px-2 py-1 text-center text-white text-sm"
+                    on:click|stopPropagation={() => deleteScript(item)}
+                    >Delete</button
+                  >
+                </td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
     </div>
   {:else}
     <!-- TODO: Make this either a loading screen or just keep it empty-->
@@ -362,11 +367,4 @@
 </div>
 
 <style>
-  .script-table {
-    border-collapse: collapse;
-    width: 100vh;
-    text-align: left;
-    background-color: white;
-    border-radius: 10px;
-  }
 </style>
