@@ -2,16 +2,17 @@
   import Sidebar from "$lib/Sidebar.svelte";
   import "../global.css";
   import "../app.css";
-  import { goto } from "$app/navigation";
+  import { goto, invalidate } from "$app/navigation";
   import { redirect } from "@sveltejs/kit";
   import { onMount } from "svelte";
-  import { auth } from "$lib/firebase/firebase.client";
   import { authStore } from "$lib/stores/authStore";
   import { scriptIdStore, scriptSaveStatus } from "$lib/stores/scriptStore";
-  import { browser } from "$app/environment";
   import { page } from "$app/stores";
   import Landing from "$lib/Landing.svelte";
   import HamburgerMenu from "$lib/HamburgerMenu.svelte";
+
+  export let data;
+  $: ({ session, supabase } = data);
 
   // This sets the scriptSaveStatus store to false whenever it
   // isn't the route being accessed (basically resetting it)
@@ -25,31 +26,16 @@
     if (!$scriptIdStore && $page.url.pathname.startsWith("/script")) {
       redirect(307, "/dashboard");
     }
-
-    if (
-      !$authStore.isLoading &&
-      !$authStore.currentUser &&
-      !$page.url.pathname.startsWith("/login")
-    ) {
-      goto("/");
-    }
   }
 
   onMount(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      // Updates the current user in the authStore
-      // TODO: Change any to User (I need to find out how to use the User type from firebase)
-
-      authStore.update((curr: any) => {
-        return {
-          ...curr,
-          isLoading: false,
-          currentUser: user,
-        };
-      });
+    const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
+      if (newSession?.expires_at !== session?.expires_at) {
+        invalidate("supabase:auth");
+      }
     });
 
-    return unsubscribe;
+    return () => data.subscription.unsubscribe();
   });
 </script>
 

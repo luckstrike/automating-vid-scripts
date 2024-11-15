@@ -44,6 +44,8 @@
 	"dependencies": {
 		"@fortawesome/free-brands-svg-icons": "^6.5.1",
 		"@fortawesome/free-solid-svg-icons": "^6.5.1",
+		"@supabase/ssr": "^0.5.2",
+		"@supabase/supabase-js": "^2.46.1",
 		"@tiptap/core": "^2.1.13",
 		"@tiptap/extension-bubble-menu": "^2.6.6",
 		"@tiptap/extension-underline": "^2.1.13",
