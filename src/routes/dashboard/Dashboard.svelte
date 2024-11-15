@@ -249,11 +249,11 @@
   let sortModeActive: string | null = "last-updated";
 </script>
 
-<div class="flex flex-col min-h-screen pb-20 lg:pb-0">
+<div class="flex flex-col min-h-screen pb-20 p-2 lg:pb-0">
   {#if !isLoading}
     <div class="flex flex-col space-y-2">
       <div class="text-center">
-        <div class="text-center text-xl font-bold text-white">
+        <div class="text-center text-xl font-bold text-white lg:mt-2">
           Howdy {currentUser?.email}! Ready to start script writing?
         </div>
         <p class="text-center text-sm text-white">
@@ -264,101 +264,109 @@
       <!-- Scrollable cards section -->
       <div class="w-full px-4 overflow-x-auto">
         <div class="flex space-x-4 py-4">
-          <div class="flex flex-col items-center">
-            <button
-              class="w-48 h-64 bg-white rounded-lg flex items-center justify-center transition-transform gover:scale-105 flex-shrink-0"
-              on:click={() => createScript($authStore.currentUser?.uid)}
-            >
-              <Fa class="text-2xl" icon={faPlus} />
-            </button>
-            <div class="text-sm text-white mt-2">Create a New Script</div>
-          </div>
-
-          {#each previewData as item}
-            <div class="flex flex-col items-center">
+          <div
+            class="flex flex-row md:justify-center gap-4 min-w-max md:min-w-0 mx-auto"
+          >
+            <div class="flex flex-col items-center w-48">
               <button
                 class="w-48 h-64 bg-white rounded-lg flex items-center justify-center transition-transform gover:scale-105 flex-shrink-0"
+                on:click={() => createScript($authStore.currentUser?.uid)}
               >
+                <Fa class="text-2xl" icon={faPlus} />
               </button>
-              <div class="text-sm text-white mt-2">
-                {truncateText(item.name)}
-              </div>
+              <div class="text-sm text-white mt-2">Create a New Script</div>
             </div>
-          {/each}
+
+            {#each previewData as item}
+              <div class="flex flex-col items-center w-48">
+                <button
+                  class="w-48 h-64 bg-white rounded-lg flex items-center justify-center transition-transform gover:scale-105 flex-shrink-0"
+                >
+                </button>
+                <div class="text-sm text-white mt-2">
+                  {truncateText(item.name)}
+                </div>
+              </div>
+            {/each}
+          </div>
         </div>
       </div>
 
       <!-- Table section -->
-      <div class="rounded-lg bg-white overflow-hidden">
-        <table class="w-full">
-          <thead class="bg-white">
-            <tr>
-              <th
-                class="p-4 text-left border-b border-black text-sm font-medium w-[65%]"
-              >
-                <div
-                  class="cursor-pointer flex flex-row items-center space-x-2"
-                  on:click={() => setActiveButton("name")}
-                  role="button"
-                  tabindex="0"
-                  on:keydown={(event) =>
-                    handleKeydown(event, () => setActiveButton("name"))}
+      <div class="flex justify-center">
+        <div class="w-full max-w-5xl overflow-x-auto rounded-lg bg-white">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th
+                  class="p-4 text-left border-b border-black text-sm font-medium w-[65%]"
                 >
-                  <div>Name</div>
-                  <Fa
-                    icon={faCaretDown}
-                    style="color: {sortModeActive == 'name'
-                      ? '#2f2f2f'
-                      : 'lightgray'}"
-                  />
-                </div>
-              </th>
-              <th
-                class="p-4 text-left border-b border-black text-sm font-medium w-[25%]"
-              >
-                <div
-                  class="cursor-pointer flex flex-row items-center space-x-2"
-                  on:click={() => setActiveButton("last-updated")}
-                  role="button"
-                  tabindex="0"
-                  on:keydown={(event) =>
-                    handleKeydown(event, () => setActiveButton("last-updated"))}
-                >
-                  <div>Last Updated</div>
-                  <Fa
-                    icon={faCaretDown}
-                    style="color: {sortModeActive == 'last-updated'
-                      ? '#2f2f2f'
-                      : 'lightgray'}"
-                  />
-                </div>
-              </th>
-              <th
-                class="p-4 text-center border-b border-black text-sm font-medium w-[10%]"
-              >
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {#each filteredData as item}
-              <tr
-                class="hover:bg-gray-100 cursor-pointer"
-                on:click={() => getScript(item)}
-              >
-                <td class="p-4 text-sm border-b">{item.name}</td>
-                <td class="p-4 text-sm border-b">{item.lastUpdatedString}</td>
-                <td class="p-4 text-sm border-b">
-                  <button
-                    class="w-full bg-red-500 hover:bg-red-700 border-black rounded-md px-2 py-1 text-center text-white text-sm"
-                    on:click|stopPropagation={() => deleteScript(item)}
-                    >Delete</button
+                  <div
+                    class="cursor-pointer flex flex-row items-center space-x-2"
+                    on:click={() => setActiveButton("name")}
+                    role="button"
+                    tabindex="0"
+                    on:keydown={(event) =>
+                      handleKeydown(event, () => setActiveButton("name"))}
                   >
-                </td>
+                    <div>Name</div>
+                    <Fa
+                      icon={faCaretDown}
+                      style="color: {sortModeActive == 'name'
+                        ? '#2f2f2f'
+                        : 'lightgray'}"
+                    />
+                  </div>
+                </th>
+                <th
+                  class="p-4 text-left border-b border-black text-sm font-medium w-[25%]"
+                >
+                  <div
+                    class="cursor-pointer flex flex-row items-center space-x-2"
+                    on:click={() => setActiveButton("last-updated")}
+                    role="button"
+                    tabindex="0"
+                    on:keydown={(event) =>
+                      handleKeydown(event, () =>
+                        setActiveButton("last-updated"),
+                      )}
+                  >
+                    <div>Last Updated</div>
+                    <Fa
+                      icon={faCaretDown}
+                      style="color: {sortModeActive == 'last-updated'
+                        ? '#2f2f2f'
+                        : 'lightgray'}"
+                    />
+                  </div>
+                </th>
+                <th
+                  class="p-4 text-center border-b border-black text-sm font-medium w-[10%]"
+                >
+                  Action
+                </th>
               </tr>
-            {/each}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {#each filteredData as item}
+                <tr
+                  class="hover:bg-gray-100 cursor-pointer"
+                  on:click={() => getScript(item)}
+                >
+                  <td class="p-4 text-sm border-b">{item.name}</td>
+                  <td class="p-4 text-sm border-b">{item.lastUpdatedString}</td>
+                  <td class="p-4 text-sm border-b">
+                    <button
+                      class="w-full bg-red-500 hover:bg-red-700 border-black rounded-md px-2 py-1 text-center text-white text-sm"
+                      on:click|stopPropagation={() => deleteScript(item)}
+                      >Delete</button
+                    >
+                  </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   {:else}
