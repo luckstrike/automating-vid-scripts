@@ -1,7 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { authHandlers } from "./stores/authStore";
   import { scriptMetaIdStore } from "./stores/scriptStore";
 
   let tabs = ["dashboard", "brainstorm", "script", "summarize"];
@@ -36,7 +35,7 @@
     class="h-16 hover:bg-gray-600 {isActive('/summarize') ? 'bg-gray-700' : ''}"
     on:click={() => goto("/summarize")}>Summarize</button
   >
-  <button class="h-16 hover:bg-gray-600" on:click={() => authHandlers.logout()}
+  <button class="h-16 hover:bg-gray-600" on:click={() => goto("/auth/logout")}
     >Log Out</button
   >
 </div>

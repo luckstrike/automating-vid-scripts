@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import DeviconGoogle from "~icons/devicon/google";
+  import DeviconGithub from "~icons/devicon/github";
 </script>
 
 <div class="flex flex-col w-screen h-screen">
@@ -20,13 +21,21 @@
     <div class="text-center text-4xl font-bold text-white">
       Howdy there, Welcome to VidScripts
     </div>
-    <div class="flex justify-center w-full">
+    <form class="flex flex-col justify-center space-y-2 w-64" method="POST">
       <button
+        formaction="?/googleSignIn"
         class="flex flex-row space-x-2 px-6 py-4 bg-white rounded-md items-center"
       >
         <DeviconGoogle style="font-size: 1.5em"></DeviconGoogle>
         <div class="font-semibold">Continue with Google</div>
       </button>
-    </div>
+      <button
+        formaction="?/githubSignIn"
+        class="flex flex-row space-x-2 px-6 py-4 bg-white rounded-md items-center"
+      >
+        <DeviconGithub style="font-size: 1.5em"></DeviconGithub>
+        <div class="font-semibold">Continue with Github</div>
+      </button>
+    </form>
   </div>
 </div>

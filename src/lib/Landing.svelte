@@ -13,7 +13,7 @@
     <button on:click={() => goto("/")}> Home </button>
     <button
       class="bg-blue-600 rounded-lg pt-2 pb-2 pl-4 pr-4 font-semibold"
-      on:click={() => goto("/login")}
+      on:click={() => goto("/auth/login")}
     >
       Login
     </button>

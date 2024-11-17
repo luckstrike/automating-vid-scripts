@@ -5,18 +5,12 @@
   import Dashboard from "./Dashboard.svelte";
   import EosIconsLoading from "~icons/eos-icons/loading";
 
-  // TODO: This should show up once you're logged in
-  // and show all of your existing scripts!
-
-  let userEmail: string | null;
-
-  authStore.subscribe((curr: any) => {
-    userEmail = curr?.currentUser?.email;
-  });
+  export let data;
+  $: session = data.session;
 </script>
 
 <div class="w-full h-full">
-  {#if $authStore.currentUser}
+  {#if data.session}
     <Dashboard />
   {:else if $authStore.isLoading}
     <div
