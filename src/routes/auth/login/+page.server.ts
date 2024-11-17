@@ -20,13 +20,19 @@ export const actions: Actions = {
   },
 
   // TODO: Change this to googleSignIn
-  handleAuthCallback: async ({ url, locals: { supabase } }) => {
-    const code = url.searchParams.get('code')
+  googleSignIn: async ({ locals: { supabase }, url }) => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: url.origin + "/auth/callback" // Send the user back to the homepage
+      }
+    })
 
-    if (code) {
-      await supabase.auth.exchangeCodeForSession(code)
+    if (error) {
+      console.error(error)
+      return redirect(303, '/auth/error')
     }
 
-    return redirect(303, '/dashboard')
+    return redirect(303, data.url)
   }
 }
