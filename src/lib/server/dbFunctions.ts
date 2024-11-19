@@ -1,13 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js/dist/module/types'
-
-type Script = {
-  id: string,
-  title: string,
-  content: string,
-  user_id: number,
-  created_at: string,
-  updated_at: string
-}
+import type { Script } from '$lib';
 
 export async function getScripts(supabase: SupabaseClient, userId: string) {
   const { data, error } = await supabase
@@ -38,7 +30,10 @@ export async function getScript(supabase: SupabaseClient, scriptId: string, user
   return data;
 }
 
-export async function createScript(supabase: SupabaseClient, script: Omit<Script, 'id'>) {
+export async function createScript(
+  supabase: SupabaseClient,
+  script: Omit<Script, 'id' | 'created_at' | 'updated_at'>
+) {
   const { data, error } = await supabase
     .from('scripts')
     .insert(script)
