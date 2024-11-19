@@ -10,8 +10,8 @@
 </script>
 
 <div class="w-full h-full">
-  {#if data.session}
-    <Dashboard />
+  {#if session}
+    <Dashboard {data} />
   {:else if $authStore.isLoading}
     <div
       class="flex flex-col min-h-[100%] items-center justify-center text-white space-y-1"
