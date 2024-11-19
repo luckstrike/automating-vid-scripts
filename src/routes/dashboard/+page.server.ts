@@ -45,9 +45,14 @@ export const actions = {
         updated_at: new Date().toISOString()
       } satisfies Omit<Script, 'id'>
 
-      createScript(supabase, newScript)
+      const createdScript = await createScript(supabase, newScript)
+
+      return {
+        script_id: createdScript.id
+      }
     } catch (error) {
       return {
+        script_id: null,
         error: 'Failed to create a new script'
       }
     }
