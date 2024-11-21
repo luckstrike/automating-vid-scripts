@@ -1,4 +1,4 @@
-import { getScripts, createScript } from "$lib/server/dbFunctions";
+import { getScripts, createScript, deleteScript } from "$lib/server/dbFunctions";
 import type { PageServerLoad } from "./$types";
 import type { Script } from "$lib";
 
@@ -30,6 +30,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 
 export const actions = {
   createScript: async ({ request, locals: { supabase } }) => {
+    // TODO: Add redirecting logic somewhere in this action
     const { data: { session } } = await supabase.auth.getSession();
 
     try {
@@ -47,6 +48,7 @@ export const actions = {
 
       const createdScript = await createScript(supabase, newScript)
 
+      console.log("Running createScript")
       return {
         script_id: createdScript.id
       }
@@ -55,6 +57,36 @@ export const actions = {
         script_id: null,
         error: 'Failed to create a new script'
       }
+    }
+  },
+  deleteScript: async ({ request, locals: { supabase } }) => {
+    const { data: { session } } = await supabase.auth.getSession();
+
+    try {
+      if (!session) {
+        throw new Error('No user session found')
+      }
+
+      const formData = await request.formData();
+      const scriptIdValue = formData.get('script_id');
+
+      if (!scriptIdValue || typeof scriptIdValue !== 'string') {
+        return {
+          success: false,
+          error: 'Script ID is required'
+        };
+      }
+
+      await deleteScript(supabase, scriptIdValue, session.user.id);
+
+      return {
+        sucess: true
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: 'Failed to delete script'
+      };
     }
   }
 }

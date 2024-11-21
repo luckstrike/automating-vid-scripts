@@ -5,6 +5,7 @@
   import { scriptIdStore, scriptMetaIdStore } from "$lib/stores/scriptStore";
 
   import { onMount } from "svelte";
+  import { enhance } from "$app/forms";
 
   // Icon Imports
   import Fa from "svelte-fa";
@@ -140,11 +141,13 @@
             class="flex flex-row md:justify-center gap-4 min-w-max md:min-w-0 mx-auto"
           >
             <div class="flex flex-col items-center w-48">
-              <button
-                class="w-48 h-64 bg-white rounded-lg flex items-center justify-center transition-transform gover:scale-105 flex-shrink-0"
-              >
-                <Fa class="text-2xl" icon={faPlus} />
-              </button>
+              <form method="POST" action="?/createScript" use:enhance>
+                <button
+                  class="w-48 h-64 bg-white rounded-lg flex items-center justify-center transition-transform gover:scale-105 flex-shrink-0"
+                >
+                  <Fa class="text-2xl" icon={faPlus} />
+                </button>
+              </form>
               <div class="text-sm text-white mt-2">Create a New Script</div>
             </div>
 
