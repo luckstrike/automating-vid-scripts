@@ -56,13 +56,12 @@
   // Getting the Script data from the server side
   export let data;
   let { script, session } = data;
+  let scriptTitle: string = script.title; // Setting the initial script title
 
   let editor: any;
   let editorContainer: HTMLElement;
 
   let isGenerating: boolean = false;
-
-  let scriptTitle: string = ""; // the script's title
 
   let timeoutId: number | undefined; // used for debouncing the title updates (saves on API calls)
 
