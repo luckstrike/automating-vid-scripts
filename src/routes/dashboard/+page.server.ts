@@ -1,6 +1,7 @@
-import { getScripts, createScript, deleteScript } from "$lib/server/dbFunctions";
+import { getScripts, createScript, deleteScript, getScript } from "$lib/server/dbFunctions";
 import type { PageServerLoad } from "./$types";
 import type { Script } from "$lib";
+import { Page } from "openai/pagination.mjs";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   try {
@@ -57,6 +58,31 @@ export const actions = {
         script_id: null,
         error: 'Failed to create a new script'
       }
+    }
+  },
+  getScript: async ({ request, locals: { supabase } }) => {
+    const { data: { session } } = await supabase.auth.getSession();
+
+    try {
+      if (!session) {
+        throw new Error('No user session found');
+      }
+
+      const formData = await request.formData();
+      const scriptIdValue = formData.get('script_id');
+
+      if (!scriptIdValue || typeof scriptIdValue !== 'string') {
+        return {
+          success: false,
+          error: 'Script ID is required'
+        };
+      }
+
+      const result = await getScript(supabase, scriptIdValue, session.user.id);
+
+      console.log(result);
+    } catch (error) {
+
     }
   },
   deleteScript: async ({ request, locals: { supabase } }) => {
