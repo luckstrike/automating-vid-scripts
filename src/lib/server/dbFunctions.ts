@@ -41,7 +41,6 @@ export async function createScript(
     .single()
 
   if (error) {
-    console.log("Something went wrong?")
     console.log(error)
     throw error;
   }

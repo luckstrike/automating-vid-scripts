@@ -49,7 +49,6 @@ export const actions = {
 
       const createdScript = await createScript(supabase, newScript)
 
-      console.log("Running createScript")
       return {
         script_id: createdScript.id
       }
