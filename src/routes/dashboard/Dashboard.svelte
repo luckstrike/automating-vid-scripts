@@ -4,6 +4,7 @@
   // Icon Imports
   import Fa from "svelte-fa";
   import { faCaretDown, faPlus } from "@fortawesome/free-solid-svg-icons";
+  import { goto } from "$app/navigation";
 
   // Using Supabase now
   export let data;
@@ -31,18 +32,8 @@
     };
   };
 
-  function handleRowClick(scriptId) {
-    return async () => {
-      const form = new FormData();
-      form.append("script_id", scriptId);
-
-      const response = await fetch("?/getScript", {
-        method: "POST",
-        body: form,
-      });
-
-      const result = await response.json();
-    };
+  function handleRowClick(scriptId: string) {
+    goto(`/script/${scriptId}`);
   }
 
   function timestampFormatter(timestamp: string) {
