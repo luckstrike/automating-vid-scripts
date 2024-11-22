@@ -31,7 +31,7 @@ export const load: PageServerLoad = async ({ params, locals: { supabase } }) => 
 }
 
 export const actions = {
-  update: async ({ request, locals: { supabase } }) => {
+  updateTitle: async ({ request, locals: { supabase } }) => {
     const formData = await request.formData();
     const scriptId = formData.get('id')
 
@@ -61,8 +61,42 @@ export const actions = {
       )
       return { success: true }
     } catch (error) {
-      console.log("No?")
+      console.log(error)
       return fail(500, { error: 'Failed to update' })
     }
-  }
+  },
+  updateScript: async ({ request, locals: { supabase } }) => {
+    const formData = await request.formData();
+    const scriptId = formData.get('id')
+
+    if (!scriptId) {
+      return fail(400, {
+        success: false,
+        message: 'No script selected'
+      })
+    }
+
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session) {
+      return fail(401);
+    }
+
+
+    try {
+      await updateScript(
+        supabase,
+        scriptId as string,
+        {
+          content: formData.get('content') as string
+        },
+        session.user.id
+      )
+      return { success: true }
+    } catch (error) {
+      console.log(error)
+      return fail(500, { error: 'Failed to update' })
+    }
+  },
+
 }

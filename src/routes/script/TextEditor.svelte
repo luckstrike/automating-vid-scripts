@@ -2,21 +2,7 @@
   import { onMount, onDestroy } from "svelte";
   import debounce from "lodash/debounce";
   // Firebase Firestore Stuff
-  import type { User } from "firebase/auth";
   import { auth, db } from "$lib/firebase/firebase.client";
-  import {
-    DocumentReference,
-    DocumentSnapshot,
-    Firestore,
-    Timestamp,
-    collection,
-    doc,
-    getDoc,
-    getDocs,
-    query,
-    updateDoc,
-    where,
-  } from "firebase/firestore";
 
   import {
     scriptIdStore,
@@ -81,120 +67,16 @@
     return scriptContent;
   }
 
-  // Returns either true or false
-  async function saveHTMLtoDatabase(
-    scriptContent: string,
-    collectionName: string,
-    documentId: string,
-  ) {
-    if (documentId == null) {
-      console.error(
-        "saveHTMLtoDatabase Error: There is no valid script ID to save this too",
-      );
-      return false;
-    }
-
-    // Getting a reference to the document in the firestore database
-    const docRef = doc(db, collectionName, documentId);
-
-    // Holds the wheter or not a database update was successful or not
-    let saveResult: boolean = false;
-
-    // Updating the document with the new script content
-    await updateDoc(docRef, {
-      content: scriptContent,
-    })
-      .then(() => {
-        saveResult = true;
-      })
-      .catch((error) => {
-        // TODO: Show some kind of pop up here if an error occurs
-        console.error(
-          "saveHTMLtoDatabase() Error: Error updating document: ",
-          error,
-        );
-        saveResult = false;
-      });
-
-    return saveResult;
-  }
-
-  async function saveScript(
-    editor: Editor,
-    collectionName: string,
-    documentId: string | null,
-  ) {
-    // Get's the script content
-    if (documentId == null) {
-      // TODO: Make this show a pop up error message in the UI
-      console.error(
-        "saveScript() Error: There is no valid script ID to save this too",
-      );
-      return false;
-    }
-
-    // Pull out the typed script data into a string
-    const scriptContent: string = await extractScriptContent(editor);
-
-    // Store the script string data to the database
-    let result: boolean = await saveHTMLtoDatabase(
-      scriptContent,
-      "textcontent",
-      documentId,
-    );
-
-    // Getting a reference to the document in the firestore database
-    let metaDocRef: DocumentReference;
-    let titleResult: boolean = false;
-
-    // Handling updating the document's last updated time
-    collectionName = "documents";
-
-    if ($scriptMetaIdStore) {
-      metaDocRef = doc(db, collectionName, $scriptMetaIdStore);
-    } else {
-      // scriptMetaIdStore is null
-      titleResult = false;
-      return titleResult;
-    }
-
-    await updateDoc(metaDocRef, {
-      updated: Timestamp.now(),
-    })
-      .then(() => {
-        titleResult = true;
-      })
-      .catch((error) => {
-        // TODO: Show some kind of pop up here if an error occurs
-        console.error(
-          "saveScript() Error: Error updating last updated time: ",
-          error,
-        );
-        titleResult = false;
-      });
-
-    // Error-checking
-    if (!result || !titleResult) {
-      // Something broke
-      console.error("saveScript() Error: Something went wrong... :(");
-      console.log(result);
-    }
-
-    // Resets the save status and saves a script to the database
-    $scriptSaveStatus = false;
-  }
-
+  // Updating the script title
   const updateScriptTitle = debounce(async (title: string, id: string) => {
     const formData = new FormData();
     formData.append("id", id);
     formData.append("title", title);
 
-    await fetch("?/update", {
+    await fetch("?/updateTitle", {
       method: "POST",
       body: formData,
     });
-
-    console.log("Fetched?");
   }, 500);
 
   async function handleScriptTitleInput(
@@ -206,15 +88,22 @@
     updateScriptTitle(title, id);
   }
 
-  async function handleScriptInput() {
-    // Clear the previous timeout, if there's one
-    if (timeoutId !== undefined) {
-      clearTimeout(timeoutId);
-    }
+  const updateScriptContent = debounce(async (content: string, id: string) => {
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("content", content);
 
-    timeoutId = setTimeout(() => {
-      saveScript($editor, "textcontent", $scriptIdStore);
-    }, 500) as unknown as number; // delay in milliseconds (plus assertiong for TypeScript to stop yelling at me)
+    await fetch("?/updateScript", {
+      method: "POST",
+      body: formData,
+    });
+  }, 500);
+
+  async function handleScriptInput(editor: Editor) {
+    const content = await extractScriptContent(editor);
+    const id = script.id;
+
+    updateScriptContent(content, id);
   }
 
   // Gets the selected text from the script
@@ -296,7 +185,7 @@
         },
       },
       onUpdate({ editor }) {
-        handleScriptInput();
+        handleScriptInput($editor);
         $scriptSaveStatus = true;
       },
     });
