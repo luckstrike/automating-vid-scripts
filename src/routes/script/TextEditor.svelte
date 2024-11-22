@@ -53,13 +53,10 @@
   import MaterialSymbolsSearch from "~icons/material-symbols/search";
   import PhPencilFill from "~icons/ph/pencil-fill";
 
-  // Script Type Import
-  import type { Script } from "$lib/index.ts";
+  // Getting the Script data from the server side
+  export let data;
+  let { script, session } = data;
 
-  // To change the size of the toolbar icons
-  let faIconSize = "1.5x";
-
-  let element: any; // figure out this type later
   let editor: any;
   let editorContainer: HTMLElement;
 
@@ -67,10 +64,7 @@
 
   let scriptTitle: string = ""; // the script's title
 
-  let scriptLoaded = false; // updates whenever the script is done loading
   let timeoutId: number | undefined; // used for debouncing the title updates (saves on API calls)
-
-  let currentUser: User | null;
 
   // TODO: You might be able to take advantage of floating menus for GPT features!
   // Use the floating menu to possibly suggest GPT features to the user on any new lines
@@ -80,28 +74,6 @@
   //       and bullet points and then stylize the buttons with the proper icons
 
   // TODO: Make the default text disappear as soon as the user starts typing
-
-  async function getScriptContent(
-    db: Firestore,
-    collectionName: string,
-    docId: string,
-  ) {
-    const docRef: DocumentReference = await doc(db, collectionName, docId);
-
-    BubbleMenu;
-    try {
-      const docSnap: DocumentSnapshot | null = await getDoc(docRef);
-      if (docSnap.exists()) {
-        return docSnap.data();
-      } else {
-        console.log("No such document!");
-        return null;
-      }
-    } catch (error) {
-      console.error("Error fetching document: ", error);
-      return null;
-    }
-  }
 
   // Get's the HTML content that is currently in the script text editor
   async function extractScriptContent(editor: Editor) {
@@ -342,36 +314,14 @@
   }
 
   onMount(async () => {
-    let contentResult: string = "";
-    if ($scriptIdStore) {
-      await getScriptContent(db, "textcontent", $scriptIdStore).then(
-        (result) => {
-          if (result) {
-            contentResult = result.content;
-          }
-        },
-      );
-    }
-
     editor = createEditor({
       extensions: [StarterKit, Underline],
-      content: contentResult,
+      content: script.content,
       editorProps: {
         attributes: {
           class:
             "border-2 border-black rounded-lg p-2 bg-[#d9d9d9] min-h-[88vh] max-h-[88vh] overflow-y-auto outline-none",
         },
-      },
-      onCreate({ editor }) {
-        if ($scriptMetaIdStore) {
-          getScriptContent(db, "documents", $scriptMetaIdStore).then(
-            (result) => {
-              if (result) {
-                scriptTitle = result.doc_name;
-              }
-            },
-          );
-        }
       },
       onUpdate({ editor }) {
         handleScriptInput();

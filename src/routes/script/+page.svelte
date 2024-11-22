@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Script from './Script.svelte';
+  import TextEditor from "./TextEditor.svelte";
 </script>
 
 <div class="w-full h-full">
-	<Script />
+  <TextEditor />
 </div>
