@@ -16,7 +16,6 @@ export const load: PageServerLoad = async ({ params, locals: { supabase } }) => 
 
     // Grabbing the script from the database
     const script = await getScript(supabase, id, session.user.id);
-    console.log(script)
 
     return {
       script: script,
@@ -34,7 +33,7 @@ export const load: PageServerLoad = async ({ params, locals: { supabase } }) => 
 export const actions = {
   update: async ({ request, locals: { supabase } }) => {
     const formData = await request.formData();
-    const scriptId = formData.get('scriptId')
+    const scriptId = formData.get('id')
 
     if (!scriptId) {
       return fail(400, {
@@ -49,6 +48,7 @@ export const actions = {
       return fail(401);
     }
 
+
     try {
       await updateScript(
         supabase,
@@ -61,6 +61,7 @@ export const actions = {
       )
       return { success: true }
     } catch (error) {
+      console.log("No?")
       return fail(500, { error: 'Failed to update' })
     }
   }

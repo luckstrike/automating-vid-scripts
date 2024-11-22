@@ -8,6 +8,8 @@ export const actions = {
     const formData = await request.formData();
     const scriptId = formData.get('scriptId')
 
+    console.log("This is running?")
+
     if (!scriptId) {
       return fail(400, {
         success: false,
@@ -34,6 +36,7 @@ export const actions = {
       )
       return { success: true }
     } catch (error) {
+      console.log("No?")
       return fail(500, { error: 'Failed to update' })
     }
   }

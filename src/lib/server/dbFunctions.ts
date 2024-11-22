@@ -55,6 +55,7 @@ export async function updateScript(
   updates: Partial<Omit<Script, 'id' | 'created_at' | 'updated_at'>>,
   userId: string
 ) {
+
   const { data, error } = await supabase
     .from('scripts')
     .update(updates)

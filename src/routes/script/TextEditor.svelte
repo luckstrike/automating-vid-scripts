@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
-
+  import debounce from "lodash/debounce";
   // Firebase Firestore Stuff
   import type { User } from "firebase/auth";
   import { auth, db } from "$lib/firebase/firebase.client";
@@ -184,53 +184,26 @@
     $scriptSaveStatus = false;
   }
 
-  // Used to change the title of the script everytime the value of it is changed
-  async function updateScriptTitle(collectionName: string, value: string) {
-    // Holds the wheter or not a database update was successful or not
-    let saveResult: boolean = false;
+  const updateScriptTitle = debounce(async (title: string, id: string) => {
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("title", title);
 
-    // Getting a reference to the document in the firestore database
-    let docRef: DocumentReference;
-    if ($scriptMetaIdStore) {
-      docRef = doc(db, collectionName, $scriptMetaIdStore);
-    } else {
-      // scriptMetaIdStore is null
-      saveResult = false;
-      return saveResult;
-    }
+    await fetch("?/update", {
+      method: "POST",
+      body: formData,
+    });
 
-    await updateDoc(docRef, {
-      doc_name: value,
-      updated: Timestamp.now(),
-    })
-      .then(() => {
-        console.log("updateTitle() Success: Document sucessfully updated");
-        saveResult = true;
-      })
-      .catch((error) => {
-        // TODO: Show some kind of pop up here if an error occurs
-        console.error("updateTitle() Error: Error updating document: ", error);
-        saveResult = false;
-      });
-
-    return saveResult;
-  }
+    console.log("Fetched?");
+  }, 500);
 
   async function handleScriptTitleInput(
     event: Event & { currentTarget: HTMLInputElement },
   ) {
-    const target = event.target as HTMLInputElement; // safely casting the event target
+    const title = (event.target as HTMLInputElement).value; // safely casting the event currentTarget
+    const id = script.id;
 
-    // Clear the previous timeout, if there's one
-    if (timeoutId !== undefined) {
-      clearTimeout(timeoutId);
-    }
-
-    // Setting a new timeout to update the script title in the database
-    timeoutId = setTimeout(() => {
-      let collectionName: string = "documents";
-      updateScriptTitle(collectionName, target.value);
-    }, 500) as unknown as number; // delay in milliseconds (plus assertions for TypeScript to stop yelling at me)
+    updateScriptTitle(title, id);
   }
 
   async function handleScriptInput() {
