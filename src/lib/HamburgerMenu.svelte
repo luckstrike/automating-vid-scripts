@@ -1,7 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { fade } from "svelte/transition";
-  import { authHandlers } from "./stores/authStore";
   import { scriptMetaIdStore } from "./stores/scriptStore";
   import IcRoundClose from "~icons/ic/round-close";
   import SolarHamburgerMenuLinear from "~icons/solar/hamburger-menu-linear";
@@ -18,7 +17,7 @@
 
   function logOut() {
     isOpen = !isOpen;
-    authHandlers.logout();
+    goto("/auth/logout");
   }
 </script>
 
