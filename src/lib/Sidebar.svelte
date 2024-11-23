@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { scriptMetaIdStore } from "./stores/scriptStore";
+  import { scriptIdStore } from "./stores/scriptStore";
 
   let tabs = ["dashboard", "brainstorm", "script", "summarize"];
 
@@ -24,11 +24,11 @@
       : ''}"
     on:click={() => goto("/brainstorm")}>Brainstorm</button
   >
-  {#if $scriptMetaIdStore}
+  {#if $scriptIdStore}
     <!-- Only show this tab if a script has been opened -->
     <button
       class="h-16 hover:bg-gray-600 {isActive('/script') ? 'bg-gray-700' : ''}"
-      on:click={() => goto("/script")}>Script</button
+      on:click={() => goto(`/script/${$scriptIdStore}`)}>Script</button
     >
   {/if}
   <button
