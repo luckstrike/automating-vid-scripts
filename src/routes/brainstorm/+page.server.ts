@@ -28,8 +28,6 @@ export const actions = {
   generateScript: async ({ request, locals: { supabase } }) => {
     const { data: { session } } = await supabase.auth.getSession();
 
-    console.log("Is this running?")
-
     try {
       if (!session) {
         throw new Error('No user session found');
@@ -56,8 +54,6 @@ export const actions = {
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
-
-      console.log(newScript)
 
       const createdScript = await createScript(supabase, newScript)
 
