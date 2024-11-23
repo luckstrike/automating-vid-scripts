@@ -1,8 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
   import debounce from "lodash/debounce";
-  // Firebase Firestore Stuff
-  import { auth, db } from "$lib/firebase/firebase.client";
 
   import {
     scriptIdStore,
@@ -189,8 +187,6 @@
         $scriptSaveStatus = true;
       },
     });
-
-    const unsubscribe = auth.onAuthStateChanged((user) => {});
   });
 </script>
 
@@ -255,10 +251,8 @@
 
     <div class="flex flex-row justify-center space-x-4 p-3 text-white">
       <!-- Save Button -->
-      <button
-        on:click={() => saveScript($editor, "textcontent", $scriptIdStore)}
-        class:text-black={$scriptSaveStatus}
-      >
+      <!--TODO: Add the saving functionality back to this button? Although auto-save is already implemented? -->
+      <button class:text-black={$scriptSaveStatus}>
         <Fa class="toolbar-icons" icon={faSave} />
       </button>
 
