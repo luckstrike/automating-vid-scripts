@@ -42,7 +42,6 @@
 
   const handleNewScript = () => {
     return async ({ result }) => {
-      console.log(result);
       handleScriptRedirect(result.data.script_id);
     };
   };
