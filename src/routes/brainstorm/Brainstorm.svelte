@@ -51,7 +51,7 @@
         class="btn-primary"
         disabled={!brainstorm_text || isGenerating}
       >
-        {isGenerating ? "Generating..." : "Generate Idea"}
+        {isGenerating && brainstorm_text ? "Generating..." : "Generate Idea"}
       </button>
 
       <!-- Random prompt button -->
@@ -62,7 +62,7 @@
         class="btn-primary"
         disabled={brainstorm_text || isGenerating}
       >
-        {isGenerating ? "Generating..." : "Random Idea"}
+        {isGenerating && !brainstorm_text ? "Generating..." : "Random Idea"}
       </button>
     </div>
 
