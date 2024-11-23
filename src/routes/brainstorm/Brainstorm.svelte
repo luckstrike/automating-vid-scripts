@@ -1,103 +1,81 @@
 <script lang="ts">
-  import { createScript } from "$lib/scriptFunctions/scriptFunctions";
-  import { authStore } from "$lib/stores/authStore";
+  import { enhance } from "$app/forms";
+  import { goto } from "$app/navigation";
+  import type { ActionData } from "./$types";
 
-  let brainstorm_text: string = "";
-  let isGenerating: boolean = false;
-  let errorMessage: string | null = null;
+  export let form: ActionData;
 
-  const baseURL: string =
-    import.meta.env.VITE_PUBLIC_BASE_URL ||
-    import.meta.env.PUBLIC_BASE_URL ||
-    "";
-  const API_URL: string = `${baseURL}/api`;
+  let brainstorm_text = "";
+  let isGenerating = false;
 
-  async function handleGenerate(userPrompt?: string): Promise<void> {
+  const handleEnhance = () => {
     isGenerating = true;
-    errorMessage = null;
-
-    let userContent: string | null = null;
-    let userTitle: string | null = null;
-
-    const endpoint = "/brainstorm"; // Simplified endpoint, always using POST
-    const options = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: userPrompt || "" }),
-    };
-
-    // Fetching the result + error handling
-    try {
-      const res = await fetch(API_URL + endpoint, options);
-      if (res.ok) {
-        const gptResult = await res.json();
-        userContent = gptResult.scriptContent;
-        userTitle = gptResult.scriptTitle;
-      } else {
-        errorMessage = `Server error: ${res.status}`;
-      }
-    } catch (err) {
-      errorMessage = `Network error: ${(err as Error).message}`;
-    } finally {
+    return async ({ result }) => {
       isGenerating = false;
-      if (userContent && userTitle) {
-        createScript($authStore.currentUser?.uid, userContent, userTitle);
+      if (result.type === "success" && result.data?.script_id) {
+        await goto(`/script/${result.data.script_id}`);
       }
-    }
-  }
+    };
+  };
 </script>
 
 <div
   class="flex flex-col flex-grow items-center justify-center h-full w-full text-white p-4"
 >
-  <!--Creating a textbox with placeholder text for brainstorming ideas-->
-  <div class="text-center text-2xl font-bold">
-    Kickstart your writing process!
-  </div>
-  <div class="text-center text-lg p-2">
-    Do you have a topic that you want to make a video about? Provide it here:
-  </div>
-  <input
-    class="w-3/4 h-10 rounded-lg px-2 text-black"
-    type="text"
-    placeholder="or try generating a random idea..."
-    bind:value={brainstorm_text}
-  />
+  <h1 class="text-2xl font-bold">Kickstart your writing process!</h1>
 
-  <div class="flex flex-row p-2 space-x-2">
-    <button
-      class="h-10 px-2 rounded-lg bg-blue-600"
-      on:click={() => handleGenerate(brainstorm_text)}
-      disabled={brainstorm_text == "" || isGenerating}
-    >
-      {#if isGenerating && brainstorm_text != ""}
-        Generating Idea...
-      {:else}
-        Generate Idea
-      {/if}
-    </button>
-    <button
-      class="h-10 px-2 rounded-lg bg-blue-600"
-      on:click={() => handleGenerate()}
-      disabled={brainstorm_text !== ""}
-    >
-      {#if isGenerating && brainstorm_text == ""}
-        Generating Random Idea...
-      {:else}
-        Generate Random Idea
-      {/if}
-    </button>
-  </div>
+  <p class="text-lg p-2">
+    Do you have a topic that you want to make a video about? Provide it here:
+  </p>
+
+  <form
+    method="POST"
+    action="?/generateScript"
+    class="w-full flex flex-col items-center gap-4"
+    use:enhance={handleEnhance}
+  >
+    <input
+      class="w-3/4 h-10 rounded-lg px-2 text-black"
+      type="text"
+      name="prompt"
+      placeholder="or try generating a random idea..."
+      bind:value={brainstorm_text}
+    />
+
+    <div class="flex gap-2">
+      <!-- Custom prompt button -->
+      <button
+        type="submit"
+        name="type"
+        value="custom"
+        class="btn-primary"
+        disabled={!brainstorm_text || isGenerating}
+      >
+        {isGenerating ? "Generating..." : "Generate Idea"}
+      </button>
+
+      <!-- Random prompt button -->
+      <button
+        type="submit"
+        name="type"
+        value="random"
+        class="btn-primary"
+        disabled={brainstorm_text || isGenerating}
+      >
+        {isGenerating ? "Generating..." : "Random Idea"}
+      </button>
+    </div>
+
+    {#if form?.error}
+      <p class="text-red-500">{form.error}</p>
+    {/if}
+  </form>
 </div>
 
 <style>
-  button[disabled] {
-    background-color: grey;
-    color: #d9d9d9;
-    cursor: not-allowed;
-  }
-
-  button:not([disabled]):hover {
-    background-color: #005fa3;
+  .btn-primary {
+    @apply h-10 px-4 rounded-lg bg-blue-600 hover:bg-blue-700 
+           disabled:bg-gray-500 disabled:text-gray-300 
+           transition-colors;
   }
 </style>
