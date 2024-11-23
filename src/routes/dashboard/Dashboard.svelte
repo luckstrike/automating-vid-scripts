@@ -139,6 +139,7 @@
             <div class="flex flex-col items-center w-48">
               <button
                 class="w-48 h-64 bg-white rounded-lg flex items-center justify-center transition-transform gover:scale-105 flex-shrink-0"
+                on:click={handleRowClick(item.id)}
               >
               </button>
               <div class="text-sm text-white mt-2">
