@@ -40,7 +40,14 @@
     };
   };
 
-  function handleRowClick(scriptId: string) {
+  const handleNewScript = () => {
+    return async ({ result }) => {
+      console.log(result);
+      handleScriptRedirect(result.data.script_id);
+    };
+  };
+
+  function handleScriptRedirect(scriptId: string) {
     goto(`/script/${scriptId}`);
   }
 
@@ -133,7 +140,11 @@
           class="flex flex-row md:justify-center gap-4 min-w-max md:min-w-0 mx-auto"
         >
           <div class="flex flex-col items-center w-48">
-            <form method="POST" action="?/createScript" use:enhance>
+            <form
+              method="POST"
+              action="?/createScript"
+              use:enhance={() => handleNewScript()}
+            >
               <button
                 class="w-48 h-64 bg-white rounded-lg flex items-center justify-center transition-transform gover:scale-105 flex-shrink-0"
               >
@@ -147,7 +158,7 @@
             <div class="flex flex-col items-center w-48">
               <button
                 class="w-48 h-64 bg-white rounded-lg flex items-center justify-center transition-transform gover:scale-105 flex-shrink-0"
-                on:click={handleRowClick(item.id)}
+                on:click={handleScriptRedirect(item.id)}
               >
               </button>
               <div class="text-sm text-white mt-2">
@@ -216,7 +227,7 @@
             {#each scripts as item}
               <tr
                 class="hover:bg-gray-100 cursor-pointer"
-                on:click={handleRowClick(item.id)}
+                on:click={handleScriptRedirect(item.id)}
               >
                 <td class="p-4 text-sm border-b">{item.title}</td>
                 <td class="p-4 text-sm border-b">
