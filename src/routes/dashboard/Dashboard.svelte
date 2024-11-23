@@ -15,11 +15,16 @@
   let isLoading: boolean = true;
 
   let maxPreviewLimit: number = 3;
-  let previewData = scripts
-    .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
-    .slice(0, maxPreviewLimit);
 
-  // Used to hold whether data is sorted by ascending or descending manner
+  // Move the preview data calculation into a function so we can reuse it
+  function updatePreviewData(scriptsArray) {
+    return scriptsArray
+      .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+      .slice(0, maxPreviewLimit);
+  }
+
+  // Initialize preview data
+  let previewData = updatePreviewData(scripts); // Used to hold whether data is sorted by ascending or descending manner
   // (ex. A-Z or Z-A, most recent to least recent, etc...)
   let isNameAscending = true;
   let isDateAscending = true;
@@ -27,8 +32,11 @@
   const handleDelete = (scriptId) => {
     return async ({ update }) => {
       await update();
+      // Update the main scripts array
       scripts = scripts.filter((script) => script.id !== scriptId);
-      previewData = previewData.filter((script) => script.id !== scriptId);
+
+      // Recalculate the preview data based on the updated scripts array
+      previewData = updatePreviewData(scripts);
     };
   };
 
