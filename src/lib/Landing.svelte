@@ -9,14 +9,19 @@
 </script>
 
 <div class="flex flex-col w-screen h-screen p-2">
-  <div class="flex flex-row space-x-4 justify-end text-white mb-4">
-    <button on:click={() => goto("/")}> Home </button>
-    <button
-      class="bg-blue-600 rounded-lg pt-2 pb-2 pl-4 pr-4 font-semibold"
-      on:click={() => goto("/auth/login")}
-    >
-      Login
-    </button>
+  <div class="flex flex-row justify-between text-white mb-4">
+    <div class="flex flex-row space-x-2">
+      <div class="text-2xl font-bold p-1 pt-0">VidScripts</div>
+    </div>
+    <div class="flex flex-row space-x-4 text-white mb-4">
+      <button on:click={() => goto("/")}> Home </button>
+      <button
+        class="bg-blue-600 rounded-lg pt-2 pb-2 pl-4 pr-4 font-semibold"
+        on:click={() => goto("/auth/login")}
+      >
+        Login
+      </button>
+    </div>
   </div>
   <div class="flex-grow flex justify-center items-center">
     <div class="hidden lg:block max-w-[75%]">
