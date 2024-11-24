@@ -121,7 +121,7 @@
   let sortModeActive: string | null = "last-updated";
 </script>
 
-<div class="flex flex-col min-h-screen pb-20 p-2 lg:pb-0">
+<div class="flex flex-col min-h-screen pb-20 lg:pb-10 p-2">
   <div class="flex flex-col space-y-2">
     <div class="text-center">
       <div class="text-center text-xl font-bold text-white lg:mt-2">
