@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
+  import { browser } from "$app/environment";
   import debounce from "lodash/debounce";
 
   import { saveStatus } from "$lib/stores/scriptStore";
@@ -38,12 +39,15 @@
   let { script, session } = data;
   let scriptTitle: string = script.title; // Setting the initial script title
 
+  let lastSavedContent = script.content;
+  let lastSavedTitle = scriptTitle;
+
+  let pendingSave = false;
+
   let editor: any;
   let editorContainer: HTMLElement;
 
   let isGenerating: boolean = false;
-
-  let timeoutId: number | undefined; // used for debouncing the title updates (saves on API calls)
 
   // TODO: You might be able to take advantage of floating menus for GPT features!
   // Use the floating menu to possibly suggest GPT features to the user on any new lines
@@ -64,6 +68,7 @@
   // Updating the script title
   const updateScriptTitle = debounce(async (title: string, id: string) => {
     try {
+      pendingSave = true;
       saveStatus.set("saving");
 
       const formData = new FormData();
@@ -75,15 +80,19 @@
         body: formData,
       });
 
+      lastSavedTitle = title;
       saveStatus.set("saved");
     } catch (error) {
       console.error("Failed to save:", error);
       saveStatus.set("error");
+    } finally {
+      pendingSave = false;
     }
   }, 500);
 
   const updateScriptContent = debounce(async (content: string, id: string) => {
     try {
+      pendingSave = true;
       saveStatus.set("saving");
 
       const formData = new FormData();
@@ -95,11 +104,14 @@
         body: formData,
       });
       // Set save status to false only after successful save
+      lastSavedContent = content;
       saveStatus.set("saved");
     } catch (error) {
       console.error("Failed to save:", error);
       // Keep scriptSaveStatus true if save failed
       saveStatus.set("error");
+    } finally {
+      pendingSave = false;
     }
   }, 500);
 
@@ -198,27 +210,52 @@
         },
       },
       onUpdate({ editor }) {
-        handleScriptInput($editor);
-        $saveStatus = true;
+        const currentContent = editor.getHTML();
+        if (currentContent !== lastSavedContent) {
+          // Check if content has changed
+          handleScriptInput($editor);
+        }
       },
     });
 
     if (browser) {
+      const checkUnsavedChanges = () => {
+        // More defensive check for editor content
+        const currentContent = editor ? editor.getHTML() : "";
+        const currentTitle = scriptTitle;
+
+        return (
+          pendingSave || // Check if we have a pending save
+          $saveStatus === "saving" ||
+          $saveStatus === "error" ||
+          currentContent !== lastSavedContent ||
+          currentTitle !== lastSavedTitle
+        );
+      };
+
       const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-        if ($saveStatus === "saving" || $saveStatus === "error") {
+        if (checkUnsavedChanges()) {
+          // Cancel any pending debounced saves
+          updateScriptContent.cancel();
+          updateScriptTitle.cancel();
+
           event.preventDefault();
           return (event.returnValue = "Changes you made may not be saved.");
         }
       };
 
       const handleNavigation = (event: any) => {
-        if ($saveStatus === "saving" || $saveStatus === "error") {
+        if (checkUnsavedChanges()) {
           if (
             !window.confirm(
               "Changes you made may not be saved. Are you sure you want to leave?",
             )
           ) {
             event.preventDefault();
+          } else {
+            // User confirmed they want to leave, cancel pending saves
+            updateScriptContent.cancel();
+            updateScriptTitle.cancel();
           }
         }
       };
@@ -227,10 +264,19 @@
       window.addEventListener("sveltekit:navigation-start", handleNavigation);
 
       return () => {
-        window.addEventListener("beforeunload", handleBeforeUnload);
-        window.addEventListener("sveltekit:navigation-start", handleNavigation);
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+        window.removeEventListener(
+          "sveltekit:navigation-start",
+          handleNavigation,
+        );
       };
     }
+  });
+
+  onDestroy(() => {
+    // Cancel any pending debounced operations
+    updateScriptContent.cancel();
+    updateScriptTitle.cancel();
   });
 </script>
 
