@@ -1,12 +1,8 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
+  import { onMount } from "svelte";
   import debounce from "lodash/debounce";
 
-  import {
-    scriptIdStore,
-    scriptMetaIdStore,
-    scriptSaveStatus,
-  } from "$lib/stores/scriptStore";
+  import { saveStatus } from "$lib/stores/scriptStore";
 
   // Text Editor Imports
   import StarterKit from "@tiptap/starter-kit";
@@ -67,15 +63,52 @@
 
   // Updating the script title
   const updateScriptTitle = debounce(async (title: string, id: string) => {
-    const formData = new FormData();
-    formData.append("id", id);
-    formData.append("title", title);
+    try {
+      saveStatus.set("saving");
 
-    await fetch("?/updateTitle", {
-      method: "POST",
-      body: formData,
-    });
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("title", title);
+
+      await fetch("?/updateTitle", {
+        method: "POST",
+        body: formData,
+      });
+
+      saveStatus.set("saved");
+    } catch (error) {
+      console.error("Failed to save:", error);
+      saveStatus.set("error");
+    }
   }, 500);
+
+  const updateScriptContent = debounce(async (content: string, id: string) => {
+    try {
+      saveStatus.set("saving");
+
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("content", content);
+
+      await fetch("?/updateScript", {
+        method: "POST",
+        body: formData,
+      });
+      // Set save status to false only after successful save
+      saveStatus.set("saved");
+    } catch (error) {
+      console.error("Failed to save:", error);
+      // Keep scriptSaveStatus true if save failed
+      saveStatus.set("error");
+    }
+  }, 500);
+
+  async function handleScriptInput(editor: Editor) {
+    const content = await extractScriptContent(editor);
+    const id = script.id;
+
+    updateScriptContent(content, id);
+  }
 
   async function handleScriptTitleInput(
     event: Event & { currentTarget: HTMLInputElement },
@@ -84,24 +117,6 @@
     const id = script.id;
 
     updateScriptTitle(title, id);
-  }
-
-  const updateScriptContent = debounce(async (content: string, id: string) => {
-    const formData = new FormData();
-    formData.append("id", id);
-    formData.append("content", content);
-
-    await fetch("?/updateScript", {
-      method: "POST",
-      body: formData,
-    });
-  }, 500);
-
-  async function handleScriptInput(editor: Editor) {
-    const content = await extractScriptContent(editor);
-    const id = script.id;
-
-    updateScriptContent(content, id);
   }
 
   // Gets the selected text from the script
@@ -184,9 +199,38 @@
       },
       onUpdate({ editor }) {
         handleScriptInput($editor);
-        $scriptSaveStatus = true;
+        $saveStatus = true;
       },
     });
+
+    if (browser) {
+      const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+        if ($saveStatus === "saving" || $saveStatus === "error") {
+          event.preventDefault();
+          return (event.returnValue = "Changes you made may not be saved.");
+        }
+      };
+
+      const handleNavigation = (event: any) => {
+        if ($saveStatus === "saving" || $saveStatus === "error") {
+          if (
+            !window.confirm(
+              "Changes you made may not be saved. Are you sure you want to leave?",
+            )
+          ) {
+            event.preventDefault();
+          }
+        }
+      };
+
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      window.addEventListener("sveltekit:navigation-start", handleNavigation);
+
+      return () => {
+        window.addEventListener("beforeunload", handleBeforeUnload);
+        window.addEventListener("sveltekit:navigation-start", handleNavigation);
+      };
+    }
   });
 </script>
 
@@ -249,12 +293,27 @@
       />
     </div>
 
-    <div class="flex flex-row justify-center space-x-4 p-3 text-white">
-      <!-- Save Button -->
-      <!--TODO: Add the saving functionality back to this button? Although auto-save is already implemented? -->
-      <button class:text-black={$scriptSaveStatus}>
-        <Fa class="toolbar-icons" icon={faSave} />
-      </button>
+    <div class="flex flex-row justify-center space-x-4 p-2 text-white">
+      <!-- Save status indicator -->
+      <div class="flex items-center w-36">
+        <!-- Container for save icon + status -->
+        <Fa class="opacity-50" icon={faSave} />
+        <div class="flex-1 text-center">
+          <!-- Center the text in the remaining space -->
+          <span class="text-sm">
+            {#if $saveStatus === "saving"}
+              <span class="text-gray-400">Saving...</span>
+            {:else if $saveStatus === "saved"}
+              <span class="text-gray-400">All changes saved</span>
+            {:else if $saveStatus === "error"}
+              <span class="text-red-400">Failed to save</span>
+            {/if}
+          </span>
+        </div>
+      </div>
+
+      <div class="h-6 w-px bg-gray-400 opacity-50"></div>
+      <!-- Vertical divider -->
 
       <!-- Bold Button -->
       <button

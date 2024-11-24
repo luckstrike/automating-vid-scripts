@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { fade } from "svelte/transition";
-  import { scriptMetaIdStore } from "./stores/scriptStore";
+  import { scriptIdStore } from "./stores/scriptStore";
   import IcRoundClose from "~icons/ic/round-close";
   import SolarHamburgerMenuLinear from "~icons/solar/hamburger-menu-linear";
   let isOpen = false;
@@ -47,7 +47,7 @@
           <button on:click={() => changeTabs("/dashboard")}>Dashboard</button>
           <button on:click={() => changeTabs("/brainstorm")}>Brainstorm</button>
 
-          {#if $scriptMetaIdStore}
+          {#if $scriptIdStore}
             <button on:click={() => changeTabs("/script")}>Script</button>
           {/if}
           <button on:click={() => changeTabs("/summarize")}>Summarize</button>
