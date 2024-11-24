@@ -2,7 +2,7 @@
 </script>
 
 <div
-  class="flex flex-col flex-grow overflow-y-auto min-h-full lg:flex-row lg:w-full justify-center space-y-8 lg:space-y-0 items-center p-4"
+  class="flex flex-col flex-grow overflow-y-auto min-h-full lg:flex-row lg:w-full justify-center space-y-8 lg:space-y-0 lg:space-x-8 items-center p-4"
 >
   <div class="lg:max-w-[30%] space-y-2">
     <div
