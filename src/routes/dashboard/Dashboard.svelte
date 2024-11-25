@@ -6,6 +6,7 @@
   import Fa from "svelte-fa";
   import { faCaretDown, faPlus } from "@fortawesome/free-solid-svg-icons";
   import { goto } from "$app/navigation";
+  import type { ActionResult } from "@sveltejs/kit";
 
   // Using Supabase now
   export let data;
@@ -16,7 +17,10 @@
   // Move the preview data calculation into a function so we can reuse it
   function updatePreviewData(scriptsArray: Script[]) {
     return scriptsArray
-      .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+      .sort(
+        (a, b) =>
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
+      )
       .slice(0, maxPreviewLimit);
   }
 
@@ -30,7 +34,7 @@
     return async ({ update }: { update: () => Promise<void> }) => {
       await update();
       // Update the main scripts array
-      scripts = scripts.filter((script) => script.id !== scriptId);
+      scripts = scripts.filter((script: Script) => script.id !== scriptId);
 
       // Recalculate the preview data based on the updated scripts array
       previewData = updatePreviewData(scripts);
@@ -38,8 +42,10 @@
   };
 
   const handleNewScript = () => {
-    return async ({ result }) => {
-      handleScriptRedirect(result.data.script_id);
+    return async ({ result }: { result: ActionResult }) => {
+      if (result.type === "success" && result.data?.script_id) {
+        handleScriptRedirect(result.data.script_id);
+      }
     };
   };
 
@@ -97,7 +103,7 @@
     sortModeActive = button;
   }
 
-  function handleKeydown(event, action) {
+  function handleKeydown(event: KeyboardEvent, action: () => void) {
     if (event.key === "Enter") {
       action();
     }
@@ -151,7 +157,7 @@
             <div class="flex flex-col items-center w-48">
               <button
                 class="w-48 h-64 bg-white rounded-lg flex items-center justify-center transition-transform gover:scale-105 flex-shrink-0"
-                on:click={handleScriptRedirect(item.id)}
+                on:click={() => handleScriptRedirect(item.id)}
               >
               </button>
               <div class="text-sm text-white mt-2">
@@ -220,7 +226,7 @@
             {#each scripts as item}
               <tr
                 class="hover:bg-gray-100 cursor-pointer"
-                on:click={handleScriptRedirect(item.id)}
+                on:click={() => handleScriptRedirect(item.id)}
               >
                 <td class="p-4 text-sm border-b">{item.title}</td>
                 <td class="p-4 text-sm border-b">
