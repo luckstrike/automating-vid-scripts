@@ -19,25 +19,20 @@ export const actions: Actions = {
     throw redirect(303, data.url)
   },
 
+  // TODO: Change this to googleSignIn
   googleSignIn: async ({ locals: { supabase }, url }) => {
-    console.log('Starting OAuth flow');
-    console.log('Redirect URL:', `${url.origin}/auth/callback`);
-
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${url.origin}/auth/callback`,
-        scopes: 'email profile'
+        redirectTo: url.origin + "/auth/callback" // Send the user back to the homepage
       }
-    });
-
-    console.log('Supabase response:', { data, error });
+    })
 
     if (error) {
-      console.error('OAuth error:', error);
-      throw redirect(303, '/auth/error');
+      console.error(error)
+      throw redirect(303, '/auth/error')
     }
 
-    return { status: 303, headers: { location: data.url } };
+    throw redirect(303, data.url)
   }
 }
