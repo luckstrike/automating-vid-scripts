@@ -1,28 +1,9 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
+  import { browser } from "$app/environment";
+  import debounce from "lodash/debounce";
 
-  // Firebase Firestore Stuff
-  import type { User } from "firebase/auth";
-  import { auth, db } from "$lib/firebase/firebase.client";
-  import {
-    DocumentReference,
-    DocumentSnapshot,
-    Firestore,
-    Timestamp,
-    collection,
-    doc,
-    getDoc,
-    getDocs,
-    query,
-    updateDoc,
-    where,
-  } from "firebase/firestore";
-
-  import {
-    scriptIdStore,
-    scriptMetaIdStore,
-    scriptSaveStatus,
-  } from "$lib/stores/scriptStore";
+  import { saveStatus } from "$lib/stores/scriptStore";
 
   // Text Editor Imports
   import StarterKit from "@tiptap/starter-kit";
@@ -53,24 +34,20 @@
   import MaterialSymbolsSearch from "~icons/material-symbols/search";
   import PhPencilFill from "~icons/ph/pencil-fill";
 
-  // Script Type Import
-  import type { Script } from "$lib/index.ts";
+  // Getting the Script data from the server side
+  export let data;
+  let { script, session } = data;
+  let scriptTitle: string = script.title; // Setting the initial script title
 
-  // To change the size of the toolbar icons
-  let faIconSize = "1.5x";
+  let lastSavedContent = script.content;
+  let lastSavedTitle = scriptTitle;
 
-  let element: any; // figure out this type later
+  let pendingSave = false;
+
   let editor: any;
   let editorContainer: HTMLElement;
 
   let isGenerating: boolean = false;
-
-  let scriptTitle: string = ""; // the script's title
-
-  let scriptLoaded = false; // updates whenever the script is done loading
-  let timeoutId: number | undefined; // used for debouncing the title updates (saves on API calls)
-
-  let currentUser: User | null;
 
   // TODO: You might be able to take advantage of floating menus for GPT features!
   // Use the floating menu to possibly suggest GPT features to the user on any new lines
@@ -81,28 +58,6 @@
 
   // TODO: Make the default text disappear as soon as the user starts typing
 
-  async function getScriptContent(
-    db: Firestore,
-    collectionName: string,
-    docId: string,
-  ) {
-    const docRef: DocumentReference = await doc(db, collectionName, docId);
-
-    BubbleMenu;
-    try {
-      const docSnap: DocumentSnapshot | null = await getDoc(docRef);
-      if (docSnap.exists()) {
-        return docSnap.data();
-      } else {
-        console.log("No such document!");
-        return null;
-      }
-    } catch (error) {
-      console.error("Error fetching document: ", error);
-      return null;
-    }
-  }
-
   // Get's the HTML content that is currently in the script text editor
   async function extractScriptContent(editor: Editor) {
     let scriptContent: string = editor.getHTML();
@@ -110,167 +65,70 @@
     return scriptContent;
   }
 
-  // Returns either true or false
-  async function saveHTMLtoDatabase(
-    scriptContent: string,
-    collectionName: string,
-    documentId: string,
-  ) {
-    if (documentId == null) {
-      console.error(
-        "saveHTMLtoDatabase Error: There is no valid script ID to save this too",
-      );
-      return false;
-    }
+  // Updating the script title
+  const updateScriptTitle = debounce(async (title: string, id: string) => {
+    try {
+      pendingSave = true;
+      saveStatus.set("saving");
 
-    // Getting a reference to the document in the firestore database
-    const docRef = doc(db, collectionName, documentId);
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("title", title);
 
-    // Holds the wheter or not a database update was successful or not
-    let saveResult: boolean = false;
-
-    // Updating the document with the new script content
-    await updateDoc(docRef, {
-      content: scriptContent,
-    })
-      .then(() => {
-        saveResult = true;
-      })
-      .catch((error) => {
-        // TODO: Show some kind of pop up here if an error occurs
-        console.error(
-          "saveHTMLtoDatabase() Error: Error updating document: ",
-          error,
-        );
-        saveResult = false;
+      await fetch("?/updateTitle", {
+        method: "POST",
+        body: formData,
       });
 
-    return saveResult;
-  }
-
-  async function saveScript(
-    editor: Editor,
-    collectionName: string,
-    documentId: string | null,
-  ) {
-    // Get's the script content
-    if (documentId == null) {
-      // TODO: Make this show a pop up error message in the UI
-      console.error(
-        "saveScript() Error: There is no valid script ID to save this too",
-      );
-      return false;
+      lastSavedTitle = title;
+      saveStatus.set("saved");
+    } catch (error) {
+      console.error("Failed to save:", error);
+      saveStatus.set("error");
+    } finally {
+      pendingSave = false;
     }
+  }, 500);
 
-    // Pull out the typed script data into a string
-    const scriptContent: string = await extractScriptContent(editor);
+  const updateScriptContent = debounce(async (content: string, id: string) => {
+    try {
+      pendingSave = true;
+      saveStatus.set("saving");
 
-    // Store the script string data to the database
-    let result: boolean = await saveHTMLtoDatabase(
-      scriptContent,
-      "textcontent",
-      documentId,
-    );
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("content", content);
 
-    // Getting a reference to the document in the firestore database
-    let metaDocRef: DocumentReference;
-    let titleResult: boolean = false;
-
-    // Handling updating the document's last updated time
-    collectionName = "documents";
-
-    if ($scriptMetaIdStore) {
-      metaDocRef = doc(db, collectionName, $scriptMetaIdStore);
-    } else {
-      // scriptMetaIdStore is null
-      titleResult = false;
-      return titleResult;
-    }
-
-    await updateDoc(metaDocRef, {
-      updated: Timestamp.now(),
-    })
-      .then(() => {
-        titleResult = true;
-      })
-      .catch((error) => {
-        // TODO: Show some kind of pop up here if an error occurs
-        console.error(
-          "saveScript() Error: Error updating last updated time: ",
-          error,
-        );
-        titleResult = false;
+      await fetch("?/updateScript", {
+        method: "POST",
+        body: formData,
       });
-
-    // Error-checking
-    if (!result || !titleResult) {
-      // Something broke
-      console.error("saveScript() Error: Something went wrong... :(");
-      console.log(result);
+      // Set save status to false only after successful save
+      lastSavedContent = content;
+      saveStatus.set("saved");
+    } catch (error) {
+      console.error("Failed to save:", error);
+      // Keep scriptSaveStatus true if save failed
+      saveStatus.set("error");
+    } finally {
+      pendingSave = false;
     }
+  }, 500);
 
-    // Resets the save status and saves a script to the database
-    $scriptSaveStatus = false;
-  }
+  async function handleScriptInput(editor: Editor) {
+    const content = await extractScriptContent(editor);
+    const id = script.id;
 
-  // Used to change the title of the script everytime the value of it is changed
-  async function updateScriptTitle(collectionName: string, value: string) {
-    // Holds the wheter or not a database update was successful or not
-    let saveResult: boolean = false;
-
-    // Getting a reference to the document in the firestore database
-    let docRef: DocumentReference;
-    if ($scriptMetaIdStore) {
-      docRef = doc(db, collectionName, $scriptMetaIdStore);
-    } else {
-      // scriptMetaIdStore is null
-      saveResult = false;
-      return saveResult;
-    }
-
-    await updateDoc(docRef, {
-      doc_name: value,
-      updated: Timestamp.now(),
-    })
-      .then(() => {
-        console.log("updateTitle() Success: Document sucessfully updated");
-        saveResult = true;
-      })
-      .catch((error) => {
-        // TODO: Show some kind of pop up here if an error occurs
-        console.error("updateTitle() Error: Error updating document: ", error);
-        saveResult = false;
-      });
-
-    return saveResult;
+    updateScriptContent(content, id);
   }
 
   async function handleScriptTitleInput(
     event: Event & { currentTarget: HTMLInputElement },
   ) {
-    const target = event.target as HTMLInputElement; // safely casting the event target
+    const title = (event.target as HTMLInputElement).value; // safely casting the event currentTarget
+    const id = script.id;
 
-    // Clear the previous timeout, if there's one
-    if (timeoutId !== undefined) {
-      clearTimeout(timeoutId);
-    }
-
-    // Setting a new timeout to update the script title in the database
-    timeoutId = setTimeout(() => {
-      let collectionName: string = "documents";
-      updateScriptTitle(collectionName, target.value);
-    }, 500) as unknown as number; // delay in milliseconds (plus assertions for TypeScript to stop yelling at me)
-  }
-
-  async function handleScriptInput() {
-    // Clear the previous timeout, if there's one
-    if (timeoutId !== undefined) {
-      clearTimeout(timeoutId);
-    }
-
-    timeoutId = setTimeout(() => {
-      saveScript($editor, "textcontent", $scriptIdStore);
-    }, 500) as unknown as number; // delay in milliseconds (plus assertiong for TypeScript to stop yelling at me)
+    updateScriptTitle(title, id);
   }
 
   // Gets the selected text from the script
@@ -342,44 +200,83 @@
   }
 
   onMount(async () => {
-    let contentResult: string = "";
-    if ($scriptIdStore) {
-      await getScriptContent(db, "textcontent", $scriptIdStore).then(
-        (result) => {
-          if (result) {
-            contentResult = result.content;
-          }
-        },
-      );
-    }
-
     editor = createEditor({
       extensions: [StarterKit, Underline],
-      content: contentResult,
+      content: script.content,
       editorProps: {
         attributes: {
           class:
             "border-2 border-black rounded-lg p-2 bg-[#d9d9d9] min-h-[88vh] max-h-[88vh] overflow-y-auto outline-none",
         },
       },
-      onCreate({ editor }) {
-        if ($scriptMetaIdStore) {
-          getScriptContent(db, "documents", $scriptMetaIdStore).then(
-            (result) => {
-              if (result) {
-                scriptTitle = result.doc_name;
-              }
-            },
-          );
-        }
-      },
       onUpdate({ editor }) {
-        handleScriptInput();
-        $scriptSaveStatus = true;
+        const currentContent = editor.getHTML();
+        if (currentContent !== lastSavedContent) {
+          // Check if content has changed
+          handleScriptInput($editor);
+        }
       },
     });
 
-    const unsubscribe = auth.onAuthStateChanged((user) => {});
+    if (browser) {
+      const checkUnsavedChanges = () => {
+        // More defensive check for editor content
+        const currentContent = editor ? editor.getHTML() : "";
+        const currentTitle = scriptTitle;
+
+        return (
+          pendingSave || // Check if we have a pending save
+          $saveStatus === "saving" ||
+          $saveStatus === "error" ||
+          currentContent !== lastSavedContent ||
+          currentTitle !== lastSavedTitle
+        );
+      };
+
+      const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+        if (checkUnsavedChanges()) {
+          // Cancel any pending debounced saves
+          updateScriptContent.cancel();
+          updateScriptTitle.cancel();
+
+          event.preventDefault();
+          return (event.returnValue = "Changes you made may not be saved.");
+        }
+      };
+
+      const handleNavigation = (event: any) => {
+        if (checkUnsavedChanges()) {
+          if (
+            !window.confirm(
+              "Changes you made may not be saved. Are you sure you want to leave?",
+            )
+          ) {
+            event.preventDefault();
+          } else {
+            // User confirmed they want to leave, cancel pending saves
+            updateScriptContent.cancel();
+            updateScriptTitle.cancel();
+          }
+        }
+      };
+
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      window.addEventListener("sveltekit:navigation-start", handleNavigation);
+
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+        window.removeEventListener(
+          "sveltekit:navigation-start",
+          handleNavigation,
+        );
+      };
+    }
+  });
+
+  onDestroy(() => {
+    // Cancel any pending debounced operations
+    updateScriptContent.cancel();
+    updateScriptTitle.cancel();
   });
 </script>
 
@@ -425,6 +322,7 @@
       </div>
     </BubbleMenu>
 
+    <!-- Not really using this right now
     <FloatingMenu editor={$editor}>
       <button
         class="pl-1 pr-1 rounded-sm bg-[#2f2f2f] text-[#d9d9d9] hover:bg-[#1f1f1f]"
@@ -432,6 +330,7 @@
         Generate Script
       </button>
     </FloatingMenu>
+    -->
 
     <div class="w-full pt-2 text-center">
       <input
@@ -442,14 +341,27 @@
       />
     </div>
 
-    <div class="flex flex-row justify-center space-x-4 p-3 text-white">
-      <!-- Save Button -->
-      <button
-        on:click={() => saveScript($editor, "textcontent", $scriptIdStore)}
-        class:text-black={$scriptSaveStatus}
-      >
-        <Fa class="toolbar-icons" icon={faSave} />
-      </button>
+    <div class="flex flex-row justify-center space-x-4 p-2 text-white">
+      <!-- Save status indicator -->
+      <div class="flex items-center w-36">
+        <!-- Container for save icon + status -->
+        <Fa class="opacity-50" icon={faSave} />
+        <div class="flex-1 text-center">
+          <!-- Center the text in the remaining space -->
+          <span class="text-sm">
+            {#if $saveStatus === "saving"}
+              <span class="text-gray-400">Saving...</span>
+            {:else if $saveStatus === "saved"}
+              <span class="text-gray-400">All changes saved</span>
+            {:else if $saveStatus === "error"}
+              <span class="text-red-400">Failed to save</span>
+            {/if}
+          </span>
+        </div>
+      </div>
+
+      <div class="h-6 w-px bg-gray-400 opacity-50"></div>
+      <!-- Vertical divider -->
 
       <!-- Bold Button -->
       <button

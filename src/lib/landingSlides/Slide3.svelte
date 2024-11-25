@@ -2,7 +2,7 @@
 </script>
 
 <div
-  class="flex flex-col flex-grow overflow-y-auto min-h-full lg:flex-row lg:w-full justify-center space-y-8 lg:space-y-0 items-center p-4"
+  class="flex flex-col flex-grow overflow-y-auto min-h-full lg:flex-row lg:w-full justify-center space-y-8 lg:space-y-0 lg:space-x-8 items-center p-4"
 >
   <div class="lg:max-w-[30%] space-y-2">
     <div
@@ -18,7 +18,7 @@
     class="flex flex-col lg:max-w-[45%] text-white items-center space-y-2 align-middle justify-center"
   >
     <div>
-      <video src="summarize.mp4" muted autoplay loop></video>
+      <img src="summarize.png" alt="A screenshot of the Summarize tab" />
     </div>
   </div>
 </div>

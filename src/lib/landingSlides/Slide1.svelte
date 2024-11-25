@@ -14,11 +14,12 @@
       Select some text to either expand on it or rephrase it
     </div>
   </div>
-  <div
-    class="flex flex-col"
-  >
-  <div>
-      <video src="rephrase.mp4" autoplay muted loop></video>
-  </div>
+  <div class="flex flex-col">
+    <div>
+      <img
+        src="rephrase.png"
+        alt="Screenshot of the Expand/Rephrase functionality"
+      />
+    </div>
   </div>
 </div>

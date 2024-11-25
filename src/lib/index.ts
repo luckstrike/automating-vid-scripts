@@ -10,11 +10,12 @@ import type {
 
 // Interfaces
 export interface Script {
-  name: string;
-  lastUpdatedString: string;
-  lastUpdatedDate: Date | null;
-  content: string | null | unknown; // a reference to the actual content (so less data is used each call)
-  metaDocId: string | null | unknown; // id of this entry (contains a script's metadata)
+  id: string,
+  title: string,
+  content: string,
+  user_id: string,
+  created_at: string,
+  updated_at: string
 }
 
 export interface TextContent {
