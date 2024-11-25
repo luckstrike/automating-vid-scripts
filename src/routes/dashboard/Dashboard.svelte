@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import type { Script } from "$lib";
 
   // Icon Imports
   import Fa from "svelte-fa";
@@ -8,16 +9,12 @@
 
   // Using Supabase now
   export let data;
-  let { scripts, session } = data;
-
-  // TODO: Not a fan of how this just updates the global variables, fix this later
-
-  let isLoading: boolean = true;
+  let { scripts, session, user } = data;
 
   let maxPreviewLimit: number = 3;
 
   // Move the preview data calculation into a function so we can reuse it
-  function updatePreviewData(scriptsArray) {
+  function updatePreviewData(scriptsArray: Script[]) {
     return scriptsArray
       .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
       .slice(0, maxPreviewLimit);
@@ -29,8 +26,8 @@
   let isNameAscending = true;
   let isDateAscending = true;
 
-  const handleDelete = (scriptId) => {
-    return async ({ update }) => {
+  const handleDelete = (scriptId: string) => {
+    return async ({ update }: { update: () => Promise<void> }) => {
       await update();
       // Update the main scripts array
       scripts = scripts.filter((script) => script.id !== scriptId);
@@ -70,7 +67,7 @@
 
   // Function to toggle and sort by name
   function toggleSortByName() {
-    scripts.sort((a, b) =>
+    scripts.sort((a: Script, b: Script) =>
       isNameAscending
         ? a.title.localeCompare(b.title)
         : b.title.localeCompare(a.title),
@@ -81,10 +78,10 @@
 
   // Function to toggle and sort by date
   function toggleSortByDate() {
-    scripts.sort((a: Object, b: Object) =>
+    scripts.sort((a: Script, b: Script) =>
       isDateAscending
-        ? new Date(a.updated_at) - new Date(b.updated_at)
-        : new Date(b.updated_at) - new Date(a.updated_at),
+        ? new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime()
+        : new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
     );
     scripts = [...scripts];
     isDateAscending = !isDateAscending;
@@ -115,9 +112,6 @@
     return text;
   }
 
-  const contentCollection: string = "textcontent";
-  const scriptMetaInfoCollection: string = "documents";
-
   let sortModeActive: string | null = "last-updated";
 </script>
 
@@ -125,7 +119,7 @@
   <div class="flex flex-col space-y-2">
     <div class="text-center">
       <div class="text-center text-xl font-bold text-white lg:mt-2">
-        Howdy {session.user.email}! Ready to start script writing?
+        Howdy {user.email}! Ready to start script writing?
       </div>
       <p class="text-center text-sm text-white">
         or create a new script with Brainstorm or Summarize a URL!

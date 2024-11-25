@@ -1,11 +1,10 @@
 import { getScripts, createScript, deleteScript, getScript } from "$lib/server/dbFunctions";
 import type { PageServerLoad } from "./$types";
 import type { Script } from "$lib";
-import { Page } from "openai/pagination.mjs";
 
-export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+export const load: PageServerLoad = async ({ locals }) => {
   try {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { session } = await locals.safeGetSession();
 
     if (!session) {
       return {
@@ -14,7 +13,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
       };
     }
 
-    const scripts = await getScripts(supabase, session.user.id);
+    const scripts = await getScripts(locals.supabase, session.user.id);
 
     // Ensuring scripts is always an array
     const safeScripts = Array.isArray(scripts) ? scripts : [];
@@ -30,9 +29,9 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 }
 
 export const actions = {
-  createScript: async ({ request, locals: { supabase } }) => {
+  createScript: async ({ request, locals }) => {
     // TODO: Add redirecting logic somewhere in this action
-    const { data: { session } } = await supabase.auth.getSession();
+    const { session } = await locals.safeGetSession();
 
     try {
       if (!session) {
@@ -47,7 +46,7 @@ export const actions = {
         updated_at: new Date().toISOString()
       } satisfies Omit<Script, 'id'>
 
-      const createdScript = await createScript(supabase, newScript)
+      const createdScript = await createScript(locals.supabase, newScript)
 
       return {
         script_id: createdScript.id
@@ -59,8 +58,8 @@ export const actions = {
       }
     }
   },
-  deleteScript: async ({ request, locals: { supabase } }) => {
-    const { data: { session } } = await supabase.auth.getSession();
+  deleteScript: async ({ request, locals }) => {
+    const { session } = await locals.safeGetSession();
 
     try {
       if (!session) {
@@ -77,10 +76,10 @@ export const actions = {
         };
       }
 
-      await deleteScript(supabase, scriptIdValue, session.user.id);
+      await deleteScript(locals.supabase, scriptIdValue, session.user.id);
 
       return {
-        sucess: true
+        success: true
       };
     } catch (error) {
       return {
