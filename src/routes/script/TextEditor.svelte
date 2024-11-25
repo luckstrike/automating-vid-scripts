@@ -322,6 +322,7 @@
       </div>
     </BubbleMenu>
 
+    <!-- Not really using this right now
     <FloatingMenu editor={$editor}>
       <button
         class="pl-1 pr-1 rounded-sm bg-[#2f2f2f] text-[#d9d9d9] hover:bg-[#1f1f1f]"
@@ -329,6 +330,7 @@
         Generate Script
       </button>
     </FloatingMenu>
+    -->
 
     <div class="w-full pt-2 text-center">
       <input
