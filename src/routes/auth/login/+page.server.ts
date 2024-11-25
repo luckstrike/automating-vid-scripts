@@ -13,10 +13,10 @@ export const actions: Actions = {
 
     if (error) {
       console.error(error)
-      throw redirect(303, '/auth/error')
+      return redirect(303, '/auth/error')
     }
 
-    throw redirect(303, data.url)
+    return redirect(303, data.url)
   },
 
   // TODO: Change this to googleSignIn
@@ -30,9 +30,9 @@ export const actions: Actions = {
 
     if (error) {
       console.error(error)
-      throw redirect(303, '/auth/error')
+      return redirect(303, '/auth/error')
     }
 
-    throw redirect(303, data.url)
+    return redirect(303, data.url)
   }
 }
