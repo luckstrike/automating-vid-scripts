@@ -48,7 +48,9 @@
           <button on:click={() => changeTabs("/brainstorm")}>Brainstorm</button>
 
           {#if $scriptIdStore}
-            <button on:click={() => changeTabs("/script")}>Script</button>
+            <button on:click={() => changeTabs(`/script/${$scriptIdStore}`)}
+              >Script</button
+            >
           {/if}
           <button on:click={() => changeTabs("/summarize")}>Summarize</button>
           <button on:click={() => logOut()}>Log Out</button>
