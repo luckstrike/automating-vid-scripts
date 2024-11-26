@@ -62,17 +62,26 @@ const supabase: Handle = async ({ event, resolve }) => {
   })
 }
 
+// Logic which checks if a user should be able to access certain website parts
+// otherwise redirect to the login page
 const authGuard: Handle = async ({ event, resolve }) => {
   const { session, user } = await event.locals.safeGetSession()
   event.locals.session = session
   event.locals.user = user
 
-  if (!event.locals.session && event.url.pathname.startsWith('/private')) {
-    redirect(303, '/auth')
+  const path = event.url.pathname
+  const isPublicPath = path === '/' ||
+    path === '/auth/login' ||
+    path === '/auth/callback' ||  // Needed for auth callback
+    path.startsWith('/auth/callback') || // Handle auth redirects
+    path === '/auth' // Current auth path
+
+  if (!session && !isPublicPath) {
+    throw redirect(303, '/auth/login')
   }
 
-  if (event.locals.session && event.url.pathname === '/auth') {
-    redirect(303, '/private')
+  if (session && path === '/auth/login') {
+    throw redirect(303, '/dashboard')
   }
 
   return resolve(event)
