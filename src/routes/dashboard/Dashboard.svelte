@@ -7,6 +7,7 @@
   import { faCaretDown, faPlus } from "@fortawesome/free-solid-svg-icons";
   import { goto } from "$app/navigation";
   import type { ActionResult } from "@sveltejs/kit";
+  import { scriptIdStore } from "$lib/stores/scriptStore";
 
   // Using Supabase now
   export let data;
@@ -35,6 +36,9 @@
       await update();
       // Update the main scripts array
       scripts = scripts.filter((script: Script) => script.id !== scriptId);
+
+      // Resetting the scriptIdStore (the script no longer exists)
+      scriptIdStore.set(null);
 
       // Recalculate the preview data based on the updated scripts array
       previewData = updatePreviewData(scripts);
