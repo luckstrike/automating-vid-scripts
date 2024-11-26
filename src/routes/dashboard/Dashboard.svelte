@@ -121,7 +121,11 @@
   let sortModeActive: string | null = "last-updated";
 </script>
 
-<div class="flex flex-col min-h-screen pb-20 lg:pb-10 p-2">
+<div
+  class={scripts?.length === 0
+    ? "flex flex-col min-h-screen justify-center items-center"
+    : "flex flex-col min-h-screen pb-20 lg:pb-10 p-2"}
+>
   <div class="flex flex-col space-y-2">
     <div class="text-center">
       <div class="text-center text-xl font-bold text-white lg:mt-2">
@@ -170,87 +174,91 @@
     </div>
 
     <!-- Table section -->
-    <div class="flex justify-center">
-      <div class="w-full max-w-5xl overflow-x-auto rounded-lg bg-white">
-        <table class="w-full">
-          <thead>
-            <tr>
-              <th
-                class="p-4 text-left border-b border-black text-sm font-medium w-[65%]"
-              >
-                <div
-                  class="cursor-pointer flex flex-row items-center space-x-2"
-                  on:click={() => setActiveButton("name")}
-                  role="button"
-                  tabindex="0"
-                  on:keydown={(event) =>
-                    handleKeydown(event, () => setActiveButton("name"))}
+    {#if scripts.length != 0}
+      <div class="flex justify-center">
+        <div class="w-full max-w-5xl overflow-x-auto rounded-lg bg-white">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th
+                  class="p-4 text-left border-b border-black text-sm font-medium w-[65%]"
                 >
-                  <div>Name</div>
-                  <Fa
-                    icon={faCaretDown}
-                    style="color: {sortModeActive == 'name'
-                      ? '#2f2f2f'
-                      : 'lightgray'}"
-                  />
-                </div>
-              </th>
-              <th
-                class="p-4 text-left border-b border-black text-sm font-medium w-[25%]"
-              >
-                <div
-                  class="cursor-pointer flex flex-row items-center space-x-2"
-                  on:click={() => setActiveButton("last-updated")}
-                  role="button"
-                  tabindex="0"
-                  on:keydown={(event) =>
-                    handleKeydown(event, () => setActiveButton("last-updated"))}
-                >
-                  <div>Last Updated</div>
-                  <Fa
-                    icon={faCaretDown}
-                    style="color: {sortModeActive == 'last-updated'
-                      ? '#2f2f2f'
-                      : 'lightgray'}"
-                  />
-                </div>
-              </th>
-              <th
-                class="p-4 text-center border-b border-black text-sm font-medium w-[10%]"
-              >
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {#each scripts as item}
-              <tr
-                class="hover:bg-gray-100 cursor-pointer"
-                on:click={() => handleScriptRedirect(item.id)}
-              >
-                <td class="p-4 text-sm border-b">{item.title}</td>
-                <td class="p-4 text-sm border-b">
-                  {timestampFormatter(item.updated_at)}
-                </td>
-                <td class="p-4 text-sm border-b" on:click|stopPropagation>
-                  <form
-                    method="POST"
-                    action="?/deleteScript"
-                    use:enhance={() => handleDelete(item.id)}
+                  <div
+                    class="cursor-pointer flex flex-row items-center space-x-2"
+                    on:click={() => setActiveButton("name")}
+                    role="button"
+                    tabindex="0"
+                    on:keydown={(event) =>
+                      handleKeydown(event, () => setActiveButton("name"))}
                   >
-                    <input type="hidden" name="script_id" value={item.id} />
-                    <button
-                      class="w-full bg-red-500 hover:bg-red-700 border-black rounded-md px-2 py-1 text-center text-white text-sm"
-                      >Delete</button
-                    >
-                  </form>
-                </td>
+                    <div>Name</div>
+                    <Fa
+                      icon={faCaretDown}
+                      style="color: {sortModeActive == 'name'
+                        ? '#2f2f2f'
+                        : 'lightgray'}"
+                    />
+                  </div>
+                </th>
+                <th
+                  class="p-4 text-left border-b border-black text-sm font-medium w-[25%]"
+                >
+                  <div
+                    class="cursor-pointer flex flex-row items-center space-x-2"
+                    on:click={() => setActiveButton("last-updated")}
+                    role="button"
+                    tabindex="0"
+                    on:keydown={(event) =>
+                      handleKeydown(event, () =>
+                        setActiveButton("last-updated"),
+                      )}
+                  >
+                    <div>Last Updated</div>
+                    <Fa
+                      icon={faCaretDown}
+                      style="color: {sortModeActive == 'last-updated'
+                        ? '#2f2f2f'
+                        : 'lightgray'}"
+                    />
+                  </div>
+                </th>
+                <th
+                  class="p-4 text-center border-b border-black text-sm font-medium w-[10%]"
+                >
+                  Action
+                </th>
               </tr>
-            {/each}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {#each scripts as item}
+                <tr
+                  class="hover:bg-gray-100 cursor-pointer"
+                  on:click={() => handleScriptRedirect(item.id)}
+                >
+                  <td class="p-4 text-sm border-b">{item.title}</td>
+                  <td class="p-4 text-sm border-b">
+                    {timestampFormatter(item.updated_at)}
+                  </td>
+                  <td class="p-4 text-sm border-b" on:click|stopPropagation>
+                    <form
+                      method="POST"
+                      action="?/deleteScript"
+                      use:enhance={() => handleDelete(item.id)}
+                    >
+                      <input type="hidden" name="script_id" value={item.id} />
+                      <button
+                        class="w-full bg-red-500 hover:bg-red-700 border-black rounded-md px-2 py-1 text-center text-white text-sm"
+                        >Delete</button
+                      >
+                    </form>
+                  </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    {/if}
   </div>
 </div>
 
