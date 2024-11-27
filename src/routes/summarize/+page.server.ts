@@ -23,9 +23,7 @@ async function generateScriptContent(userProvidedUrl: string) {
 }
 
 export const actions = {
-  generateSummary: async ({ request, locals: { supabase } }) => {
-    const { data: { session } } = await supabase.auth.getSession();
-
+  generateSummary: async ({ request, locals: { session } }) => {
     try {
       if (!session) {
         throw new Error('No user session found');

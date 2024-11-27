@@ -2,10 +2,8 @@ import { getScripts, createScript, deleteScript, getScript } from "$lib/server/d
 import type { PageServerLoad } from "./$types";
 import type { Script } from "$lib";
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals: { supabase, session } }) => {
   try {
-    const { session } = await locals.safeGetSession();
-
     if (!session) {
       return {
         scripts: [],
@@ -13,7 +11,7 @@ export const load: PageServerLoad = async ({ locals }) => {
       };
     }
 
-    const scripts = await getScripts(locals.supabase, session.user.id);
+    const scripts = await getScripts(supabase, session.user.id);
 
     // Ensuring scripts is always an array
     const safeScripts = Array.isArray(scripts) ? scripts : [];
@@ -29,10 +27,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 }
 
 export const actions = {
-  createScript: async ({ request, locals }) => {
-    // TODO: Add redirecting logic somewhere in this action
-    const { session } = await locals.safeGetSession();
-
+  createScript: async ({ request, locals: { supabase, session } }) => {
     try {
       if (!session) {
         throw new Error('No user session found');
@@ -46,7 +41,7 @@ export const actions = {
         updated_at: new Date().toISOString()
       } satisfies Omit<Script, 'id'>
 
-      const createdScript = await createScript(locals.supabase, newScript)
+      const createdScript = await createScript(supabase, newScript)
 
       return {
         script_id: createdScript.id
@@ -58,9 +53,7 @@ export const actions = {
       }
     }
   },
-  deleteScript: async ({ request, locals }) => {
-    const { session } = await locals.safeGetSession();
-
+  deleteScript: async ({ request, locals: { supabase, session } }) => {
     try {
       if (!session) {
         throw new Error('No user session found')
@@ -76,7 +69,7 @@ export const actions = {
         };
       }
 
-      await deleteScript(locals.supabase, scriptIdValue, session.user.id);
+      await deleteScript(supabase, scriptIdValue, session.user.id);
 
       return {
         success: true

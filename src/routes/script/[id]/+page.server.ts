@@ -2,9 +2,8 @@ import type { PageServerLoad } from "../$types";
 import { fail } from "@sveltejs/kit";
 import { getScript, updateScript } from "$lib/server/dbFunctions";
 
-export const load: PageServerLoad = async ({ params, locals: { supabase } }) => {
+export const load: PageServerLoad = async ({ params, locals: { supabase, session } }) => {
   try {
-    const { data: { session } } = await supabase.auth.getSession();
     const { id } = params;
 
     if (!session) {
