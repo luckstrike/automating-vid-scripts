@@ -74,7 +74,8 @@ const authGuard: Handle = async ({ event, resolve }) => {
     path === '/auth/login' ||
     path === '/auth/callback' ||  // Needed for auth callback
     path.startsWith('/auth/callback') || // Handle auth redirects
-    path === '/auth' // Current auth path
+    path === '/auth' || // Current auth path
+    path.startsWith('/api')
 
   if (!session && !isPublicPath) {
     throw redirect(303, '/auth/login')
