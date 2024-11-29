@@ -255,16 +255,16 @@
   {#if editor}
     <!-- Bubble Menu Stuff -->
     <BubbleMenu editor={$editor}>
-      <div
-        class="flex flex-row rounded-md items-center bg-[#2f2f2f] text-[#d9d9d9]"
-      >
+      <div>
         <form
+          class="flex flex-row rounded-md items-center bg-[#2f2f2f] text-[#d9d9d9]"
           method="POST"
           action="?/editSelection"
           use:enhance={({ formData }) => {
             // Grabbing the currently selected text
             const result = getSelectedText();
             formData.append("user_selection", result);
+            isGenerating = true;
 
             // Do all of this once we get GPT results
             return async ({ result, update }) => {
