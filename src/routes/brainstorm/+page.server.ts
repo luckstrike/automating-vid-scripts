@@ -8,10 +8,13 @@ const baseURL: string =
 const API_URL: string = `${baseURL}/api`;
 
 // TODO: Maybe move this to another file?
-async function generateScriptContent(userPrompt: string) {
+async function generateScriptContent(userPrompt: string, accessToken: string) {
   const response = await fetch(API_URL + '/brainstorm', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
     body: JSON.stringify({ prompt: userPrompt })
   });
 
@@ -43,7 +46,7 @@ export const actions = {
       }
 
       // Calling the GPT API
-      const { scriptContent, scriptTitle } = await generateScriptContent(prompt);
+      const { scriptContent, scriptTitle } = await generateScriptContent(prompt, session.access_token);
 
       const newScript = {
         user_id: session.user.id,
