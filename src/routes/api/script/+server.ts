@@ -80,7 +80,8 @@ export const POST: RequestHandler = async ({ request, platform, locals }) => {
   let data: UserSelection | null = null;
 
   try {
-    data = (await request.json()) as UserSelection;
+    data = (await request.json());
+    console.log("We got data?", data)
   } catch (e) {
     console.error("Unable to handle a POST request /api/script");
     return json({ success: false, error: "Bad request" }, { status: 400 });
@@ -89,15 +90,16 @@ export const POST: RequestHandler = async ({ request, platform, locals }) => {
   // Use the OpenAI API here
   let gptResult: string | null = "";
 
-  if (data && data.userSelection) {
-    if (data.actionType == "expand") {
-      gptResult = await sendToGPT(openai, generatePrompt, data.userSelection);
-    } else if (data.actionType == "rephrase") {
-      gptResult = await sendToGPT(openai, rephrasePrompt, data.userSelection);
+  if (data.action && data.user_selection) {
+    if (data.action == "expand") {
+      gptResult = await sendToGPT(openai, generatePrompt, data.user_selection);
+    } else if (data.action == "rephrase") {
+      gptResult = await sendToGPT(openai, rephrasePrompt, data.user_selection);
     } else {
       return json({ success: false, gptContent: "" });
     }
   }
+
   if (gptResult) {
     return json({ success: true, gptContent: gptResult });
   } else {

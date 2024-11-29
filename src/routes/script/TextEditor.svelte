@@ -2,6 +2,7 @@
   import { onMount, onDestroy } from "svelte";
   import { browser } from "$app/environment";
   import debounce from "lodash/debounce";
+  import { enhance } from "$app/forms";
 
   import { saveStatus } from "$lib/stores/scriptStore";
 
@@ -150,43 +151,8 @@
 
   async function generateTextWithGPT(actionType: string) {
     const text: string = getSelectedText();
-    let textFromAI: string = "";
 
-    const baseURL: string =
-      import.meta.env.VITE_PUBLIC_BASE_URL ||
-      import.meta.env.PUBLIC_BASE_URL ||
-      "";
-    const API_URL: string = `${baseURL}/api`;
-
-    const endpoint = "/script"; // Simplified endpoint, always using POST
-    const options = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userSelection: text || "",
-        actionType: actionType,
-      }),
-    };
-
-    // Query GPT and get a result back only if we have some selected text
-    if (text) {
-      // Fetching the result + error handling
-      try {
-        isGenerating = true;
-        const res = await fetch(API_URL + endpoint, options);
-
-        if (res.ok) {
-          const gptResult = await res.json();
-          textFromAI = gptResult.gptContent;
-        } else {
-          isGenerating = false;
-          console.error(`Server error: ${res.status}`);
-        }
-      } catch (err) {
-        isGenerating = false;
-        console.error(`Network error: ${(err as Error).message}`);
-      }
-    }
+    const textFromAI: string = await fetch("?/generateTextWithGPT");
 
     if (textFromAI) {
       if (actionType == "expand") {
@@ -292,25 +258,57 @@
       <div
         class="flex flex-row rounded-md items-center bg-[#2f2f2f] text-[#d9d9d9]"
       >
-        <button
-          class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
-          class:text-red-400={isGenerating}
-          disabled={isGenerating}
-          on:click={() => generateTextWithGPT("expand")}
+        <form
+          method="POST"
+          action="?/editSelection"
+          use:enhance={({ formData }) => {
+            // Grabbing the currently selected text
+            const result = getSelectedText();
+            formData.append("user_selection", result);
+
+            // Do all of this once we get GPT results
+            return async ({ result, update }) => {
+              isGenerating = false;
+
+              if (result.type === "success") {
+                if (formData.get("action") == "expand") {
+                  insertTextAfterSelection(result.data.gptContent);
+                } else if (formData.get("action") == "rephrase") {
+                  replaceSelectedText(result.data.gptContent);
+                } else {
+                  console.error("Invalid result type was provided");
+                  return false;
+                }
+              }
+
+              await update();
+            };
+          }}
         >
-          <div>Expand</div>
-          <IonRocketSharp />
-        </button>
-        <div class="inline-block h-8 items-center w-0.5 bg-[#a2a2a2]"></div>
-        <button
-          class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
-          class:text-red-400={isGenerating}
-          disabled={isGenerating}
-          on:click={() => generateTextWithGPT("rephrase")}
-        >
-          <div>Rephrase</div>
-          <PhPencilFill />
-        </button>
+          <button
+            name="action"
+            value="expand"
+            class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
+            class:text-red-400={isGenerating}
+            disabled={isGenerating}
+            type="submit"
+          >
+            <div>Expand</div>
+            <IonRocketSharp />
+          </button>
+          <div class="inline-block h-8 items-center w-0.5 bg-[#a2a2a2]"></div>
+          <button
+            name="action"
+            value="rephrase"
+            class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
+            class:text-red-400={isGenerating}
+            disabled={isGenerating}
+            type="submit"
+          >
+            <div>Rephrase</div>
+            <PhPencilFill />
+          </button>
+        </form>
         <!-- Commented out until I figure out how to do search
         <button
           class="flex flex-row p-2 space-x-1 hover:bg-[#1f1f1f] hover:rounded-md"
