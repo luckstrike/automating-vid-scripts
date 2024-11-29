@@ -81,7 +81,6 @@ export const POST: RequestHandler = async ({ request, platform, locals }) => {
 
   try {
     data = (await request.json());
-    console.log("We got data?", data)
   } catch (e) {
     console.error("Unable to handle a POST request /api/script");
     return json({ success: false, error: "Bad request" }, { status: 400 });
