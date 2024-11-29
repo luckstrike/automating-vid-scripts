@@ -38,7 +38,22 @@ async function sendToGPT(
   return completion.choices[0].message.content;
 }
 
-export const POST: RequestHandler = async ({ request, platform }) => {
+export const POST: RequestHandler = async ({ request, platform, locals }) => {
+  // Getting the bearer token
+  const authHeader = request.headers.get('Authorization');
+  const token = authHeader?.split(' ')[1];
+
+  if (!token) {
+    return json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Verifying the token with Supabase
+  const { data: { user }, error } = await locals.supabase.auth.getUser(token);
+
+  if (error || !user) {
+    return json({ success: false, error: "Invalid token" }, { status: 401 });
+  }
+
   // Get the API key from the environment
   let OPENAI_API_KEY: string | undefined;
 
@@ -65,7 +80,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
   let data: UserSelection | null = null;
 
   try {
-    data = (await request.json()) as UserSelection;
+    data = (await request.json());
   } catch (e) {
     console.error("Unable to handle a POST request /api/script");
     return json({ success: false, error: "Bad request" }, { status: 400 });
@@ -74,15 +89,16 @@ export const POST: RequestHandler = async ({ request, platform }) => {
   // Use the OpenAI API here
   let gptResult: string | null = "";
 
-  if (data && data.userSelection) {
-    if (data.actionType == "expand") {
-      gptResult = await sendToGPT(openai, generatePrompt, data.userSelection);
-    } else if (data.actionType == "rephrase") {
-      gptResult = await sendToGPT(openai, rephrasePrompt, data.userSelection);
+  if (data.action && data.user_selection) {
+    if (data.action == "expand") {
+      gptResult = await sendToGPT(openai, generatePrompt, data.user_selection);
+    } else if (data.action == "rephrase") {
+      gptResult = await sendToGPT(openai, rephrasePrompt, data.user_selection);
     } else {
       return json({ success: false, gptContent: "" });
     }
   }
+
   if (gptResult) {
     return json({ success: true, gptContent: gptResult });
   } else {

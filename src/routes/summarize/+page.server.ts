@@ -8,10 +8,13 @@ const baseURL: string =
 const API_URL: string = `${baseURL}/api`;
 
 // TODO: Maybe move this to another file?
-async function generateScriptContent(userProvidedUrl: string) {
+async function generateScriptContent(userProvidedUrl: string, accessToken: string) {
   const response = await fetch(API_URL + '/summarize', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
     body: JSON.stringify({ url: userProvidedUrl })
   });
 
@@ -41,7 +44,7 @@ export const actions = {
         }
       }
 
-      const { summary } = await generateScriptContent(url);
+      const { summary } = await generateScriptContent(url, session.access_token);
 
       return {
         success: true,

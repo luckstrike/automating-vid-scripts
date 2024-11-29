@@ -61,7 +61,22 @@ async function brainstormTitleGPT(
   return completion.choices[0].message.content;
 }
 
-export const POST: RequestHandler = async ({ request, platform }) => {
+export const POST: RequestHandler = async ({ request, platform, locals }) => {
+  // Getting the bearer token
+  const authHeader = request.headers.get('Authorization');
+  const token = authHeader?.split(' ')[1];
+
+  if (!token) {
+    return json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Verifying the token with Supabase
+  const { data: { user }, error } = await locals.supabase.auth.getUser(token);
+
+  if (error || !user) {
+    return json({ success: false, error: "Invalid token" }, { status: 401 });
+  }
+
   // Get the API key from the environment
   let OPENAI_API_KEY: string | undefined;
 
