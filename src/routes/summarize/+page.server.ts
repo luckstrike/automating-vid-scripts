@@ -24,6 +24,10 @@ const summarizeSchema: ChatCompletionTool = {
 };
 
 async function generateScriptContent(userAgent: string, url: string) {
+  if (!(new URL(url))) {
+    throw new Error("Invalid URL");
+  }
+
   if (await checkIfAllowed(userAgent, url)) {
     const pageHTMLResult = await parseURL(url);
 
