@@ -1,4 +1,3 @@
-import { createScript } from "$lib/server/dbFunctions";
 import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
 import type { ChatCompletionTool } from "$lib";
 import { checkIfAllowed, parseURL } from "$lib/server/parser.js";
