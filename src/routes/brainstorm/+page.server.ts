@@ -1,5 +1,6 @@
 import { createScript } from "$lib/server/dbFunctions";
 import { redirect } from "@sveltejs/kit";
+import { queryGPT } from "$lib/server/openAIFunctions";
 
 const baseURL: string =
   import.meta.env.VITE_PUBLIC_BASE_URL ||
@@ -7,25 +8,16 @@ const baseURL: string =
   "";
 const API_URL: string = `${baseURL}/api`;
 
-// TODO: Maybe move this to another file?
-async function generateScriptContent(userPrompt: string, accessToken: string) {
-  const response = await fetch(API_URL + '/brainstorm', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
-    },
-    body: JSON.stringify({ prompt: userPrompt })
-  });
+const brainstormPrompt: string = `You are a helpful assistant who provides, users with key bullet points
+                                related to a user provided video topic. If the user specifies that they want
+                                ideas related to a random topic you should provided bullet points to them
+                                about a random topic that could be turned into a video. The topic may be
+                                about anything, you can decide that! Just make sure to focus on one topic 
+                                and if you feel like it provide the user with some pointers they can use to
+                                branch from that idea. Also please make sure to format all of this in HTML,
+                                just the tags, you dont have to specify it's html at the start or end.`;
 
-  if (!response.ok) {
-    throw new Error(`Generation failed: {response.status}`)
-  }
-
-  const { scriptContent, scriptTitle } = await response.json();
-
-  return { scriptContent, scriptTitle }
-}
+const aiModel = "gpt-4o-mini";
 
 export const actions = {
   generateScript: async ({ request, locals: { supabase, session } }) => {
@@ -46,12 +38,17 @@ export const actions = {
       }
 
       // Calling the GPT API
-      const { scriptContent, scriptTitle } = await generateScriptContent(prompt, session.access_token);
+      let response: string | null;
+      try {
+        response = await queryGPT(brainstormPrompt, prompt, aiModel);
+      } catch (e) {
+        console.error("An error occured: ", e)
+      }
 
       const newScript = {
         user_id: session.user.id,
-        content: scriptContent,
-        title: scriptTitle,
+        content: response.scriptContent,
+        title: response.scriptTitle,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };

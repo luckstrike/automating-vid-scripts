@@ -1,6 +1,7 @@
 import type { UserPrompt, Env } from "$lib";
 import { json, type RequestHandler } from "@sveltejs/kit";
 import OpenAI from "openai";
+import type { ChatCompletionTool } from "openai/resources/index.mjs";
 
 // NOTE: This prompt can be refined over time, maybe even be a feature for the user to change
 const brainstormPrompt: string = `You are a helpful assistant who provides, users with key bullet points
@@ -19,6 +20,28 @@ const brainstormTitlePrompt: string = `You are a helpful assitant who provides, 
                                     words or less, don't provide it in quotes. The less words you provide the better, 
                                     but don't be shy of providing more words for the title if needed.`;
 
+const brainstormSchema: ChatCompletionTool = {
+  type: "function",
+  function: {
+    name: "generate_script",
+    description: "Generate a script with title and HTML-formatted content",
+    parameters: {
+      type: "object",
+      properties: {
+        scriptTitle: {
+          type: "string",
+          description: "The title of the script"
+        },
+        scriptContent: {
+          type: "string",
+          description: "The script content wrapped in HTML tags",
+          examples: ["<p>Example content</p>"]
+        }
+      },
+      required: ["scriptTitle", "scriptContent"]
+    }
+  }
+};
 async function brainstormGPT(
   openai: OpenAI,
   userInput: string,
