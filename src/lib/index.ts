@@ -49,6 +49,27 @@ export interface Env {
   PUBLIC_BASE_URL: string;
 }
 
+// For OpenAI JSON Schema Queries
+export type FunctionParameters = {
+  type: "object";
+  properties: Record<string, {
+    type: string;
+    description: string;
+    examples?: string[];
+  }>;
+  required: string[];
+}
+
+// For OpenAI JSON Schema Queries
+export type ChatCompletionTool = {
+  type: "function";
+  function: {
+    name: string;
+    description: string;
+    parameters: FunctionParameters;
+  };
+};
+
 // Converters
 export const textContentConverter: FirestoreDataConverter<TextContent> = {
   toFirestore(textContent: TextContent): DocumentData {

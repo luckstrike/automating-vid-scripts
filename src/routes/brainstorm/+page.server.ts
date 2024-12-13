@@ -1,31 +1,31 @@
 import { createScript } from "$lib/server/dbFunctions";
-import { redirect } from "@sveltejs/kit";
+import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
+import type { ChatCompletionTool } from "$lib";
 
-const baseURL: string =
-  import.meta.env.VITE_PUBLIC_BASE_URL ||
-  import.meta.env.PUBLIC_BASE_URL ||
-  "";
-const API_URL: string = `${baseURL}/api`;
+const GPT_MODEL = "gpt-4o-mini";
 
-// TODO: Maybe move this to another file?
-async function generateScriptContent(userPrompt: string, accessToken: string) {
-  const response = await fetch(API_URL + '/brainstorm', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
-    },
-    body: JSON.stringify({ prompt: userPrompt })
-  });
-
-  if (!response.ok) {
-    throw new Error(`Generation failed: {response.status}`)
+const brainstormSchema: ChatCompletionTool = {
+  type: "function",
+  function: {
+    name: "generate_script",
+    description: "Generate a script with title and HTML-formatted content",
+    parameters: {
+      type: "object",
+      properties: {
+        scriptTitle: {
+          type: "string",
+          description: "The title of the script"
+        },
+        scriptContent: {
+          type: "string",
+          description: "The script content wrapped in HTML tags",
+          examples: ["<p>Example content</p>"]
+        }
+      },
+      required: ["scriptTitle", "scriptContent"]
+    }
   }
-
-  const { scriptContent, scriptTitle } = await response.json();
-
-  return { scriptContent, scriptTitle }
-}
+};
 
 export const actions = {
   generateScript: async ({ request, locals: { supabase, session } }) => {
@@ -46,12 +46,20 @@ export const actions = {
       }
 
       // Calling the GPT API
-      const { scriptContent, scriptTitle } = await generateScriptContent(prompt, session.access_token);
+      const response = await queryGPTJSONSchema(prompt, brainstormSchema, GPT_MODEL);
+
+      if (!response) {
+        throw new Error("No response from OpenAI");
+      }
+
+      if (!response.scriptTitle || !response.scriptContent) {
+        throw new Error("No response / missing field in response from OpenAI");
+      }
 
       const newScript = {
         user_id: session.user.id,
-        content: scriptContent,
-        title: scriptTitle,
+        content: response.scriptContent,
+        title: response.scriptTitle,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };

@@ -1,28 +1,77 @@
 import type { PageServerLoad } from "../$types";
 import { fail } from "@sveltejs/kit";
 import { getScript, updateScript } from "$lib/server/dbFunctions";
+import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
+import type { ChatCompletionTool } from "$lib";
 
-const baseURL: string =
-  import.meta.env.VITE_PUBLIC_BASE_URL ||
-  import.meta.env.PUBLIC_BASE_URL ||
-  "";
-const API_URL: string = `${baseURL}/api`;
+const GPT_MODEL = "gpt-4o-mini";
 
-async function getAiResult(actionType: string, userSelection: string, accessToken: string) {
-  const response = await fetch(API_URL + '/script', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
-    },
-    body: JSON.stringify({ action: actionType, user_selection: userSelection })
-  });
+const expandSchema: ChatCompletionTool = {
+  type: "function",
+  function: {
+    name: "expand_text",
+    description:
+      `Expand the input text by adding relevant details, examples, and elaboration. 
+      For short inputs (under 50 words), expand by roughly 2-3x. For more medium inputs (50-200 words), 
+      expand by 1.5-2x. For longer inputs (200+ words), expand by 1.3-1.5x. Main the original tone and style 
+      while adding meaningful content.`,
+    parameters: {
+      type: "object",
+      properties: {
+        resultText: {
+          type: "string",
+          description:
+            `The expanded version of the input text, with added depth and details
+            while maintaining natural flow and relevance. Should follow the length
+            multiplication guidelines based on input size.`,
+          examples: ["Example content"]
+        }
+      },
+      required: ["resultText"]
+    }
+  }
+};
 
-  if (!response.ok) {
-    throw new Error(`Generation failed: {response.status}`)
+const rephraseSchema: ChatCompletionTool = {
+  type: "function",
+  function: {
+    name: "rephrase_text",
+    description:
+      `Generate an elegantly rephrased version of the input text.
+      Maintain the original meaning and key information while improving clarity and flow.
+      Use varied sentence structures and sophisticated vocabulary where appropriate.
+      Keep the same tone but enhance the overall writing quality.`,
+    parameters: {
+      type: "object",
+      properties: {
+        resultText: {
+          type: "string",
+          description:
+            `A more polished and elegant version of the input text, 
+            maintaing core meaning while improving style and readablity.`,
+          examples: ["Example content"]
+        }
+      },
+      required: ["resultText"]
+    }
+  }
+};
+
+async function getAiResponse(actionType: string, userSelection: string) {
+
+  let response;
+
+  try {
+    if (actionType === "expand") {
+      response = await queryGPTJSONSchema(userSelection, expandSchema, GPT_MODEL);
+    } else if (actionType === "rephrase") {
+      response = await queryGPTJSONSchema(userSelection, rephraseSchema, GPT_MODEL);
+    }
+  } catch (error) {
+    console.error("Failed to generate data: ", error);
   }
 
-  return await response.json();
+  return response;
 }
 
 export const load: PageServerLoad = async ({ params, locals: { supabase, session } }) => {
@@ -140,16 +189,16 @@ export const actions = {
     }
 
     try {
-      const { gptContent } = await getAiResult(actionType, userSelection, session.access_token)
+      const { resultText } = await getAiResponse(actionType, userSelection)
 
       return {
         success: true,
-        gptContent
+        resultText
       }
     } catch (error) {
       return fail(400, {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to rephrase the text'
+        error: error instanceof Error ? error.message : 'Failed to rephrase or expand on the text'
       })
     }
   }

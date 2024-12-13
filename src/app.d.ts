@@ -15,6 +15,9 @@ declare global {
     interface PageData {
       session: Session | null
     }
+    interface Env {
+      OPENAI_API_KEY: string;
+    }
     // interface PageState {}
     // interface Platform {}
   }
