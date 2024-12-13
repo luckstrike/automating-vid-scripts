@@ -1,10 +1,12 @@
 import OpenAI from "openai";
-import type { FunctionParameters, ChatCompletionTool } from "$lib";
+import type { ChatCompletionTool } from "$lib";
+import { OPENAI_API_KEY } from "$env/static/private";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: OPENAI_API_KEY,
 })
 
+// Used for when you just need a simple reponse back
 export async function queryGPT(
   initialPrompt: string,
   userInput: string,
@@ -34,11 +36,12 @@ export async function queryGPT(
   return JSON.parse(content);
 }
 
+// Used when a JSON response is needed, this is better for that
 export async function queryGPTJSONSchema(
   userPrompt: string,
-  schema: any,
+  schema: ChatCompletionTool,
   aiModel: string
-): Promise<string | null> {
+): Promise<any> {
   const completion = await openai.chat.completions.create({
     messages: [
       {
@@ -50,5 +53,7 @@ export async function queryGPTJSONSchema(
     tools: [
       schema
     ]
-  })
+  });
+
+  return JSON.parse(completion.choices[0].message.tool_calls![0].function.arguments);
 }

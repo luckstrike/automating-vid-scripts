@@ -1,23 +1,32 @@
 import { createScript } from "$lib/server/dbFunctions";
 import { redirect } from "@sveltejs/kit";
-import { queryGPT } from "$lib/server/openAIFunctions";
+import { queryGPT, queryGPTJSONSchema } from "$lib/server/openAIFunctions";
+import type { ChatCompletionTool } from "$lib";
 
-const baseURL: string =
-  import.meta.env.VITE_PUBLIC_BASE_URL ||
-  import.meta.env.PUBLIC_BASE_URL ||
-  "";
-const API_URL: string = `${baseURL}/api`;
+const GPT_MODEL = "gpt-4o-mini";
 
-const brainstormPrompt: string = `You are a helpful assistant who provides, users with key bullet points
-                                related to a user provided video topic. If the user specifies that they want
-                                ideas related to a random topic you should provided bullet points to them
-                                about a random topic that could be turned into a video. The topic may be
-                                about anything, you can decide that! Just make sure to focus on one topic 
-                                and if you feel like it provide the user with some pointers they can use to
-                                branch from that idea. Also please make sure to format all of this in HTML,
-                                just the tags, you dont have to specify it's html at the start or end.`;
-
-const aiModel = "gpt-4o-mini";
+const brainstormSchema: ChatCompletionTool = {
+  type: "function",
+  function: {
+    name: "generate_script",
+    description: "Generate a script with title and HTML-formatted content",
+    parameters: {
+      type: "object",
+      properties: {
+        scriptTitle: {
+          type: "string",
+          description: "The title of the script"
+        },
+        scriptContent: {
+          type: "string",
+          description: "The script content wrapped in HTML tags",
+          examples: ["<p>Example content</p>"]
+        }
+      },
+      required: ["scriptTitle", "scriptContent"]
+    }
+  }
+};
 
 export const actions = {
   generateScript: async ({ request, locals: { supabase, session } }) => {
@@ -38,11 +47,14 @@ export const actions = {
       }
 
       // Calling the GPT API
-      let response: string | null;
-      try {
-        response = await queryGPT(brainstormPrompt, prompt, aiModel);
-      } catch (e) {
-        console.error("An error occured: ", e)
+      const response = await queryGPTJSONSchema(prompt, brainstormSchema, GPT_MODEL);
+
+      if (!response) {
+        throw new Error("No response from OpenAI");
+      }
+
+      if (!response.scriptTitle || !response.scriptContent) {
+        throw new Error("No response / missing field in response from OpenAI");
       }
 
       const newScript = {
