@@ -52,8 +52,23 @@ export async function queryGPTJSONSchema(
     model: aiModel,
     tools: [
       schema
-    ]
+    ],
+    tool_choice: { type: "function", function: { name: schema.function.name } }
   });
 
-  return JSON.parse(completion.choices[0].message.tool_calls![0].function.arguments);
+  const message = completion.choices[0]?.message;
+
+  if (!message) {
+    throw new Error('No message in response');
+  }
+
+  if (!message.tool_calls?.[0].function?.arguments) {
+    throw new Error('No tool calls found in the response');
+  }
+
+  try {
+    return JSON.parse(message.tool_calls![0].function.arguments);
+  } catch (error) {
+    console.error('Error in queryGPTJSONSchema: ', error);
+  }
 }

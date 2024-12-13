@@ -272,9 +272,9 @@
 
               if (result.type === "success") {
                 if (formData.get("action") == "expand") {
-                  insertTextAfterSelection(result.data.gptContent);
+                  insertTextAfterSelection(result.data.resultText);
                 } else if (formData.get("action") == "rephrase") {
-                  replaceSelectedText(result.data.gptContent);
+                  replaceSelectedText(result.data.resultText);
                 } else {
                   console.error("Invalid result type was provided");
                   return false;

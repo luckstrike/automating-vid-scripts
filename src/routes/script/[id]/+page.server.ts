@@ -1,28 +1,64 @@
 import type { PageServerLoad } from "../$types";
 import { fail } from "@sveltejs/kit";
 import { getScript, updateScript } from "$lib/server/dbFunctions";
+import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
+import type { ChatCompletionTool } from "$lib";
 
-const baseURL: string =
-  import.meta.env.VITE_PUBLIC_BASE_URL ||
-  import.meta.env.PUBLIC_BASE_URL ||
-  "";
-const API_URL: string = `${baseURL}/api`;
+const GPT_MODEL = "gpt-4o-mini";
 
-async function getAiResult(actionType: string, userSelection: string, accessToken: string) {
-  const response = await fetch(API_URL + '/script', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
-    },
-    body: JSON.stringify({ action: actionType, user_selection: userSelection })
-  });
+const expandSchema: ChatCompletionTool = {
+  type: "function",
+  function: {
+    name: "expand_text",
+    description: "Generate text that further expands on the provided input text",
+    parameters: {
+      type: "object",
+      properties: {
+        resultText: {
+          type: "string",
+          description: "The provided user input but further expanded upon",
+          examples: ["Example content"]
+        }
+      },
+      required: ["resultText"]
+    }
+  }
+};
 
-  if (!response.ok) {
-    throw new Error(`Generation failed: {response.status}`)
+const rephraseSchema: ChatCompletionTool = {
+  type: "function",
+  function: {
+    name: "rephrase_text",
+    description: "Generate a rephrased version of the provided input text",
+    parameters: {
+      type: "object",
+      properties: {
+        resultText: {
+          type: "string",
+          description: "The provided user input but rephrased more elegantly",
+          examples: ["Example content"]
+        }
+      },
+      required: ["resultText"]
+    }
+  }
+};
+
+async function getAiResponse(actionType: string, userSelection: string) {
+
+  let response;
+
+  try {
+    if (actionType === "expand") {
+      response = await queryGPTJSONSchema(userSelection, expandSchema, GPT_MODEL);
+    } else if (actionType === "rephrase") {
+      response = await queryGPTJSONSchema(userSelection, rephraseSchema, GPT_MODEL);
+    }
+  } catch (error) {
+    console.error("Failed to generate data: ", error);
   }
 
-  return await response.json();
+  return response;
 }
 
 export const load: PageServerLoad = async ({ params, locals: { supabase, session } }) => {
@@ -140,16 +176,16 @@ export const actions = {
     }
 
     try {
-      const { gptContent } = await getAiResult(actionType, userSelection, session.access_token)
+      const { resultText } = await getAiResponse(actionType, userSelection)
 
       return {
         success: true,
-        gptContent
+        resultText
       }
     } catch (error) {
       return fail(400, {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to rephrase the text'
+        error: error instanceof Error ? error.message : 'Failed to rephrase or expand on the text'
       })
     }
   }
