@@ -1,28 +1,40 @@
 import { createScript } from "$lib/server/dbFunctions";
-import { redirect } from "@sveltejs/kit";
+import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
+import type { ChatCompletionTool } from "$lib";
+import { checkIfAllowed, parseURL } from "$lib/server/parser.js";
 
-const baseURL: string =
-  import.meta.env.VITE_PUBLIC_BASE_URL ||
-  import.meta.env.PUBLIC_BASE_URL ||
-  "";
-const API_URL: string = `${baseURL}/api`;
+const GPT_MODEL = "gpt-4o-mini";
 
-// TODO: Maybe move this to another file?
-async function generateScriptContent(userProvidedUrl: string, accessToken: string) {
-  const response = await fetch(API_URL + '/summarize', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
-    },
-    body: JSON.stringify({ url: userProvidedUrl })
-  });
-
-  if (!response.ok) {
-    throw new Error(`Generation failed: {response.status}`)
+const summarizeSchema: ChatCompletionTool = {
+  type: "function",
+  function: {
+    name: "generate_summary",
+    description: "Generate a summary of the provided scrapped HTML content",
+    parameters: {
+      type: "object",
+      properties: {
+        summary: {
+          type: "string",
+          description: "The summary of the scrapped HTML content",
+          examples: ["<p>Example content</p>"]
+        }
+      },
+      required: ["scriptTitle", "scriptContent"]
+    }
   }
+};
 
-  return await response.json();
+async function generateScriptContent(userAgent: string, url: string) {
+  if (await checkIfAllowed(userAgent, url)) {
+    const pageHTMLResult = await parseURL(url);
+
+    if (pageHTMLResult) {
+      const response = await queryGPTJSONSchema(pageHTMLResult, summarizeSchema, GPT_MODEL);
+      return response;
+    } else {
+      throw new Error("Issue when trying to parse a website...")
+    }
+  }
 }
 
 export const actions = {
@@ -44,7 +56,8 @@ export const actions = {
         }
       }
 
-      const { summary } = await generateScriptContent(url, session.access_token);
+      const userAgent: string = request.headers.get("user-agent") || "unknown";
+      const { summary } = await generateScriptContent(userAgent, url);
 
       return {
         success: true,
