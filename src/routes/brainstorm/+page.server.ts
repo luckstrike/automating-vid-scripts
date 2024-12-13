@@ -1,6 +1,5 @@
 import { createScript } from "$lib/server/dbFunctions";
-import { redirect } from "@sveltejs/kit";
-import { queryGPT, queryGPTJSONSchema } from "$lib/server/openAIFunctions";
+import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
 import type { ChatCompletionTool } from "$lib";
 
 const GPT_MODEL = "gpt-4o-mini";
