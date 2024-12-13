@@ -10,13 +10,20 @@ const expandSchema: ChatCompletionTool = {
   type: "function",
   function: {
     name: "expand_text",
-    description: "Generate text that further expands on the provided input text",
+    description:
+      `Expand the input text by adding relevant details, examples, and elaboration. 
+      For short inputs (under 50 words), expand by roughly 2-3x. For more medium inputs (50-200 words), 
+      expand by 1.5-2x. For longer inputs (200+ words), expand by 1.3-1.5x. Main the original tone and style 
+      while adding meaningful content.`,
     parameters: {
       type: "object",
       properties: {
         resultText: {
           type: "string",
-          description: "The provided user input but further expanded upon",
+          description:
+            `The expanded version of the input text, with added depth and details
+            while maintaining natural flow and relevance. Should follow the length
+            multiplication guidelines based on input size.`,
           examples: ["Example content"]
         }
       },
@@ -29,13 +36,19 @@ const rephraseSchema: ChatCompletionTool = {
   type: "function",
   function: {
     name: "rephrase_text",
-    description: "Generate a rephrased version of the provided input text",
+    description:
+      `Generate an elegantly rephrased version of the input text.
+      Maintain the original meaning and key information while improving clarity and flow.
+      Use varied sentence structures and sophisticated vocabulary where appropriate.
+      Keep the same tone but enhance the overall writing quality.`,
     parameters: {
       type: "object",
       properties: {
         resultText: {
           type: "string",
-          description: "The provided user input but rephrased more elegantly",
+          description:
+            `A more polished and elegant version of the input text, 
+            maintaing core meaning while improving style and readablity.`,
           examples: ["Example content"]
         }
       },
