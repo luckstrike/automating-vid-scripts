@@ -19,7 +19,7 @@
     class="flex flex-col w-full h-full items-center justify-center p-4 space-y-4"
   >
     <div class="text-center text-4xl font-bold text-white">
-      Howdy there, Welcome to VidScripts
+      Howdy there, Welcome to DinoDino
     </div>
     <form class="flex flex-col justify-center space-y-2 w-64" method="POST">
       <button

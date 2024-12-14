@@ -11,7 +11,7 @@
 <div class="flex flex-col w-screen h-screen p-2">
   <div class="flex flex-row justify-between text-white mb-4">
     <div class="flex flex-row space-x-2">
-      <div class="text-2xl font-bold p-1 pt-0">VidScripts</div>
+      <div class="text-2xl font-bold p-1 pt-0">DinoDino</div>
     </div>
     <div class="flex flex-row space-x-4 text-white mb-4">
       <button on:click={() => goto("/")}> Home </button>

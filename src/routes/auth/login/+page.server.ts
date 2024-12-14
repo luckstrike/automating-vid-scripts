@@ -1,6 +1,13 @@
 import { redirect } from '@sveltejs/kit'
-
-import type { Actions } from '../$types'
+import type { Actions, PageServerLoad } from './$types'
+export const load: PageServerLoad = async () => {
+  return {
+    seo: {
+      title: "Login | DinoDino",
+      description: "Summarize tab where you can summarize the content of a URL"
+    }
+  };
+}
 
 export const actions: Actions = {
   githubSignIn: async ({ locals: { supabase }, url }) => {
