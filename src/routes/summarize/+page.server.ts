@@ -31,8 +31,8 @@ export const load: PageServerLoad = async () => {
       description: "Summarize tab where you can summarize the content of a URL"
     }
   };
-
 }
+
 async function generateScriptContent(userAgent: string, url: string) {
   if (!(new URL(url))) {
     throw new Error("Invalid URL");
