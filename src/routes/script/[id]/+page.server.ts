@@ -90,7 +90,11 @@ export const load: PageServerLoad = async ({ params, locals: { supabase, session
 
     return {
       script: script,
-      session: session
+      session: session,
+      seo: {
+        title: `${script.title} | DinoDino`,
+        description: "Script tab where you can edit a script"
+      }
     }
   } catch (error) {
     return {

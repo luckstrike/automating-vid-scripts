@@ -1,6 +1,7 @@
 import { createScript } from "$lib/server/dbFunctions";
 import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
 import type { ChatCompletionTool } from "$lib";
+import type { PageServerLoad } from "./$types";
 
 const GPT_MODEL = "gpt-4o-mini";
 
@@ -26,6 +27,16 @@ const brainstormSchema: ChatCompletionTool = {
     }
   }
 };
+
+export const load: PageServerLoad = async () => {
+  return {
+    seo: {
+      title: "Brainstorm | DinoDino",
+      description: "Brainstorm tab where you can brainstorm a starting point for a script"
+    }
+  };
+
+}
 
 export const actions = {
   generateScript: async ({ request, locals: { supabase, session } }) => {

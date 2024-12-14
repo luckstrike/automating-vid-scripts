@@ -7,7 +7,8 @@ export const load: PageServerLoad = async ({ locals: { supabase, session } }) =>
     if (!session) {
       return {
         scripts: [],
-        session: null
+        session: null,
+        error: 'No user session is active'
       };
     }
 
@@ -16,7 +17,14 @@ export const load: PageServerLoad = async ({ locals: { supabase, session } }) =>
     // Ensuring scripts is always an array
     const safeScripts = Array.isArray(scripts) ? scripts : [];
 
-    return { scripts: safeScripts, session };
+    return { 
+      scripts: safeScripts, 
+      session, 
+      seo: {
+        title: "Dashboard | DinoDino",
+        description: "Website dashboard where you can create, delete and select a script to edit"
+      } 
+    };
   } catch (error) {
     return {
       scripts: [],

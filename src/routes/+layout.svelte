@@ -27,6 +27,14 @@
   });
 </script>
 
+<svelte:head>
+  <title>{$page.data.seo?.title ?? "DinoDino"}</title>
+  <meta
+    name="description"
+    content={$page.data.seo?.description ?? "A site for making video scripts"}
+  />
+</svelte:head>
+
 <div class="flex flex-row h-screen">
   {#if $page.url.pathname === "/" && !session}
     <Landing />

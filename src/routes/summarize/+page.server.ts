@@ -1,6 +1,7 @@
 import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
-import type { ChatCompletionTool } from "$lib";
 import { checkIfAllowed, parseURL } from "$lib/server/parser.js";
+import type { ChatCompletionTool } from "$lib";
+import type { PageServerLoad } from "./$types";
 
 const GPT_MODEL = "gpt-4o-mini";
 
@@ -23,6 +24,15 @@ const summarizeSchema: ChatCompletionTool = {
   }
 };
 
+export const load: PageServerLoad = async () => {
+  return {
+    seo: {
+      title: "Summarize | DinoDino",
+      description: "Summarize tab where you can summarize the content of a URL"
+    }
+  };
+
+}
 async function generateScriptContent(userAgent: string, url: string) {
   if (!(new URL(url))) {
     throw new Error("Invalid URL");
