@@ -4,7 +4,7 @@ export const load: PageServerLoad = async () => {
   return {
     seo: {
       title: "Login | DinoDino",
-      description: "Summarize tab where you can summarize the content of a URL"
+      description: "Login page for the website"
     }
   };
 }
