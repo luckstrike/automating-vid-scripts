@@ -18,6 +18,11 @@
   <div
     class="flex flex-col w-full h-full items-center justify-center p-4 space-y-4"
   >
+    <img
+      class="h-24 w-24"
+      src="/favicon/android-chrome-512x512.png"
+      alt="DinoDino Logo"
+    />
     <div class="text-center text-4xl font-bold text-white">
       Howdy there, Welcome to DinoDino
     </div>

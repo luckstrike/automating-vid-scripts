@@ -10,8 +10,13 @@
 
 <div class="flex flex-col w-screen h-screen p-2">
   <div class="flex flex-row justify-between text-white mb-4">
-    <div class="flex flex-row space-x-2">
-      <div class="text-2xl font-bold p-1 pt-0">DinoDino</div>
+    <div class="flex flex-row space-x-1 items-center">
+      <img
+        class="h-16 w-16"
+        src="/favicon/android-chrome-512x512.png"
+        alt="DinoDino Logo"
+      />
+      <div class="text-4xl font-bold p-1 pt-0">DinoDino</div>
     </div>
     <div class="flex flex-row space-x-4 text-white mb-4">
       <button on:click={() => goto("/")}> Home </button>
