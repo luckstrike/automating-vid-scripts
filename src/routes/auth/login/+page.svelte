@@ -20,7 +20,7 @@
   >
     <img
       class="h-24 w-24"
-      src="/favicon/android-chrome-512x512.png"
+      src="/favicon/android-chrome-192x192.png"
       alt="DinoDino Logo"
     />
     <div class="text-center text-4xl font-bold text-white">

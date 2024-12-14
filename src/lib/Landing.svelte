@@ -13,7 +13,7 @@
     <div class="flex flex-row space-x-1 items-center">
       <img
         class="h-16 w-16"
-        src="/favicon/android-chrome-512x512.png"
+        src="/favicon/android-chrome-192x192.png"
         alt="DinoDino Logo"
       />
       <div class="text-4xl font-bold p-1 pt-0">DinoDino</div>
