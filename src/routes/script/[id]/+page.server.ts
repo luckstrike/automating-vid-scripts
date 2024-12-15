@@ -130,7 +130,6 @@ export const actions = {
         scriptId as string,
         {
           title: formData.get('title') as string,
-          content: formData.get('content') as string
         },
         session.user.id
       )
