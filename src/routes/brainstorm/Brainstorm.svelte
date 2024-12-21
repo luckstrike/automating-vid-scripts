@@ -36,7 +36,11 @@
     use:enhance={handleEnhance}
   >
     <div class="w-3/4">
-      <AutoGrowInput />
+      <AutoGrowInput
+        bind:value={brainstorm_text}
+        placeholder="...or try typing a topic"
+        maxLength={2000}
+      />
     </div>
     <div class="flex gap-2">
       <!-- Custom prompt button -->
