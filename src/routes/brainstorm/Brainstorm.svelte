@@ -2,6 +2,7 @@
   import { enhance } from "$app/forms";
   import { goto } from "$app/navigation";
   import type { ActionData } from "./$types";
+  import AutoGrowInput from "$lib/AutoGrowInput.svelte";
 
   export let form: ActionData;
 
@@ -34,14 +35,9 @@
     class="w-full flex flex-col items-center gap-4"
     use:enhance={handleEnhance}
   >
-    <input
-      class="w-3/4 h-10 rounded-lg px-2 text-black"
-      type="text"
-      name="prompt"
-      placeholder="or try generating a random idea..."
-      bind:value={brainstorm_text}
-    />
-
+    <div class="w-3/4">
+      <AutoGrowInput />
+    </div>
     <div class="flex gap-2">
       <!-- Custom prompt button -->
       <button
