@@ -23,11 +23,9 @@
 <div
   class="flex flex-col flex-grow items-center justify-center h-full w-full text-white p-4"
 >
-  <h1 class="text-2xl font-bold">Kickstart your writing process!</h1>
-
-  <p class="text-lg p-2">
-    Do you have a topic that you want to make a video about? Provide it here:
-  </p>
+  <h1 class="text-2xl text-center font-bold p-2 w-2/3">
+    Have a topic you want to make a video on? Brainstorm away!
+  </h1>
 
   <form
     method="POST"
@@ -35,7 +33,7 @@
     class="w-full flex flex-col items-center gap-4"
     use:enhance={handleEnhance}
   >
-    <div class="w-3/4">
+    <div class="w-2/3">
       <AutoGrowInput
         bind:value={brainstorm_text}
         placeholder="...or try typing a topic"
