@@ -3,9 +3,9 @@
   import { enhance } from "$app/forms";
   import debounce from "lodash/debounce";
 
-  let form: HTMLFormElement;
   let summarize_url: string | null = null;
   let summarizable: string = "";
+  let summaryOption: string | null = null;
 
   let isGenerating: boolean = false;
   let errorMessage: string | null = null;
@@ -86,7 +86,6 @@
       Please provide the URL of the website you would like to summarize:
     </p>
     <form
-      bind:this={form}
       method="POST"
       action="?/generateSummary"
       use:enhance={handleSubmit}
@@ -105,18 +104,28 @@
       </div>
       <div class="flex flex-col">
         <div>
-          <input type="radio" name="summary" value="detailed" />
+          <input
+            type="radio"
+            name="summary"
+            value="detailed"
+            bind:group={summaryOption}
+          />
           <label for="summary">Detailed Summary</label>
         </div>
         <div>
-          <input type="radio" name="summary" value="bullet" />
+          <input
+            type="radio"
+            name="summary"
+            value="bullet"
+            bind:group={summaryOption}
+          />
           <label for="summary">Bullet Points</label>
         </div>
       </div>
       <button
         type="submit"
         class="p-2 disabled:bg-gray-400 disabled:cursor-not-allowed bg-blue-600 rounded-lg text-white"
-        disabled={!summarize_url || isGenerating || !form?.summary?.value}
+        disabled={!summarize_url || isGenerating || !summaryOption}
       >
         Summarize
       </button>

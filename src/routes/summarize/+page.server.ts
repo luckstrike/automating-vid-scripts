@@ -71,9 +71,10 @@ export const actions = {
 
       const formData = await request.formData();
       const url = formData.get('url')?.toString();
-      const summaryOption = formData.get('summaryOption')?.toString();
+      const summaryOption = formData.get('summary');
 
       if (!url) {
+        console.log("URL")
         return {
           success: false,
           summary: null,
@@ -85,7 +86,7 @@ export const actions = {
           summary: null,
           error: 'No summary option was selected'
         }
-      } else if (summaryOption !== "detailed" || summaryOption !== "bullet") {
+      } else if (summaryOption != "detailed" && summaryOption != "bullet") {
         return {
           success: false,
           summary: null,
