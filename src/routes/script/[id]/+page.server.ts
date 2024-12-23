@@ -2,7 +2,7 @@ import type { PageServerLoad } from "../$types";
 import { fail } from "@sveltejs/kit";
 import { getScript, updateScript } from "$lib/server/dbFunctions";
 import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
-import type { ChatCompletionTool } from "$lib";
+import type { ChatCompletionTool, ChatMessage } from "$lib";
 
 const GPT_MODEL = "gpt-4o-mini";
 
@@ -60,12 +60,13 @@ const rephraseSchema: ChatCompletionTool = {
 async function getAiResponse(actionType: string, userSelection: string) {
 
   let response;
+  const message: ChatMessage[] = [{ role: "user", content: userSelection }];
 
   try {
     if (actionType === "expand") {
-      response = await queryGPTJSONSchema(userSelection, expandSchema, GPT_MODEL);
+      response = await queryGPTJSONSchema(message, expandSchema, GPT_MODEL);
     } else if (actionType === "rephrase") {
-      response = await queryGPTJSONSchema(userSelection, rephraseSchema, GPT_MODEL);
+      response = await queryGPTJSONSchema(message, rephraseSchema, GPT_MODEL);
     }
   } catch (error) {
     console.error("Failed to generate data: ", error);

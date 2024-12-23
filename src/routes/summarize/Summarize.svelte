@@ -3,6 +3,7 @@
   import { enhance } from "$app/forms";
   import debounce from "lodash/debounce";
 
+  let form: HTMLFormElement;
   let summarize_url: string | null = null;
   let summarizable: string = "";
 
@@ -26,7 +27,7 @@
   };
 
   const handleSubmit = async ({ action, cancel }) => {
-    if (!summarize_url) {
+    if (!summarize_url || !summaryOption) {
       cancel();
       return;
     }
@@ -85,6 +86,7 @@
       Please provide the URL of the website you would like to summarize:
     </p>
     <form
+      bind:this={form}
       method="POST"
       action="?/generateSummary"
       use:enhance={handleSubmit}
@@ -103,18 +105,18 @@
       </div>
       <div class="flex flex-col">
         <div>
-          <input type="radio" name="summary" />
+          <input type="radio" name="summary" value="detailed" />
           <label for="summary">Detailed Summary</label>
         </div>
         <div>
-          <input type="radio" name="summary" />
+          <input type="radio" name="summary" value="bullet" />
           <label for="summary">Bullet Points</label>
         </div>
       </div>
       <button
         type="submit"
         class="p-2 disabled:bg-gray-400 disabled:cursor-not-allowed bg-blue-600 rounded-lg text-white"
-        disabled={!summarize_url || isGenerating}
+        disabled={!summarize_url || isGenerating || !form?.summary?.value}
       >
         Summarize
       </button>

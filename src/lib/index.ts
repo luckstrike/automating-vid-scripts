@@ -70,6 +70,12 @@ export type ChatCompletionTool = {
   };
 };
 
+// For OpenAI JSON Schema Queries
+export type ChatMessage = {
+  role: "user" | "system" | "assistant";
+  content: string;
+};
+
 // Converters
 export const textContentConverter: FirestoreDataConverter<TextContent> = {
   toFirestore(textContent: TextContent): DocumentData {

@@ -1,6 +1,6 @@
 import { createScript } from "$lib/server/dbFunctions";
 import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
-import type { ChatCompletionTool } from "$lib";
+import type { ChatCompletionTool, ChatMessage } from "$lib";
 import type { PageServerLoad } from "./$types";
 
 const GPT_MODEL = "gpt-4o-mini";
@@ -57,7 +57,8 @@ export const actions = {
       }
 
       // Calling the GPT API
-      const response = await queryGPTJSONSchema(prompt, brainstormSchema, GPT_MODEL);
+      const message: ChatMessage[] = [{ role: "user", content: prompt }];
+      const response = await queryGPTJSONSchema(message, brainstormSchema, GPT_MODEL);
 
       if (!response) {
         throw new Error("No response from OpenAI");
