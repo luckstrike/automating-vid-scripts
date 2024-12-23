@@ -52,9 +52,23 @@
 
     try {
       new URL(value);
-      summarizable = "Yes";
-      // TODO: Call a function which checks if a URL can be parsed
-      return true;
+
+      const response = await fetch("/api/check-robots", {
+        method: "POST",
+        body: JSON.stringify({ url: value }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await response.json();
+
+      if (data.success === true && data.isAllowed) {
+        summarizable = "Yes";
+        return true;
+      } else if (data.success === false) {
+        summarizable = "Invalid URL";
+      } else {
+        summarizable = "No";
+      }
     } catch {
       summarizable = "Invalid URL";
       return false;

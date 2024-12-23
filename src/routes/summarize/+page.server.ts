@@ -33,12 +33,12 @@ export const load: PageServerLoad = async () => {
   };
 }
 
-async function generateScriptContent(userAgent: string, url: string) {
+async function generateScriptContent(url: string) {
   if (!(new URL(url))) {
     throw new Error("Invalid URL");
   }
 
-  if (await checkIfAllowed(userAgent, url)) {
+  if (await checkIfAllowed(url)) {
     const pageHTMLResult = await parseURL(url);
 
     if (pageHTMLResult) {
@@ -69,8 +69,7 @@ export const actions = {
         }
       }
 
-      const userAgent: string = request.headers.get("user-agent") || "unknown";
-      const { summary } = await generateScriptContent(userAgent, url);
+      const { summary } = await generateScriptContent(url);
 
       return {
         success: true,
