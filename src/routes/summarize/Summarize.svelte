@@ -13,8 +13,9 @@
     "";
   const API_URL: string = `${baseURL}/api`;
 
-  let showModal: boolean = false;
-  let modalContent: string = "";
+  let showModal: boolean = true;
+  let modalTitle: string = "Here's a Summary:";
+  let modalContent: string = "The quick brown fox, Houdini?";
 
   // Set's showModal (the global variable) to false
   const closeModal = () => {
@@ -75,7 +76,10 @@
     </form>
   </div>
 
-  <Modal show={showModal} onClose={closeModal} content={modalContent}>
-    <p class="text-xl font-bold">Here's what we got back:</p>
-  </Modal>
+  <Modal
+    show={showModal}
+    onClose={closeModal}
+    title={modalTitle}
+    content={modalContent}
+  />
 </div>

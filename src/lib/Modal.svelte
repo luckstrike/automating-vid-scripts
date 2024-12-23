@@ -1,6 +1,8 @@
 <script lang="ts">
   export let show: boolean = false;
   export let onClose: () => void = () => {};
+
+  export let title: string = "";
   export let content: string = "";
 
   const copyToClipboard = () => {
@@ -19,21 +21,23 @@
     on:click={onClose}
   >
     <div
-      class="flex flex-col p-10 max-h-[80%] max-w-[80%] rounded-lg text-white bg-[#2f2f2f]"
+      class="flex flex-col p-4 space-y-2 max-h-[80%] w-1/2 max-w-[80%] rounded-lg text-white bg-[#1f1f1f]"
       on:click|stopPropagation
     >
-      <slot></slot>
+      <div class="text-xl font-bold text-center">{title}</div>
+      <hr class="border-gray-500 border-1" />
       <p class="p-2 overflow-y-scroll items-center justify-center">
         {content}
       </p>
-      <div class="flex flex-row justify-center space-x-2">
+      <hr class="border-gray-500 border-1" />
+      <div class="flex flex-row justify-center space-x-4">
         <button
-          class="p-1 font-bold rounded-lg bg-blue-500"
+          class="p-2 font-bold rounded-lg bg-blue-500"
           on:click={copyToClipboard}
         >
           Copy
         </button>
-        <button class="p-1 font-bold rounded-lg bg-blue-500" on:click={onClose}>
+        <button class="p-2 font-bold rounded-lg bg-blue-500" on:click={onClose}>
           Close
         </button>
       </div>
