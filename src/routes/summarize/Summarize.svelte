@@ -15,7 +15,7 @@
 
   let showModal: boolean = true;
   let modalTitle: string = "Here's a Summary:";
-  let modalContent: string = "The quick brown fox, Houdini?";
+  let modalContent: string = "";
 
   // Set's showModal (the global variable) to false
   const closeModal = () => {
