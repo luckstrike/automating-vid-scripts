@@ -1,8 +1,10 @@
 <script lang="ts">
   import Modal from "$lib/Modal.svelte";
   import { enhance } from "$app/forms";
+  import debounce from "lodash/debounce";
 
   let summarize_url: string | null = null;
+  let summarizable: string = "";
 
   let isGenerating: boolean = false;
   let errorMessage: string | null = null;
@@ -41,6 +43,23 @@
       isGenerating = false;
     };
   };
+
+  const validateURL = debounce(async (value: string | null) => {
+    if (!value) {
+      summarizable = "";
+      return false;
+    }
+
+    try {
+      new URL(value);
+      summarizable = "Yes";
+      // TODO: Call a function which checks if a URL can be parsed
+      return true;
+    } catch {
+      summarizable = "Invalid URL";
+      return false;
+    }
+  }, 300);
 </script>
 
 <div class="flex flex-col text-white w-full h-screen">
@@ -55,7 +74,7 @@
       method="POST"
       action="?/generateSummary"
       use:enhance={handleSubmit}
-      class="w-3/4 flex flex-col items-center space-y-3"
+      class="w-2/3 flex flex-col items-center space-y-3"
     >
       <input
         name="url"
@@ -63,9 +82,21 @@
         type="text"
         placeholder="Enter URL here..."
         bind:value={summarize_url}
+        on:input={() => validateURL(summarize_url)}
       />
-      <!-- Why the -mt-3? Since I'm using space-y-3 this causes that to also be applied to the 
-        overlay, so adding this in fixes the issue some-->
+      <div class="font-bold text-lg">
+        Can this URL be summarized? {summarizable}
+      </div>
+      <div class="flex flex-col">
+        <div>
+          <input type="radio" name="summary" />
+          <label for="summary">Detailed Summary</label>
+        </div>
+        <div>
+          <input type="radio" name="summary" />
+          <label for="summary">Bullet Points</label>
+        </div>
+      </div>
       <button
         type="submit"
         class="p-2 disabled:bg-gray-400 disabled:cursor-not-allowed bg-blue-600 rounded-lg text-white"
