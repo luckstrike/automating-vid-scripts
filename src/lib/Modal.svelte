@@ -5,6 +5,9 @@
   export let title: string = "";
   export let content: string = "";
 
+  // Used by the copy button
+  let showCopied: boolean = false;
+
   const copyToClipboard = () => {
     navigator.clipboard
       .writeText(content)
@@ -12,6 +15,12 @@
       .catch((err) => {
         console.error("Failed to copy text: ", err);
       });
+
+    showCopied = true;
+
+    setTimeout(() => {
+      showCopied = false;
+    }, 2000);
   };
 </script>
 
@@ -35,7 +44,11 @@
           class="p-2 font-bold rounded-lg bg-blue-500"
           on:click={copyToClipboard}
         >
-          Copy
+          {#if showCopied}
+            Copied!
+          {:else}
+            Copy
+          {/if}
         </button>
         <button class="p-2 font-bold rounded-lg bg-blue-500" on:click={onClose}>
           Close

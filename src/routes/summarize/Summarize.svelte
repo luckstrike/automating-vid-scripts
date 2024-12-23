@@ -13,7 +13,7 @@
     "";
   const API_URL: string = `${baseURL}/api`;
 
-  let showModal: boolean = true;
+  let showModal: boolean = false;
   let modalTitle: string = "Here's a Summary:";
   let modalContent: string = "";
 
