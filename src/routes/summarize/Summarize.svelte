@@ -4,7 +4,7 @@
   import debounce from "lodash/debounce";
 
   let summarize_url: string | null = null;
-  let summarizable: string = "";
+  let summarizable: string = "No URL provided";
   let summaryOption: string | null = null;
 
   let isGenerating: boolean = false;
@@ -80,7 +80,7 @@
 
   const validateURL = debounce(async (value: string | null) => {
     if (!value) {
-      summarizable = "";
+      summarizable = "No URL provided";
       return false;
     }
 
@@ -133,7 +133,16 @@
         on:input={() => validateURL(summarize_url)}
       />
       <div class="font-bold text-lg">
-        Can this URL be summarized? {summarizable}
+        Can this URL be summarized? <span
+          class={`
+          ${summarizable === "Yes" ? "text-green-500" : ""}
+          ${summarizable === "No" ? "text-red-500" : ""}
+          ${summarizable === "Invalid URL" ? "text-yellow-500" : ""}
+          ${summarizable === "No URL provided" ? "text-gray-400" : ""}
+        `}
+        >
+          {summarizable}
+        </span>
       </div>
       <div class="flex flex-col">
         <div>
