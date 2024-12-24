@@ -5,6 +5,7 @@
 
   let summarize_url: string | null = null;
   let summarizable: string = "No URL provided";
+  let summarizableBool: boolean = false;
   let summaryOption: string | null = null;
 
   let isGenerating: boolean = false;
@@ -97,14 +98,18 @@
 
       if (data.success === true && data.isAllowed) {
         summarizable = "Yes";
+        summarizableBool = true;
         return true;
       } else if (data.success === false) {
         summarizable = "Invalid URL";
+        summarizableBool = false;
       } else {
         summarizable = "No";
+        summarizableBool = false;
       }
     } catch {
       summarizable = "Invalid URL";
+      summarizableBool = false;
       return false;
     }
   }, 300);
@@ -173,7 +178,7 @@
       <button
         type="submit"
         class="p-2 disabled:bg-gray-400 disabled:cursor-not-allowed bg-blue-600 rounded-lg text-white"
-        disabled={!summarize_url || isGenerating || !summaryOption}
+        disabled={!summarize_url || isGenerating || !summarizableBool}
       >
         {isGenerating ? "Summarizing..." : "Summarize"}
       </button>
