@@ -146,22 +146,28 @@
       </div>
       <div class="flex flex-col">
         <div>
-          <input
-            type="radio"
-            name="summary"
-            value="detailed"
-            bind:group={summaryOption}
-          />
-          <label for="summary">Detailed Summary</label>
+          <label class="cursor-pointer">
+            <input
+              type="radio"
+              id="detailed"
+              name="summary"
+              value="detailed"
+              bind:group={summaryOption}
+            />
+            Detailed Summary
+          </label>
         </div>
         <div>
-          <input
-            type="radio"
-            name="summary"
-            value="bullet"
-            bind:group={summaryOption}
-          />
-          <label for="summary">Bullet Points</label>
+          <label class="cursor-pointer">
+            <input
+              type="radio"
+              id="bullet"
+              name="summary"
+              value="bullet"
+              bind:group={summaryOption}
+            />
+            Bullet Points
+          </label>
         </div>
       </div>
       <button
