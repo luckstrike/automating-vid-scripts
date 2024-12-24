@@ -50,24 +50,9 @@ export interface Env {
 }
 
 // For OpenAI JSON Schema Queries
-export type FunctionParameters = {
-  type: "object";
-  properties: Record<string, {
-    type: string;
-    description: string;
-    examples?: string[];
-  }>;
-  required: string[];
-}
-
-// For OpenAI JSON Schema Queries
-export type ChatCompletionTool = {
-  type: "function";
-  function: {
-    name: string;
-    description: string;
-    parameters: FunctionParameters;
-  };
+export type ChatMessage = {
+  role: "user" | "system" | "assistant";
+  content: string;
 };
 
 // Converters

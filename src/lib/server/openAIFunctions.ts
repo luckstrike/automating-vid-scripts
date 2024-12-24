@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import type { ChatCompletionTool } from "$lib";
+import type { ChatCompletionTool, ChatMessage } from "$lib";
 import { OPENAI_API_KEY } from "$env/static/private";
 
 const openai = new OpenAI({
@@ -38,17 +38,12 @@ export async function queryGPT(
 
 // Used when a JSON response is needed, this is better for that
 export async function queryGPTJSONSchema(
-  userPrompt: string,
+  messages: ChatMessage[],
   schema: ChatCompletionTool,
   aiModel: string
 ): Promise<any> {
   const completion = await openai.chat.completions.create({
-    messages: [
-      {
-        role: "user",
-        content: userPrompt
-      }
-    ],
+    messages,
     model: aiModel,
     tools: [
       schema

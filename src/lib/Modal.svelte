@@ -1,15 +1,31 @@
 <script lang="ts">
   export let show: boolean = false;
   export let onClose: () => void = () => {};
+
+  export let title: string = "";
   export let content: string = "";
 
+  // Used by the copy button
+  let showCopied: boolean = false;
+
   const copyToClipboard = () => {
+    // Remove bullet points and clean up the text
+    const cleanContent = content
+      .split("•")
+      .filter(Boolean)
+      .map((line) => line.trim())
+      .join("\n");
+
     navigator.clipboard
-      .writeText(content)
+      .writeText(cleanContent)
       .then(() => {})
       .catch((err) => {
         console.error("Failed to copy text: ", err);
       });
+    showCopied = true;
+    setTimeout(() => {
+      showCopied = false;
+    }, 2000);
   };
 </script>
 
@@ -19,27 +35,32 @@
     on:click={onClose}
   >
     <div
-      class="flex flex-col p-10 max-h-[80%] max-w-[80%] rounded-lg text-white bg-[#2f2f2f]"
+      class="flex flex-col p-4 space-y-2 max-h-[80%] w-1/2 max-w-[80%] rounded-lg text-white bg-[#1f1f1f]"
       on:click|stopPropagation
     >
-      <slot></slot>
+      <div class="text-xl font-bold text-center">{title}</div>
+      <hr class="border-gray-500 border-1" />
       <p class="p-2 overflow-y-scroll items-center justify-center">
-        {content}
+        {#each content.replace(/•/g, "\n•").split("\n").filter(Boolean) as line}
+          <span class="block py-1">{line.trim()}</span>
+        {/each}
       </p>
-      <div class="flex flex-row justify-center space-x-2">
+      <hr class="border-gray-500 border-1" />
+      <div class="flex flex-row justify-center space-x-4">
         <button
-          class="p-1 font-bold rounded-lg bg-blue-500"
+          class="p-2 font-bold rounded-lg bg-blue-500"
           on:click={copyToClipboard}
         >
-          Copy
+          {#if showCopied}
+            Copied!
+          {:else}
+            Copy
+          {/if}
         </button>
-        <button class="p-1 font-bold rounded-lg bg-blue-500" on:click={onClose}>
+        <button class="p-2 font-bold rounded-lg bg-blue-500" on:click={onClose}>
           Close
         </button>
       </div>
     </div>
   </div>
 {/if}
-
-<style>
-</style>
