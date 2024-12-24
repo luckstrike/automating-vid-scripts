@@ -1,6 +1,7 @@
 import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
 import { checkIfAllowed, parseURL } from "$lib/server/parser.js";
-import type { ChatCompletionTool, ChatMessage } from "$lib";
+import type { ChatCompletionTool } from "openai/resources/chat/completions"
+import type { ChatMessage } from "$lib";
 import type { PageServerLoad } from "./$types";
 
 const GPT_MODEL = "gpt-4o-mini";
@@ -24,6 +25,58 @@ const summarizeSchema: ChatCompletionTool = {
   }
 };
 
+const bulletPointSchema: ChatCompletionTool = {
+  type: "function",
+  function: {
+    name: "generate_bullet_points",
+    description: "Generate a bullet-point summary of the provided content",
+    parameters: {
+      type: "object",
+      properties: {
+        summary: {
+          type: "object",
+          description: "The bullet-point summary structure",
+          properties: {
+            bullet_points: {
+              type: "array",
+              description: "Array of bullet points",
+              items: {
+                type: "object",
+                properties: {
+                  point: {
+                    type: "string",
+                    description: "The content of the bullet point"
+                  },
+                  order: {
+                    type: "integer",
+                    description: "The order of the bullet point"
+                  }
+                },
+                required: ["point", "order"]
+              }
+            },
+            metadata: {
+              type: "object",
+              properties: {
+                total_points: {
+                  type: "integer",
+                  description: "Total number of bullet points"
+                },
+                source_text_length: {
+                  type: "integer",
+                  description: "Length of the source text"
+                }
+              },
+              required: ["total_points", "source_text_length"]
+            }
+          },
+          required: ["bullet_points", "metadata"]
+        }
+      },
+      required: ["summary"]
+    }
+  }
+};
 export const load: PageServerLoad = async () => {
   return {
     seo: {
@@ -38,24 +91,22 @@ async function generateScriptContent(url: string, summaryOption: string) {
     throw new Error("Invalid URL");
   }
 
-  let gptPrompt: string = "";
+  let gptSchema: ChatCompletionTool | null = null;
 
   if (summaryOption == "detailed") {
-    gptPrompt = `You are helpful assistant that summarizes HTML and text content. You are to
-                  summarize the content you receive into a detailed summary to the user as text.`
+    gptSchema = summarizeSchema;
   } else if (summaryOption == "bullet") {
-    gptPrompt = `You are a helpful assistant that summarizes HTML and text content. You are to
-                  summarize the content you receive into bullet points. Format your summary as a
-                  bullet-point list with the key points from the text. Each bullet-point should
-                  be 1-2 sentences long.`
+    gptSchema = bulletPointSchema;
+  } else {
+    throw new Error("Invalid summary schema")
   }
 
   if (await checkIfAllowed(url)) {
     const pageHTMLResult = await parseURL(url);
 
     if (pageHTMLResult) {
-      const message: ChatMessage[] = [{ role: "system", content: gptPrompt }, { role: "user", content: pageHTMLResult }]
-      const response = await queryGPTJSONSchema(message, summarizeSchema, GPT_MODEL);
+      const message: ChatMessage[] = [{ role: "user", content: pageHTMLResult }]
+      const response = await queryGPTJSONSchema(message, gptSchema, GPT_MODEL);
       return response;
     } else {
       throw new Error("Issue when trying to parse the website...")

@@ -20,11 +20,33 @@
   let modalTitle: string = "Here's a Summary:";
   let modalContent: string = "";
 
+  type BulletPointResponse = {
+    summary: {
+      bullet_points: Array<{
+        point: string;
+        order: number;
+      }>;
+      metadata: {
+        total_points: number;
+        source_text_length: number;
+      };
+    };
+  };
+
   // Set's showModal (the global variable) to false
   const closeModal = () => {
     showModal = false;
     modalContent = ""; // reset the content as well
   };
+
+  function parseBulletPoints(bulletPoints: BulletPointResponse) {
+    const points = bulletPoints
+      .sort((a, b) => a.order - b.order)
+      .map((point) => `• ${point.point}`)
+      .join("\n");
+
+    return points;
+  }
 
   const handleSubmit = async ({ action, cancel }) => {
     if (!summarize_url || !summaryOption) {
@@ -36,7 +58,18 @@
     return async ({ result }) => {
       if (result.type === "success") {
         showModal = true;
-        modalContent = result.data.summary;
+
+        if (result.data.summary.bullet_points) {
+          // TODO: Write a function that grabs each bullet point and feeds them to the
+          // modal correctly
+          const bulletPoints: BulletPointResponse =
+            result.data.summary.bullet_points;
+          const bulletPointsString = parseBulletPoints(bulletPoints);
+
+          modalContent = bulletPointsString;
+        } else if (result.data.summary) {
+          modalContent = result.data.summary;
+        }
       } else {
         errorMessage = "Failed to generate summary";
         modalContent = "An error occurred while generating the summary";
