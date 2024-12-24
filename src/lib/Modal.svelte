@@ -9,15 +9,20 @@
   let showCopied: boolean = false;
 
   const copyToClipboard = () => {
+    // Remove bullet points and clean up the text
+    const cleanContent = content
+      .split("•")
+      .filter(Boolean)
+      .map((line) => line.trim())
+      .join("\n");
+
     navigator.clipboard
-      .writeText(content)
+      .writeText(cleanContent)
       .then(() => {})
       .catch((err) => {
         console.error("Failed to copy text: ", err);
       });
-
     showCopied = true;
-
     setTimeout(() => {
       showCopied = false;
     }, 2000);
@@ -36,7 +41,9 @@
       <div class="text-xl font-bold text-center">{title}</div>
       <hr class="border-gray-500 border-1" />
       <p class="p-2 overflow-y-scroll items-center justify-center">
-        {content}
+        {#each content.replace(/•/g, "\n•").split("\n").filter(Boolean) as line}
+          <span class="block py-1">{line.trim()}</span>
+        {/each}
       </p>
       <hr class="border-gray-500 border-1" />
       <div class="flex flex-row justify-center space-x-4">
@@ -57,6 +64,3 @@
     </div>
   </div>
 {/if}
-
-<style>
-</style>
