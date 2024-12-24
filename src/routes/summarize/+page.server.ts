@@ -45,8 +45,9 @@ async function generateScriptContent(url: string, summaryOption: string) {
                   summarize the content you receive into a detailed summary to the user as text.`
   } else if (summaryOption == "bullet") {
     gptPrompt = `You are a helpful assistant that summarizes HTML and text content. You are to
-                  summarize the content you receive into bullet points. The bullet points should
-                  contain key points of the HTML or text that you receive from the user.`
+                  summarize the content you receive into bullet points. Format your summary as a
+                  bullet-point list with the key points from the text. Each bullet-point should
+                  be 1-2 sentences long.`
   }
 
   if (await checkIfAllowed(url)) {
