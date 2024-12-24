@@ -160,7 +160,7 @@
         class="p-2 disabled:bg-gray-400 disabled:cursor-not-allowed bg-blue-600 rounded-lg text-white"
         disabled={!summarize_url || isGenerating || !summaryOption}
       >
-        Summarize
+        {isGenerating ? "Summarizing..." : "Summarize"}
       </button>
     </form>
   </div>
