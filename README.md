@@ -1,38 +1,35 @@
-# create-svelte
+# Automating Video Scripts
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+The goal of this project is to create a website that makes the video script creating easier by providing helpful tools.
 
-## Creating a project
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Dashboard Tab
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+This tab lets you create, delete, and view which scripts you already have! The top section of it shows you a preview of the three most recently viewed scripts along with an optionto create one.
+The table below that shows you all of your scripts and lets you sort them by name or most recently edited.
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+![Dashboard Image](static/dashboard.png)
 
-## Developing
+***
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Brainstorm Tab
 
-```bash
-npm run dev
+This tab let's create a script based on a topic idea that you have. You can even create one based on a random topic as well. After you either type in a topic or select the random topic option you will be redirected to a new script. From there the script will have text based on the topic you selected.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+![Brainstorm Image](static/brainstorm.png)
 
-## Building
+***
 
-To create a production version of your app:
+### Summarize Tab
 
-```bash
-npm run build
-```
+This tab let's you summarize a web page by providing a URL. This scrapes the website (if allowed) and returns a summary of the site. The summary is shown in a modal which you can copy with the click of a button.
 
-You can preview the production build with `npm run preview`.
+![Summarize Image](static/summarize.png)
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+***
+
+### Script Tab
+
+This tab let's you edit a script. This is the tab where you can write out a script for your video.
+
+![Script Image](static/script.png)
