@@ -35,6 +35,7 @@
   >
     <div class="w-2/3">
       <AutoGrowInput
+        name="prompt"
         bind:value={brainstorm_text}
         placeholder="...or try typing a topic"
         maxLength={2000}
@@ -65,7 +66,7 @@
     </div>
 
     {#if form?.error}
-      <p class="text-red-500">{form.error}</p>
+      <p class="text-red-500" role="alert">{form.error}</p>
     {/if}
   </form>
 </div>
