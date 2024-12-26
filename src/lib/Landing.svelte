@@ -8,17 +8,17 @@
   const slides = [Slide1, Slide2, Slide3];
 </script>
 
-<div class="flex flex-col w-screen h-screen p-2">
-  <div class="flex flex-row justify-between text-white mb-4">
-    <div class="flex flex-row space-x-1 items-center">
+<div class="flex flex-col w-full h-full pt-2 p-4">
+  <div class="flex flex-row justify-between text-white">
+    <div class="flex flex-row space-x-1">
       <img
         class="h-16 w-16"
         src="/favicon/android-chrome-192x192.png"
         alt="DinoDino Logo"
       />
-      <div class="text-4xl font-bold p-1 pt-0">DinoDino</div>
+      <div class="text-4xl font-bold p-1 flex items-center">DinoDino</div>
     </div>
-    <div class="flex flex-row space-x-4 text-white mb-4">
+    <div class="flex flex-row space-x-4 text-white h-16 items-center">
       <button on:click={() => goto("/")}> Home </button>
       <button
         class="bg-blue-600 rounded-lg pt-2 pb-2 pl-4 pr-4 font-semibold"
