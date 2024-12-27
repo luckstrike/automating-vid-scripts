@@ -1,6 +1,7 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import type { Script } from "$lib";
+  import { toastStore } from "$lib/stores/toast";
 
   // Icon Imports
   import Fa from "svelte-fa";
@@ -32,7 +33,7 @@
   let isDateAscending = true;
 
   const handleDelete = (scriptId: string) => {
-    return async ({ update }: { update: () => Promise<void> }) => {
+    return async ({ update, result }: { update: () => Promise<void> }) => {
       await update();
       // Update the main scripts array
       scripts = scripts.filter((script: Script) => script.id !== scriptId);
@@ -42,13 +43,28 @@
 
       // Recalculate the preview data based on the updated scripts array
       previewData = updatePreviewData(scripts);
+
+      if (result.type === "failure") {
+        toastStore.show(
+          result.data?.error || "An error occurred",
+          "error",
+          5000,
+        );
+      }
     };
   };
 
   const handleNewScript = () => {
     return async ({ result }: { result: ActionResult }) => {
       if (result.type === "success" && result.data?.script_id) {
+        toastStore.show("Script created successfully", "success");
         handleScriptRedirect(result.data.script_id);
+      } else if (result.type == "failure") {
+        toastStore.show(
+          result.data?.error || "An error occurred",
+          "error",
+          5000,
+        );
       }
     };
   };
