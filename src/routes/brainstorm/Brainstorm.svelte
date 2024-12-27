@@ -3,6 +3,7 @@
   import { goto } from "$app/navigation";
   import type { ActionData } from "./$types";
   import AutoGrowInput from "$lib/AutoGrowInput.svelte";
+  import { toastStore } from "$lib/stores/toast";
 
   export let form: ActionData;
 
@@ -14,7 +15,14 @@
     return async ({ result }) => {
       isGenerating = false;
       if (result.type === "success" && result.data?.script_id) {
+        toastStore.show("Script created successfully", "success");
         await goto(`/script/${result.data.script_id}`);
+      } else if (result.type === "failure") {
+        toastStore.show(
+          result.data?.error || "An error occurred",
+          "error",
+          5000,
+        );
       }
     };
   };
@@ -64,10 +72,6 @@
         {isGenerating && !brainstorm_text ? "Generating..." : "Random Idea"}
       </button>
     </div>
-
-    {#if form?.error}
-      <p class="text-red-500" role="alert">{form.error}</p>
-    {/if}
   </form>
 </div>
 

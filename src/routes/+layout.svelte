@@ -7,6 +7,7 @@
   import { page } from "$app/stores";
   import Landing from "$lib/Landing.svelte";
   import HamburgerMenu from "$lib/HamburgerMenu.svelte";
+  import Toast from "$lib/components/Toast.svelte";
 
   export let data;
   $: ({ session, supabase } = data);
@@ -53,6 +54,7 @@
       </div>
     </div>
   {/if}
+  <Toast />
 </div>
 
 <style>
