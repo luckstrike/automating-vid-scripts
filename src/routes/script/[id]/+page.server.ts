@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "../$types";
-import { fail } from "@sveltejs/kit";
+import { error, fail } from "@sveltejs/kit";
 import { getScript, updateScript } from "$lib/server/dbFunctions";
 import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
 import type { ChatCompletionTool, ChatMessage } from "$lib";
@@ -76,16 +76,16 @@ async function getAiResponse(actionType: string, userSelection: string) {
 }
 
 export const load: PageServerLoad = async ({ params, locals: { supabase, session } }) => {
+  const { id } = params;
+
+  if (!session) {
+    return {
+      script: null,
+      session: null
+    };
+  }
+
   try {
-    const { id } = params;
-
-    if (!session) {
-      return {
-        script: null,
-        session: null
-      };
-    }
-
     // Grabbing the script from the database
     const script = await getScript(supabase, id, session.user.id);
 
@@ -97,12 +97,8 @@ export const load: PageServerLoad = async ({ params, locals: { supabase, session
         description: "Script tab where you can edit a script"
       }
     }
-  } catch (error) {
-    return {
-      script: null,
-      session: null,
-      error: 'Failed to load script'
-    }
+  } catch (err) {
+    throw error(500, 'Failed to load script')
   }
 }
 
@@ -113,17 +109,17 @@ export const actions = {
 
     if (!scriptId) {
       return fail(400, {
-        success: false,
-        message: 'No script selected'
+        error: 'No script was selected'
       })
     }
 
     const { data: { session } } = await supabase.auth.getSession();
 
     if (!session) {
-      return fail(401);
+      return fail(401, {
+        error: 'Not authenticated'
+      });
     }
-
 
     try {
       await updateScript(
@@ -137,7 +133,9 @@ export const actions = {
       return { success: true }
     } catch (error) {
       console.log(error)
-      return fail(500, { error: 'Failed to update' })
+      return fail(500, {
+        error: 'Failed to update'
+      });
     }
   },
   updateScript: async ({ request, locals: { supabase } }) => {
@@ -146,17 +144,15 @@ export const actions = {
 
     if (!scriptId) {
       return fail(400, {
-        success: false,
-        message: 'No script selected'
+        error: 'No script was selected'
       })
     }
 
     const { data: { session } } = await supabase.auth.getSession();
 
     if (!session) {
-      return fail(401);
+      throw error(401, 'Not authenticated');
     }
-
 
     try {
       await updateScript(
@@ -169,8 +165,9 @@ export const actions = {
       )
       return { success: true }
     } catch (error) {
-      console.log(error)
-      return fail(500, { error: 'Failed to update' })
+      return fail(500, {
+        error: 'Failed to update the script'
+      });
     }
   },
   editSelection: async ({ request, locals: { session } }) => {
@@ -180,15 +177,13 @@ export const actions = {
 
     if (!actionType) {
       return fail(400, {
-        success: false,
-        error: "No action type was received"
+        error: 'No action type was received'
       })
     }
 
     if (!userSelection) {
       return fail(400, {
-        success: false,
-        error: "No user selection was received"
+        error: 'No user selection was received'
       })
     }
 
@@ -201,7 +196,6 @@ export const actions = {
       }
     } catch (error) {
       return fail(400, {
-        success: false,
         error: error instanceof Error ? error.message : 'Failed to rephrase or expand on the text'
       })
     }

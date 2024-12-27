@@ -1,7 +1,9 @@
 import { createScript } from "$lib/server/dbFunctions";
 import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
-import type { ChatCompletionTool, ChatMessage } from "$lib";
+import type { ChatCompletionTool } from "openai/resources/chat/completions"
+import type { ChatMessage } from "$lib";
 import type { PageServerLoad } from "./$types";
+import { error, fail } from "@sveltejs/kit";
 
 const GPT_MODEL = "gpt-4o-mini";
 
@@ -35,25 +37,26 @@ export const load: PageServerLoad = async () => {
       description: "Brainstorm tab where you can brainstorm a starting point for a script"
     }
   };
-
 }
 
 export const actions = {
   generateScript: async ({ request, locals: { supabase, session } }) => {
+    if (!session) {
+      throw error(401, 'Not authenticated');
+    }
+
+    const formData = await request.formData();
+    const type = formData.get('type')?.toString();
+    let prompt = formData.get('prompt')?.toString() || '';
+
     try {
-      if (!session) {
-        throw new Error('No user session found');
-      }
-
-      const formData = await request.formData();
-      const type = formData.get('type')?.toString();
-      let prompt = formData.get('prompt')?.toString() || '';
-
       // If it's a random request, override the prompt
       if (type === 'random') {
         prompt = "Give me a random creative writing prompt";
       } else if (!prompt) {
-        throw new Error('No prompt provided');
+        throw fail(400, {
+          error: 'No prompt provided'
+        });
       }
 
       // Calling the GPT API
@@ -61,11 +64,15 @@ export const actions = {
       const response = await queryGPTJSONSchema(message, brainstormSchema, GPT_MODEL);
 
       if (!response) {
-        throw new Error("No response from OpenAI");
+        throw fail(500, {
+          error: 'No response received from the AI model'
+        });
       }
 
       if (!response.scriptTitle || !response.scriptContent) {
-        throw new Error("No response / missing field in response from OpenAI");
+        throw fail(400, {
+          error: 'Missing field in response from the AI model'
+        });
       }
 
       const newScript = {
@@ -84,10 +91,9 @@ export const actions = {
       };
 
     } catch (error) {
-      return {
-        script_id: null,
-        error: error instanceof Error ? error.message : 'Failed to create a new script'
-      }
+      return fail(500, {
+        error: 'Failed to create a new script'
+      });
     }
   }
 }

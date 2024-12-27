@@ -3,6 +3,7 @@ import { checkIfAllowed, parseURL } from "$lib/server/parser.js";
 import type { ChatCompletionTool } from "openai/resources/chat/completions"
 import type { ChatMessage } from "$lib";
 import type { PageServerLoad } from "./$types";
+import { error, fail } from "@sveltejs/kit";
 
 const GPT_MODEL = "gpt-4o-mini";
 
@@ -88,7 +89,9 @@ export const load: PageServerLoad = async () => {
 
 async function generateScriptContent(url: string, summaryOption: string) {
   if (!(new URL(url))) {
-    throw new Error("Invalid URL");
+    return fail(400, {
+      error: 'Invalid URL'
+    });
   }
 
   let gptSchema: ChatCompletionTool | null = null;
@@ -98,7 +101,9 @@ async function generateScriptContent(url: string, summaryOption: string) {
   } else if (summaryOption == "bullet") {
     gptSchema = bulletPointSchema;
   } else {
-    throw new Error("Invalid summary schema")
+    return fail(400, {
+      error: 'Invalid summary schema'
+    });
   }
 
   if (await checkIfAllowed(url)) {
@@ -109,41 +114,35 @@ async function generateScriptContent(url: string, summaryOption: string) {
       const response = await queryGPTJSONSchema(message, gptSchema, GPT_MODEL);
       return response;
     } else {
-      throw new Error("Issue when trying to parse the website...")
+      return fail(500, {
+        error: 'Unable to parse the website'
+      });
     }
   }
 }
 
 export const actions = {
   generateSummary: async ({ request, locals: { session } }) => {
+    if (!session) {
+      throw error(401, 'Not authenticated');
+    }
+    const formData = await request.formData();
+    const url = formData.get('url')?.toString();
+    const summaryOption = formData.get('summary');
+
     try {
-      if (!session) {
-        throw new Error('No user session found');
-      }
-
-      const formData = await request.formData();
-      const url = formData.get('url')?.toString();
-      const summaryOption = formData.get('summary');
-
       if (!url) {
-        console.log("URL")
-        return {
-          success: false,
-          summary: null,
+        return fail(400, {
           error: 'No URL was provided'
-        }
+        });
       } else if (!summaryOption) {
-        return {
-          success: false,
-          summary: null,
+        return fail(400, {
           error: 'No summary option was selected'
-        }
+        })
       } else if (summaryOption != "detailed" && summaryOption != "bullet") {
-        return {
-          success: false,
-          summary: null,
+        return fail(400, {
           error: 'Invalid summary option was selected'
-        }
+        });
       }
 
       const { summary } = await generateScriptContent(url, summaryOption);
@@ -154,11 +153,9 @@ export const actions = {
       };
 
     } catch (error) {
-      return {
-        script_id: null,
-        summary: null,
-        error: error instanceof Error ? error.message : 'Failed to generate a summary'
-      }
+      return fail(500, {
+        error: 'Failed to generate a summary'
+      })
     }
   }
 }
