@@ -34,6 +34,7 @@
   import IonRocketSharp from "~icons/ion/rocket-sharp";
   import MaterialSymbolsSearch from "~icons/material-symbols/search";
   import PhPencilFill from "~icons/ph/pencil-fill";
+  import { toastStore } from "$lib/stores/toast";
 
   // Getting the Script data from the server side
   export let data;
@@ -165,6 +166,44 @@
     isGenerating = false;
   }
 
+  const handleEditSelection = (formData: FormData) => {
+    // Grabbing the currently selected text
+    const selectedText = getSelectedText();
+    formData.append("user_selection", selectedText);
+    isGenerating = true;
+
+    // Do all of this once we get the AI model results
+    return async ({ result, update }) => {
+      isGenerating = false;
+
+      if (result.type === "success") {
+        // FOR DEBUGGING only
+        toastStore.show("Selection edited successfully", "success");
+        if (formData.get("action") == "expand") {
+          insertTextAfterSelection(result.data.resultText);
+        } else if (formData.get("action") == "rephrase") {
+          replaceSelectedText(result.data.resultText);
+        } else {
+          // Invalid result type
+          toastStore.show(
+            result.data?.error || "An error occurred",
+            "error",
+            5000,
+          );
+          return false;
+        }
+      } else if (result.type === "failure") {
+        toastStore.show(
+          result.data?.error || "An error occurred",
+          "error",
+          5000,
+        );
+      }
+
+      await update();
+    };
+  };
+
   onMount(async () => {
     editor = createEditor({
       extensions: [StarterKit, Underline],
@@ -260,30 +299,7 @@
           class="flex flex-row rounded-md items-center bg-[#2f2f2f] text-[#d9d9d9]"
           method="POST"
           action="?/editSelection"
-          use:enhance={({ formData }) => {
-            // Grabbing the currently selected text
-            const result = getSelectedText();
-            formData.append("user_selection", result);
-            isGenerating = true;
-
-            // Do all of this once we get GPT results
-            return async ({ result, update }) => {
-              isGenerating = false;
-
-              if (result.type === "success") {
-                if (formData.get("action") == "expand") {
-                  insertTextAfterSelection(result.data.resultText);
-                } else if (formData.get("action") == "rephrase") {
-                  replaceSelectedText(result.data.resultText);
-                } else {
-                  console.error("Invalid result type was provided");
-                  return false;
-                }
-              }
-
-              await update();
-            };
-          }}
+          use:enhance={({ formData }) => handleEditSelection(formData)}
         >
           <button
             name="action"
