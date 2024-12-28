@@ -61,8 +61,6 @@
         showModal = true;
 
         if (result.data.summary.bullet_points) {
-          // TODO: Write a function that grabs each bullet point and feeds them to the
-          // modal correctly
           const bulletPoints: BulletPointResponse =
             result.data.summary.bullet_points;
           const bulletPointsString = parseBulletPoints(bulletPoints);
@@ -71,8 +69,8 @@
         } else if (result.data.summary) {
           modalContent = result.data.summary;
         }
-      } else {
-        errorMessage = "Failed to generate summary";
+      } else if (result.type === "failure") {
+        errorMessage = "Failed to generate a summary";
         modalContent = "An error occurred while generating the summary";
       }
       isGenerating = false;
