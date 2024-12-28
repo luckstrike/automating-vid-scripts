@@ -85,7 +85,6 @@
       lastSavedTitle = title;
       saveStatus.set("saved");
     } catch (error) {
-      console.error("Failed to save:", error);
       saveStatus.set("error");
     } finally {
       pendingSave = false;
@@ -109,7 +108,6 @@
       lastSavedContent = content;
       saveStatus.set("saved");
     } catch (error) {
-      console.error("Failed to save:", error);
       // Keep scriptSaveStatus true if save failed
       saveStatus.set("error");
     } finally {
@@ -150,22 +148,6 @@
     $editor.commands.insertContent(textToInsert);
   };
 
-  async function generateTextWithGPT(actionType: string) {
-    const text: string = getSelectedText();
-
-    const textFromAI: string = await fetch("?/generateTextWithGPT");
-
-    if (textFromAI) {
-      if (actionType == "expand") {
-        insertTextAfterSelection(textFromAI);
-      } else if (actionType == "rephrase") {
-        replaceSelectedText(textFromAI);
-      }
-    }
-
-    isGenerating = false;
-  }
-
   const handleEditSelection = (formData: FormData) => {
     // Grabbing the currently selected text
     const selectedText = getSelectedText();
@@ -177,8 +159,6 @@
       isGenerating = false;
 
       if (result.type === "success") {
-        // FOR DEBUGGING only
-        toastStore.show("Selection edited successfully", "success");
         if (formData.get("action") == "expand") {
           insertTextAfterSelection(result.data.resultText);
         } else if (formData.get("action") == "rephrase") {
@@ -198,6 +178,7 @@
           "error",
           5000,
         );
+        return false;
       }
 
       await update();
