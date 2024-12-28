@@ -34,6 +34,16 @@
     name="description"
     content={$page.data.seo?.description ?? "A site for making video scripts"}
   />
+  <meta
+    name="theme-color"
+    content="#2F2F2F"
+    media="(prefers-color-scheme: light)"
+  />
+  <meta
+    name="theme-color"
+    content="#2F2F2F"
+    media="(prefers-color-scheme: dark)"
+  />
 </svelte:head>
 
 <div class="flex flex-row h-screen">
