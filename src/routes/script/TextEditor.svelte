@@ -96,16 +96,25 @@
       pendingSave = true;
       saveStatus.set("saving");
 
+      console.log("updateScriptContent: Before fetching");
+
       const formData = new FormData();
       formData.append("id", id);
       formData.append("content", content);
+
+      console.log("updateScriptContent: formData.id ", id);
+      console.log("updateScriptContent: formData.content ", content);
 
       const response = await fetch("?/updateScript", {
         method: "POST",
         body: formData,
       });
 
+      console.log("updateScriptContent: Post fetch!");
+
       const result = await response.json();
+
+      console.log("updateScriptContent: Post response.json!");
 
       if (!response.ok) {
         throw new Error(result.error || "Failed to save");
@@ -114,6 +123,7 @@
       // Set save status to false only after successful save
       lastSavedContent = content;
       saveStatus.set("saved");
+      console.log("updateScriptContent: Everything is fine now! :)");
     } catch (err) {
       // Keep scriptSaveStatus true if save failed
       toastStore.show(err.message, "error", 500);
