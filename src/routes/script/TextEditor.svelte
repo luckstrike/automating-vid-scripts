@@ -106,13 +106,22 @@
       console.log("updateScriptContent: formData.content ", content);
       console.log("updateScriptContent: formData: ", formData);
 
+      // Add timeout handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        console.log("⚠️ Request timeout reached");
+        controller.abort();
+      }, 10000); // 10 second timeout
       // IT GETS STUCK HERE?????
       const response = await fetch("?/updateScript", {
         method: "POST",
         body: formData,
+        signal: controller.signal,
       });
 
       console.log("updateScriptContent: Post fetch!");
+
+      clearTimeout(timeoutId);
 
       const result = await response.json();
 

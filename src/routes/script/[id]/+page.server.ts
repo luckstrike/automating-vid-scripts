@@ -143,6 +143,7 @@ export const actions = {
     const scriptId = formData.get('id');
     const scriptContent = formData.get('content');
 
+    console.log("Yes this is even more debug...")
     console.log("server formData: ", formData);
     console.log("server formData.id: ", scriptId);
     console.log("server formData.content: ", scriptContent);
