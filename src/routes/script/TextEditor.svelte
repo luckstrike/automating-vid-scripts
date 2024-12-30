@@ -100,15 +100,23 @@
       formData.append("id", id);
       formData.append("content", content);
 
-      await fetch("?/updateScript", {
+      const response = await fetch("?/updateScript", {
         method: "POST",
         body: formData,
       });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to save");
+      }
+
       // Set save status to false only after successful save
       lastSavedContent = content;
       saveStatus.set("saved");
-    } catch (error) {
+    } catch (err) {
       // Keep scriptSaveStatus true if save failed
+      toastStore.show(err.message, "error", 500);
       saveStatus.set("error");
     } finally {
       pendingSave = false;

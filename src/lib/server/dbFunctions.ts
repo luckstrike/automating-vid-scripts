@@ -64,6 +64,7 @@ export async function updateScript(
     .single()
 
   if (error) {
+    console.error('Database update failed: ', error)
     throw error;
   }
 

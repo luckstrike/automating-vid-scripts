@@ -141,6 +141,7 @@ export const actions = {
   updateScript: async ({ request, locals: { supabase } }) => {
     const formData = await request.formData();
     const scriptId = formData.get('id');
+    const scriptContent = formData.get('content');
 
     if (!scriptId) {
       return fail(400, {
@@ -154,19 +155,28 @@ export const actions = {
       throw error(401, 'Not authenticated');
     }
 
+    if (!scriptContent) {
+      return fail(400, {
+        error: 'No script content provided'
+      });
+    }
+
     try {
       await updateScript(
         supabase,
         scriptId as string,
         {
-          content: formData.get('content') as string
+          content: scriptContent as string
         },
         session.user.id
       )
       return { success: true }
     } catch (error) {
+      // For debugging
+      console.error('Script update error', error);
       return fail(500, {
-        error: 'Failed to update the script'
+        error: error instanceof Error ? error.message : 'Failed to update the script',
+        details: error instanceof Error ? error.stack : "Stack not available"
       });
     }
   },
