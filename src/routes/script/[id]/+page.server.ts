@@ -143,11 +143,17 @@ export const actions = {
     const scriptId = formData.get('id');
     const scriptContent = formData.get('content');
 
+    console.log("server formData: ", formData);
+    console.log("server formData.id: ", scriptId);
+    console.log("server formData.content: ", scriptContent);
+
     if (!scriptId) {
       return fail(400, {
         error: 'No script was selected'
       })
     }
+
+    console.log("Past scriptId")
 
     const { data: { session } } = await supabase.auth.getSession();
 
@@ -155,11 +161,15 @@ export const actions = {
       throw error(401, 'Not authenticated');
     }
 
+    console.log("Past active session check");
+
     if (!scriptContent) {
       return fail(400, {
         error: 'No script content provided'
       });
     }
+
+    console.log("Past script content check");
 
     try {
       await updateScript(
@@ -170,6 +180,9 @@ export const actions = {
         },
         session.user.id
       )
+
+      console.log("Past dbFunctions updateScript function")
+
       return { success: true }
     } catch (error) {
       // For debugging

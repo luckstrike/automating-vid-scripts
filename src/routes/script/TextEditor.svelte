@@ -104,7 +104,9 @@
 
       console.log("updateScriptContent: formData.id ", id);
       console.log("updateScriptContent: formData.content ", content);
+      console.log("updateScriptContent: formData: ", formData);
 
+      // IT GETS STUCK HERE?????
       const response = await fetch("?/updateScript", {
         method: "POST",
         body: formData,

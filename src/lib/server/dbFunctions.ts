@@ -63,6 +63,8 @@ export async function updateScript(
     .select()
     .single()
 
+  console.log("Past dbFunctions updateScript (actual DB update)");
+
   if (error) {
     console.error('Database update failed: ', error)
     throw error;
