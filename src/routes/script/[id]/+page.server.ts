@@ -146,7 +146,7 @@ export const actions = {
     const formData = await request.formData();
     const scriptId = formData.get('id') as string;
     const blobContent = formData.get('content') as File;
-    const scriptContent = blobContent.text();
+    const scriptContent = await blobContent.text();
     console.log("Which would really suck")
 
     console.log("Yes this is even more debug...")
