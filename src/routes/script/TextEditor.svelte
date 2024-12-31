@@ -35,6 +35,7 @@
   import MaterialSymbolsSearch from "~icons/material-symbols/search";
   import PhPencilFill from "~icons/ph/pencil-fill";
   import { toastStore } from "$lib/stores/toast";
+  import { MAX_CONTENT_SIZE, WARNING_SIZE } from "$lib/config/config";
 
   // Getting the Script data from the server side
   export let data;
@@ -67,6 +68,10 @@
     return scriptContent;
   }
 
+  function formatFileSize(bytes: number): string {
+    return `${(bytes / 1024).toFixed(1)}KB`;
+  }
+
   // Updating the script title
   const updateScriptTitle = debounce(async (title: string, id: string) => {
     try {
@@ -93,10 +98,37 @@
 
   const updateScriptContent = debounce(async (content: string, id: string) => {
     try {
+      const blob = new Blob([content], { type: "text/html" });
+      const contentSize = blob.size;
+
+      // Error whenever content is too large to save
+      if (contentSize > MAX_CONTENT_SIZE) {
+        toastStore.show(
+          `Cannot save: Your script (${formatFileSize(contentSize)}) ` +
+            `is larger than the maximum size of ${formatFileSize(
+              MAX_CONTENT_SIZE,
+            )}`,
+          "error",
+          5000,
+        );
+        saveStatus.set("error");
+        return;
+      }
+
+      // Warning if content starts getting large
+      if (contentSize > WARNING_SIZE) {
+        const remainingSpace = MAX_CONTENT_SIZE - contentSize;
+        toastStore.show(
+          `Your script is getting large (${formatFileSize(contentSize)}).` +
+            `You have ${formatFileSize(remainingSpace)} remaining.`,
+          "warning",
+          5000,
+        );
+      }
+
       pendingSave = true;
       saveStatus.set("saving");
 
-      const blob = new Blob([content], { type: "text/html" });
       const formData = new FormData();
       formData.append("id", id);
       formData.append("content", blob, "script-content.html");

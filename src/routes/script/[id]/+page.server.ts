@@ -2,7 +2,9 @@ import type { PageServerLoad } from "../$types";
 import { error, fail } from "@sveltejs/kit";
 import { getScript, updateScript } from "$lib/server/dbFunctions";
 import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
-import type { ChatCompletionTool, ChatMessage } from "$lib";
+import type { ChatMessage } from "$lib";
+import type { ChatCompletionTool } from "openai/resources/index.mjs";
+import { MAX_CONTENT_SIZE } from "$lib/config/config";
 
 const GPT_MODEL = "gpt-4o-mini";
 
@@ -142,6 +144,13 @@ export const actions = {
     const formData = await request.formData();
     const scriptId = formData.get('id') as string;
     const blobContent = formData.get('content') as File;
+
+    if (blobContent.size > MAX_CONTENT_SIZE) {
+      return fail(413, {  // 413 is "Payload Too Large"
+        error: `Script size exceeds the maximum allowed size of ${Math.round(MAX_CONTENT_SIZE / 1024)}KB`
+      });
+    }
+
     const scriptContent = await blobContent.text();
 
     if (!scriptId) {
