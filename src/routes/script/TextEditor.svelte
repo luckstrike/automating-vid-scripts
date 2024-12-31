@@ -98,9 +98,10 @@
 
       console.log("updateScriptContent: Before fetching");
 
+      const blob = new Blob([content], { type: "text/html" });
       const formData = new FormData();
       formData.append("id", id);
-      formData.append("content", content);
+      formData.append("content", blob, "script-content.html");
 
       console.log("updateScriptContent: formData.id ", id);
       console.log("updateScriptContent: formData.content ", content);
@@ -115,13 +116,7 @@
       // IT GETS STUCK HERE?????
       const response = await fetch("?/updateScript", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id,
-          content,
-        }),
+        body: formData,
         signal: controller.signal,
       });
 

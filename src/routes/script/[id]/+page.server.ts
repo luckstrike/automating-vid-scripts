@@ -143,8 +143,10 @@ export const actions = {
 
     // In the long script cases, this line is where the code
     // gets stuck (the formData = await request.formData())
-    const body = await request.json();
-    const { scriptId, scriptContent } = body;
+    const formData = await request.formData();
+    const scriptId = formData.get('id') as string;
+    const blobContent = formData.get('content') as File;
+    const scriptContent = blobContent.text();
     console.log("Which would really suck")
 
     console.log("Yes this is even more debug...")
