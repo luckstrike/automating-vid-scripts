@@ -55,7 +55,7 @@ export async function updateScript(
   userId: string
 ) {
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('scripts')
     .update(updates)
     .eq('id', scriptId)
@@ -70,7 +70,7 @@ export async function updateScript(
     throw error;
   }
 
-  return data;
+  return true;
 }
 
 export async function deleteScript(supabase: SupabaseClient, scriptId: string, userId: string) {
