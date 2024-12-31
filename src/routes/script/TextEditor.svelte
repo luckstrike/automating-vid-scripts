@@ -96,37 +96,17 @@
       pendingSave = true;
       saveStatus.set("saving");
 
-      console.log("updateScriptContent: Before fetching");
-
       const blob = new Blob([content], { type: "text/html" });
       const formData = new FormData();
       formData.append("id", id);
       formData.append("content", blob, "script-content.html");
 
-      console.log("updateScriptContent: formData.id ", id);
-      console.log("updateScriptContent: formData.content ", content);
-      console.log("updateScriptContent: formData: ", formData);
-
-      // Add timeout handling
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => {
-        console.log("⚠️ Request timeout reached");
-        controller.abort();
-      }, 10000); // 10 second timeout
-      // IT GETS STUCK HERE?????
       const response = await fetch("?/updateScript", {
         method: "POST",
         body: formData,
-        signal: controller.signal,
       });
 
-      console.log("updateScriptContent: Post fetch!");
-
-      clearTimeout(timeoutId);
-
       const result = await response.json();
-
-      console.log("updateScriptContent: Post response.json!");
 
       if (!response.ok) {
         throw new Error(result.error || "Failed to save");
@@ -135,7 +115,6 @@
       // Set save status to false only after successful save
       lastSavedContent = content;
       saveStatus.set("saved");
-      console.log("updateScriptContent: Everything is fine now! :)");
     } catch (err) {
       // Keep scriptSaveStatus true if save failed
       toastStore.show(err.message, "error", 500);

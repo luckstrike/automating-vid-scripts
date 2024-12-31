@@ -132,26 +132,17 @@ export const actions = {
       )
       return { success: true }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       return fail(500, {
         error: 'Failed to update'
       });
     }
   },
   updateScript: async ({ request, locals: { supabase } }) => {
-    console.log("Unless it's getting stuck here with JSON?")
-
-    // In the long script cases, this line is where the code
-    // gets stuck (the formData = await request.formData())
     const formData = await request.formData();
     const scriptId = formData.get('id') as string;
     const blobContent = formData.get('content') as File;
     const scriptContent = await blobContent.text();
-    console.log("Which would really suck")
-
-    console.log("Yes this is even more debug...")
-    console.log("server formData.id: ", scriptId);
-    console.log("server formData.content: ", scriptContent);
 
     if (!scriptId) {
       return fail(400, {
@@ -159,23 +150,17 @@ export const actions = {
       })
     }
 
-    console.log("Past scriptId")
-
     const { data: { session } } = await supabase.auth.getSession();
 
     if (!session) {
       throw error(401, 'Not authenticated');
     }
 
-    console.log("Past active session check");
-
     if (!scriptContent) {
       return fail(400, {
         error: 'No script content provided'
       });
     }
-
-    console.log("Past script content check");
 
     try {
       await updateScript(
@@ -186,8 +171,6 @@ export const actions = {
         },
         session.user.id
       )
-
-      console.log("Past dbFunctions updateScript function")
 
       return { success: true }
     } catch (error) {
