@@ -139,7 +139,9 @@ export const actions = {
     }
   },
   updateScript: async ({ request, locals: { supabase } }) => {
+    console.log("Unless it's getting stuck here?")
     const formData = await request.formData();
+    console.log("Which would really suck")
     const scriptId = formData.get('id');
     const scriptContent = formData.get('content');
 
