@@ -139,14 +139,15 @@ export const actions = {
     }
   },
   updateScript: async ({ request, locals: { supabase } }) => {
-    console.log("Unless it's getting stuck here?")
-    const formData = await request.formData();
+    console.log("Unless it's getting stuck here with JSON?")
+
+    // In the long script cases, this line is where the code
+    // gets stuck (the formData = await request.formData())
+    const body = await request.json();
+    const { scriptId, scriptContent } = body;
     console.log("Which would really suck")
-    const scriptId = formData.get('id');
-    const scriptContent = formData.get('content');
 
     console.log("Yes this is even more debug...")
-    console.log("server formData: ", formData);
     console.log("server formData.id: ", scriptId);
     console.log("server formData.content: ", scriptContent);
 

@@ -115,7 +115,13 @@
       // IT GETS STUCK HERE?????
       const response = await fetch("?/updateScript", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+          content,
+        }),
         signal: controller.signal,
       });
 
