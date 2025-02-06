@@ -230,9 +230,15 @@
   };
 
   onMount(async () => {
+    let textContent;
+    if (script.content == "") {
+      textContent = "";
+    } else {
+      textContent = JSON.parse(script.content);
+    }
     editor = createEditor({
       extensions: [StarterKit, Underline],
-      content: JSON.parse(script.content),
+      content: textContent,
       editorProps: {
         attributes: {
           class:
