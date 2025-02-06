@@ -91,6 +91,7 @@ export const actions = {
       };
 
     } catch (error) {
+      console.log("Error: ", error)
       return fail(500, {
         error: 'Failed to create a new script'
       });

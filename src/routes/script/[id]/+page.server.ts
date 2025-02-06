@@ -5,6 +5,7 @@ import { queryGPTJSONSchema } from "$lib/server/openAIFunctions";
 import type { ChatMessage } from "$lib";
 import type { ChatCompletionTool } from "openai/resources/index.mjs";
 import { MAX_CONTENT_SIZE } from "$lib/config/config";
+import type { Script } from "$lib";
 
 const GPT_MODEL = "gpt-4o-mini";
 
@@ -171,13 +172,17 @@ export const actions = {
       });
     }
 
+    const updatedScript = {
+      content: scriptContent as string,
+      updated_at: new Date().toISOString(),
+      updated_by: session.user.id
+    } satisfies Omit<Script, 'id' | 'title' | 'created_at' | 'last_snapshot_at'>;
+
     try {
       await updateScript(
         supabase,
         scriptId as string,
-        {
-          content: scriptContent as string
-        },
+        updatedScript,
         session.user.id
       )
 

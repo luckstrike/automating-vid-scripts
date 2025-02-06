@@ -42,7 +42,8 @@ export const actions = {
         content: "",
         user_id: session.user.id,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        updated_by: session.user.id,
       } satisfies Omit<Script, 'id'>
 
       const createdScript = await createScript(supabase, newScript)

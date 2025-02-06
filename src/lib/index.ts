@@ -10,12 +10,14 @@ import type {
 
 // Interfaces
 export interface Script {
-  id: string,
-  title: string,
-  content: string,
-  user_id: string,
-  created_at: string,
-  updated_at: string
+  id: string;
+  title: string;
+  content: string;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+  updated_by: string;
+  last_snapshot_at: string;
 }
 
 export interface TextContent {
