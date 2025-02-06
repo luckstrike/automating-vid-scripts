@@ -36,10 +36,11 @@
   import PhPencilFill from "~icons/ph/pencil-fill";
   import { toastStore } from "$lib/stores/toast";
   import { MAX_CONTENT_SIZE, WARNING_SIZE } from "$lib/config/config";
+  import type { JSONContent } from "@tiptap/core";
 
   // Getting the Script data from the server side
   export let data;
-  let { script, session } = data;
+  let { script } = data;
   let scriptTitle: string = script.title; // Setting the initial script title
 
   let lastSavedContent = script.content;
@@ -63,7 +64,7 @@
 
   // Get's the HTML content that is currently in the script text editor
   async function extractScriptContent(editor: Editor) {
-    let scriptContent: string = editor.getHTML();
+    let scriptContent: JSONContent = editor.getJSON();
 
     return scriptContent;
   }
@@ -98,7 +99,9 @@
 
   const updateScriptContent = debounce(async (content: string, id: string) => {
     try {
-      const blob = new Blob([content], { type: "text/html" });
+      const blob = new Blob([JSON.stringify(content)], {
+        type: "application/json",
+      });
       const contentSize = blob.size;
 
       // Error whenever content is too large to save
@@ -131,7 +134,7 @@
 
       const formData = new FormData();
       formData.append("id", id);
-      formData.append("content", blob, "script-content.html");
+      formData.append("content", blob, "script-content.json");
 
       const response = await fetch("?/updateScript", {
         method: "POST",
@@ -229,7 +232,7 @@
   onMount(async () => {
     editor = createEditor({
       extensions: [StarterKit, Underline],
-      content: script.content,
+      content: JSON.parse(script.content),
       editorProps: {
         attributes: {
           class:
@@ -237,7 +240,7 @@
         },
       },
       onUpdate({ editor }) {
-        const currentContent = editor.getHTML();
+        const currentContent = editor.getJSON();
         if (currentContent !== lastSavedContent) {
           // Check if content has changed
           handleScriptInput($editor);
@@ -248,7 +251,7 @@
     if (browser) {
       const checkUnsavedChanges = () => {
         // More defensive check for editor content
-        const currentContent = editor ? editor.getHTML() : "";
+        const currentContent = editor ? editor.getJSON() : "";
         const currentTitle = scriptTitle;
 
         return (
