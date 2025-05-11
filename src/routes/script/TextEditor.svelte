@@ -236,13 +236,14 @@
     } else {
       textContent = JSON.parse(script.content);
     }
+    /* NOTE: Kind of a hacky fix, but doing the 2 separate heights for the editor works for now */
     editor = createEditor({
       extensions: [StarterKit, Underline],
       content: textContent,
       editorProps: {
         attributes: {
           class:
-            "border-2 border-black rounded-lg p-2 bg-[#d9d9d9] min-h-[88vh] max-h-[88vh] overflow-y-auto outline-none",
+            "border-2 border-black rounded-lg p-2 bg-[#d9d9d9] lg:min-h-[90vh] lg:max-h-[90vh] min-h-[88vh] max-h-[88vh] overflow-y-auto outline-none",
         },
       },
       onUpdate({ editor }) {
@@ -321,7 +322,7 @@
 <!-- Potential Future Buttons -->
 <!-- Code Block, Quote Block, Horizontal Rule (just like a horizontal line) -->
 
-<div class="flex flex-col justify-center items-center h-screen w-full p-4">
+<div class="flex flex-col justify-center items-center lg:p-4">
   {#if editor}
     <!-- Bubble Menu Stuff -->
     <BubbleMenu editor={$editor}>
@@ -377,7 +378,7 @@
     </FloatingMenu>
     -->
 
-    <div class="w-full pt-2 text-center">
+    <div class="w-full text-center">
       <input
         class="bg-transparent w-3/4 text-center text-[#d9d9d9] font-bold text-lg border-solid border-2 border-[#d9d9d9] rounded-lg"
         type="text"
@@ -476,7 +477,7 @@
     </div>
   {/if}
 
-  <div bind:this={editorContainer} class="w-[95%] prose">
+  <div bind:this={editorContainer} class="lg:w-[80%] w-[95%] prose">
     <EditorContent editor={$editor} />
   </div>
 </div>
